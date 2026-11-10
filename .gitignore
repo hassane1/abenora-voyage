@@ -51,3 +51,4 @@ next-env.d.ts
 # documents de voyage privés
 /storage/
 *.db.bak-*
+/.next-prod/

@@ -55,7 +55,17 @@ function allowedOrigins(req: NextRequest) {
 }
 function sameOrigin(req: NextRequest) {
   const origin = req.headers.get("origin");
-  if (origin) return allowedOrigins(req).includes(origin);
+  if (origin) {
+    if (allowedOrigins(req).includes(origin)) return true;
+    // derrière un proxy ou un tunnel HTTPS, l'URL interne est http://localhost : on compare alors l'hôte
+    // demandé par le navigateur (Host / X-Forwarded-Host) à celui de l'en-tête Origin
+    const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+    try {
+      return !!host && new URL(origin).host === host;
+    } catch {
+      return false;
+    }
+  }
   // pas d'Origin (anciens navigateurs, outils) : on refuse si le navigateur signale une requête intersite
   const site = req.headers.get("sec-fetch-site");
   return !site || site === "same-origin" || site === "none";

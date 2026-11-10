@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // dossier de compilation configurable (permet une 2e compilation de production sans toucher à .next)
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   // pas d’en-tête « X-Powered-By: Next.js » (empreinte technique inutile)
   poweredByHeader: false,
   // better-sqlite3 est un module natif : on le laisse hors du bundle serveur
