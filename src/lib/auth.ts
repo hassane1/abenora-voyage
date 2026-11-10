@@ -175,6 +175,9 @@ export async function getAdmin(): Promise<AdminSession | null> {
 
 export const mfaRequired = () => process.env.ADMIN_MFA_REQUIRED !== "false";
 
+/** Même règle que requireAdmin, pour les routes (exports, documents) : MFA validé, ou MFA non exigé et non activé */
+export const adminMfaOk = (a: AdminSession) => a.mfaPassed || (!a.mfaEnabled && !mfaRequired());
+
 /**
  * À appeler en tête de chaque page / action d'administration.
  * @param perm permission requise (RBAC) ; sans permission : tout membre de l'équipe connecté

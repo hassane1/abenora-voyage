@@ -183,6 +183,7 @@ export async function offlineAnswer(question: string, locale: Locale): Promise<s
   return `${parts.length ? parts.join("\n\n") : o.fallback}\n\n_${o.intro}_`;
 }
 
+/** Assistant IA actif seulement si le modèle ET la clé d'API sont configurés ; sinon mode simplifié (FAQ / catalogue) */
 export function aiEnabled() {
-  return Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
+  return Boolean(process.env.ASSISTANT_MODEL?.trim() && process.env.ANTHROPIC_API_KEY?.trim());
 }

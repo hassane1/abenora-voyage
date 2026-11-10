@@ -10,7 +10,7 @@ function createClient() {
 
 // En développement, le client est conservé entre deux rechargements à chaud. On le rattache à la version
 // du schéma : après une migration (`prisma generate`), un nouveau client est créé sans redémarrer le serveur.
-const SCHEMA_VERSION = "2026-11-10-security";
+const SCHEMA_VERSION = "2026-11-10-customer-idle";
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient; prismaVersion?: string };
 
 export const db = globalForPrisma.prisma && globalForPrisma.prismaVersion === SCHEMA_VERSION ? globalForPrisma.prisma : createClient();

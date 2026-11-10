@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { db } from "@/lib/db";
-import { randomToken, sha256 } from "@/lib/security";
+import { randomToken, safeEqual, sha256 } from "@/lib/security";
 import { unsubscribeSig } from "@/lib/newsletter";
 
 /** Confirmation (double opt-in) et désinscription en un clic depuis les e-mails */
@@ -13,7 +13,8 @@ export async function GET(req: NextRequest) {
     sub = token.length >= 20 ? await db.newsletterSubscriber.findUnique({ where: { tokenHash: sha256(token) } }) : null;
   } else if (action === "unsubscribe") {
     const id = p.get("id") ?? "";
-    sub = id && p.get("sig") === unsubscribeSig(id) ? await db.newsletterSubscriber.findUnique({ where: { id } }) : null;
+    // signature comparée en temps constant
+    sub = id && id.length <= 40 && safeEqual(p.get("sig"), unsubscribeSig(id)) ? await db.newsletterSubscriber.findUnique({ where: { id } }) : null;
   }
   const locale = sub?.locale ?? "fr";
   const back = (state: string) => NextResponse.redirect(new URL(`/${locale}?newsletter=${state}#newsletter`, req.url));

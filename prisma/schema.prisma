@@ -406,6 +406,7 @@ model CustomerSession {
   userAgent  String?
   expiresAt  DateTime
   createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now()) // expiration après 7 jours d’inactivité (src/lib/customer.ts)
 }
 
 /// Jetons à usage unique : vérification d'e-mail, réinitialisation du mot de passe

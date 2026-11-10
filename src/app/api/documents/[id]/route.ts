@@ -3,7 +3,7 @@ import path from "node:path";
 import { NextResponse, type NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { getCustomer } from "@/lib/customer";
-import { getAdmin } from "@/lib/auth";
+import { adminMfaOk, getAdmin } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import { DOCS_DIR } from "@/lib/files";
 import { timingSafeEqual } from "node:crypto";
@@ -28,7 +28,8 @@ export async function GET(req: NextRequest, ctx: RouteContext<"/api/documents/[i
   }
   if (!allowed) {
     const a = await getAdmin();
-    allowed = !!a && (a.mfaPassed || !a.mfaEnabled) && can(a.role, "bookings.read");
+    // même règle MFA que requireAdmin
+    allowed = !!a && adminMfaOk(a) && can(a.role, "bookings.read");
   }
   if (!allowed) return new NextResponse("Forbidden", { status: 403 });
   const file = path.join(DOCS_DIR, path.basename(doc.fileName)); // basename : pas de traversée de répertoire

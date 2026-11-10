@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAdmin } from "@/lib/auth";
+import { adminMfaOk, getAdmin } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/security";
@@ -7,7 +7,9 @@ import { unsubscribeUrl } from "@/lib/newsletter";
 
 export async function GET(req: Request) {
   const admin = await getAdmin();
-  if (!admin || (admin.mfaEnabled && !admin.mfaPassed) || !can(admin.role, "marketing.write")) return NextResponse.redirect(new URL("/admin/login", req.url));
+  if (!admin) return NextResponse.redirect(new URL("/admin/login", req.url));
+  // même règle MFA que requireAdmin
+  if (!adminMfaOk(admin) || !can(admin.role, "marketing.write")) return new NextResponse("Forbidden", { status: 403 });
   const subs = await db.newsletterSubscriber.findMany({ where: { status: "CONFIRMED" }, orderBy: { confirmedAt: "asc" } });
   // protection contre l'injection de formules (CSV injection)
   const cell = (v: string) => `"${(/^[=+\-@]/.test(v) ? `'${v}` : v).replace(/"/g, '""')}"`;

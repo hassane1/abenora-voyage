@@ -8,7 +8,8 @@ import { randomToken, sha256 } from "./security";
  * seule son empreinte SHA-256 est stockée en base → révocables individuellement ou toutes à la fois.
  */
 const COOKIE = "traveler_session";
-const MAX_AGE = 60 * 60 * 24 * 30; // 30 jours
+const MAX_AGE = 60 * 60 * 24 * 30; // 30 jours (durée maximale)
+const IDLE_MS = 7 * 24 * 60 * 60 * 1000; // 7 jours d'inactivité
 
 export async function createCustomerSession(customerId: string) {
   const token = randomToken();
@@ -21,7 +22,15 @@ export async function getCustomer() {
   const token = (await cookies()).get(COOKIE)?.value;
   if (!token || token.length < 20) return null;
   const s = await db.customerSession.findUnique({ where: { tokenHash: sha256(token) }, include: { customer: true } });
-  if (!s || s.expiresAt < new Date()) return null;
+  const now = Date.now();
+  if (!s || s.expiresAt.getTime() < now) return null;
+  // expiration après 7 jours sans activité : la session est supprimée, le voyageur doit se reconnecter
+  if (now - s.lastSeenAt.getTime() > IDLE_MS) {
+    await db.customerSession.delete({ where: { id: s.id } }).catch(() => {});
+    return null;
+  }
+  // dernière activité mise à jour au plus une fois par heure (limite les écritures)
+  if (now - s.lastSeenAt.getTime() > 60 * 60 * 1000) await db.customerSession.update({ where: { id: s.id }, data: { lastSeenAt: new Date() } }).catch(() => {});
   return s.customer;
 }
 

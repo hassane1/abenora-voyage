@@ -21,6 +21,10 @@ function utcDay(d: Date) {
 }
 
 async function main() {
+  // mot de passe administrateur trop court : refus AVANT toute écriture en base
+  if (process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.length < 20) {
+    throw new Error("ADMIN_PASSWORD refusé : 20 caractères minimum pour le compte administrateur.");
+  }
   if (reset) {
     await db.message.deleteMany();
     await db.quote.deleteMany();
@@ -149,14 +153,19 @@ async function main() {
   }
 
   // --- Administrateur --------------------------------------------------------
+  // ADMIN_PASSWORD n'est PAS stocké dans .env : il est fourni le temps de la commande, par exemple
+  //   PowerShell : $env:ADMIN_PASSWORD="…"; npm run db:seed; Remove-Item Env:ADMIN_PASSWORD
   const email = process.env.ADMIN_EMAIL;
   const password = process.env.ADMIN_PASSWORD;
   if (email && password) {
-    const passwordHash = await bcrypt.hash(password, 12);
+    if (password.length < 20) {
+      throw new Error("ADMIN_PASSWORD refusé : 20 caractères minimum pour le compte administrateur.");
+    }
+    const passwordHash = await bcrypt.hash(password, 12); // migré automatiquement vers Argon2id à la première connexion
     await db.adminUser.upsert({ where: { email }, update: { passwordHash }, create: { email, name: "Administrateur", passwordHash } });
-    console.log(`✔ Compte administrateur prêt : ${email} (mot de passe défini dans .env)`);
+    console.log(`✔ Compte administrateur prêt : ${email}`);
   } else {
-    console.warn("⚠ ADMIN_EMAIL / ADMIN_PASSWORD absents : aucun administrateur créé.");
+    console.warn("⚠ ADMIN_EMAIL / ADMIN_PASSWORD absents : aucun administrateur créé ni modifié.");
   }
 
   await applyDefaults(db);

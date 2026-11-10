@@ -86,6 +86,7 @@ const nextStep = async () => {
 const run = randomBytes(3).toString("hex");
 const adminEmail = `secu-${run}@example.com`;
 const adminPw = `Secu-${randomBytes(9).toString("hex")}`;
+const noMfaEmail = `secu-nomfa-${run}@example.com`;
 const mfaSecret = b32enc(randomBytes(20));
 const cols = db.prepare("pragma table_info(AdminUser)").all().map((c) => c.name);
 const hasMfa = cols.includes("mfaSecret");
@@ -264,13 +265,50 @@ try {
     if (fresh.length) db.prepare("delete from Media where url = ?").run(`/uploads/${fresh[0]}`);
   } else skip("MFA, révocation, ré-authentification");
 
+  // admin SANS MFA (MFA exigé) : aucune route d'export, d'impression ni de document ne doit répondre
+  if (hasMfa && process.env.ADMIN_MFA_REQUIRED !== "false") {
+    const noMfaPw = `NoMfa-${randomBytes(9).toString("hex")}`;
+    db.prepare("insert into AdminUser (id, email, name, passwordHash, role, active, mfaEnabled, createdAt) values (?, ?, 'Sans MFA', ?, 'ADMIN', 1, 0, ?)").run(`n${run}`, noMfaEmail, bcrypt.hashSync(noMfaPw, 10), new Date().toISOString().replace("Z", "+00:00"));
+    await ctx.clearCookies();
+    await login(noMfaEmail, noMfaPw);
+    await a.waitForURL((u) => u.pathname === "/admin/securite", { timeout: 15000 }).catch(() => {});
+    ok(a.url().includes("/admin/securite"), "Admin sans MFA : renvoyé vers la configuration du MFA");
+    const cookie = (await ctx.cookies()).filter((c) => c.name === "admin_session").map((c) => `${c.name}=${c.value}`).join("; ");
+    const doc = hasTable("BookingDocument") ? db.prepare("select id from BookingDocument limit 1").get() : null;
+    const routes = ["/admin/reservations/export", "/admin/newsletter/export", ...(doc ? [`/api/documents/${doc.id}`] : []), "/admin/reservations/imprimer"];
+    const out = [];
+    for (const r of routes) {
+      const res = await fetch(`${BASE}${r}`, { headers: { cookie }, redirect: "manual" });
+      const body = res.status === 200 ? await res.text() : "";
+      // 403 attendu ; une page (impression) redirige vers la configuration du MFA ; 404 = route absente de ce projet
+      const blocked = res.status === 403 || (res.status === 307 && /securite/.test(res.headers.get("location") ?? "")) || res.status === 404;
+      out.push({ r, status: res.status, blocked: blocked && !/;.*@/.test(body) });
+    }
+    ok(out.every((o) => o.blocked) && out.filter((o) => o.status === 403).length >= 2, `Admin sans MFA : exports et documents refusés (${out.map((o) => `${o.r} → ${o.status}`).join(", ")})`);
+  } else skip("Admin sans MFA (MFA non exigé)");
+
+  // session voyageur inactive depuis plus de 7 jours : refusée et supprimée
+  const csCols = hasTable("CustomerSession") ? db.prepare("pragma table_info(CustomerSession)").all().map((c) => c.name) : [];
+  const someCustomer = csCols.includes("lastSeenAt") ? db.prepare("select id from Customer limit 1").get() : null;
+  if (someCustomer) {
+    const tok = randomBytes(32).toString("base64url");
+    const iso = (d) => d.toISOString().replace("Z", "+00:00");
+    const sid = `cs${run}`;
+    db.prepare('insert into CustomerSession (id, tokenHash, customerId, expiresAt, createdAt, lastSeenAt) values (?, ?, ?, ?, ?, ?)').run(
+      sid, createHash("sha256").update(tok).digest("hex"), someCustomer.id, iso(new Date(Date.now() + 20 * 86400000)), iso(new Date(Date.now() - 10 * 86400000)), iso(new Date(Date.now() - 8 * 86400000)),
+    );
+    await fetch(`${BASE}/fr/compte`, { headers: { cookie: `traveler_session=${tok}` }, redirect: "manual" });
+    ok(!db.prepare("select 1 from CustomerSession where id = ?").get(sid), "Session voyageur inactive depuis 8 jours refusée et supprimée");
+    db.prepare("delete from CustomerSession where id = ?").run(sid);
+  } else skip("Expiration des sessions voyageurs (pas de comptes voyageurs)");
+
   // force brute
   await ctx.clearCookies();
   for (let i = 0; i < 6; i++) await login(adminEmail, "mauvais-mot-de-passe");
   ok(a.url().includes("error=locked"), "Force brute : compte verrouillé après 5 échecs");
 } finally {
   await browser.close();
-  db.prepare("delete from AdminUser where email in (?, ?)").run(adminEmail, `secu-tmp-${run}@example.com`);
+  db.prepare("delete from AdminUser where email in (?, ?, ?)").run(adminEmail, `secu-tmp-${run}@example.com`, noMfaEmail);
   if (hasTable("RateLimit")) db.prepare("delete from RateLimit").run();
   const passed = results.filter((r) => r.ok === true).length;
   const failed = results.filter((r) => r.ok === false).length;

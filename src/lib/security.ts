@@ -9,6 +9,13 @@ import { invalidateCatalog } from "./cache";
 // ---------------------------------------------------------------------------
 export const sha256 = (s: string) => createHash("sha256").update(s).digest("hex");
 export const randomToken = (bytes = 32) => randomBytes(bytes).toString("base64url");
+/** Comparaison de jetons / signatures en temps constant (pas de fuite d'information par le temps de réponse) */
+export function safeEqual(a: string | null | undefined, b: string | null | undefined): boolean {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  const x = Buffer.from(a);
+  const y = Buffer.from(b);
+  return x.length === y.length && timingSafeEqual(x, y);
+}
 
 // ---------------------------------------------------------------------------
 // Chiffrement symétrique (secrets MFA). Clé dérivée de AUTH_SECRET.
@@ -91,21 +98,20 @@ export function otpauthUrl(secret: string, account: string, issuer: string) {
 }
 
 // ---------------------------------------------------------------------------
-// Adresse IP du client. Derrière un proxy de confiance (Cloudflare, Nginx), TRUST_PROXY=1 :
-// on lit X-Forwarded-For depuis la droite (la dernière valeur est ajoutée par notre proxy).
+// Adresse IP du client.
+// - TRUST_PROXY=1 (site servi uniquement via Cloudflare / le tunnel, serveur à l'écoute sur 127.0.0.1) :
+//   seul l'en-tête CF-Connecting-IP, posé par Cloudflare, est pris en compte.
+// - Sinon : "unknown". Aucun en-tête envoyé par le client (X-Real-IP, X-Forwarded-For) n'est jamais lu,
+//   car il serait falsifiable et permettrait de contourner les limites de débit.
 // ---------------------------------------------------------------------------
+const IP_RE = /^[0-9a-fA-F:.]{2,45}$/;
 export async function clientIp(): Promise<string> {
   const h = await headers();
   if (process.env.TRUST_PROXY === "1") {
-    const cf = h.get("cf-connecting-ip");
-    if (cf) return cf;
-    const xff = h.get("x-forwarded-for");
-    if (xff) {
-      const parts = xff.split(",").map((s) => s.trim()).filter(Boolean);
-      if (parts.length) return parts[parts.length - 1];
-    }
+    const cf = h.get("cf-connecting-ip")?.trim();
+    if (cf && IP_RE.test(cf)) return cf;
   }
-  return h.get("x-real-ip") ?? "local";
+  return "unknown";
 }
 
 // ---------------------------------------------------------------------------

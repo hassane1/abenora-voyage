@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAdmin } from "@/lib/auth";
+import { adminMfaOk, getAdmin } from "@/lib/auth";
+import { audit } from "@/lib/security";
 import { can } from "@/lib/rbac";
 import { db } from "@/lib/db";
 import { tr } from "@/lib/i18n-content";
@@ -7,13 +8,16 @@ import { tr } from "@/lib/i18n-content";
 /** Export CSV (séparateur « ; », UTF-8 avec BOM : s'ouvre directement dans Excel) */
 export async function GET(req: NextRequest) {
   const admin = await getAdmin();
-  if (!admin || (admin.mfaEnabled && !admin.mfaPassed) || !can(admin.role, "bookings.read")) return NextResponse.redirect(new URL("/admin/login", req.url));
+  if (!admin) return NextResponse.redirect(new URL("/admin/login", req.url));
+  // même règle MFA que requireAdmin : sans MFA validé, aucun export de données clients
+  if (!adminMfaOk(admin) || !can(admin.role, "bookings.read")) return new NextResponse("Forbidden", { status: 403 });
   const sp = req.nextUrl.searchParams;
   const where = {
     ...(sp.get("status") ? { status: sp.get("status")! } : {}),
     ...(sp.get("circuit") ? { circuitId: sp.get("circuit")! } : {}),
   };
   const rows = await db.booking.findMany({ where, include: { circuit: true, payments: true }, orderBy: { createdAt: "desc" } });
+  await audit(admin.email, "BOOKINGS_EXPORT", null, { n: rows.length });
   const header = ["Dossier", "Statut", "Paiement", "Circuit", "Départ", "Retour", "Adultes", "Enfants", "Âges enfants", "Privé", "Options", "Total MAD", "Acompte MAD", "Encaissé MAD", "Tarif démo", "Prénom", "Nom", "E-mail", "Téléphone", "WhatsApp", "Pays", "Ville de départ", "Besoins", "Commentaires", "Langue", "Créé le"];
   // neutralise l'injection de formules (CSV injection) sur les champs texte saisis par les clients
   const esc = (v: unknown) => {

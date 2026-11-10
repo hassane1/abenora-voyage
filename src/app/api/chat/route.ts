@@ -50,8 +50,10 @@ export async function POST(req: NextRequest) {
     async start(controller) {
       try {
         const stream = client!.beta.messages.stream({
-          model: "claude-opus-5-5",
-          max_tokens: 2000,
+          // modèle défini par la configuration (ASSISTANT_MODEL) ; aiEnabled() garantit qu'il n'est pas vide
+          model: process.env.ASSISTANT_MODEL!.trim(),
+          // réponses courtes : limite le coût par message
+          max_tokens: 600,
           // conversation courte et simple : effort bas (rapide et économique)
           output_config: { effort: "low" },
           // repli automatique côté serveur si le modèle refuse une demande
