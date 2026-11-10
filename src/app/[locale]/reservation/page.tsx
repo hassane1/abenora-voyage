@@ -50,6 +50,7 @@ export default async function ReservationPage({ params, searchParams }: PageProp
             priceAdultMad: c.priceAdultMad,
             priceStatus: c.priceStatus,
             depositPercent: c.depositPercent,
+            programType: c.programType,
             priceGrid: resolveGrid(c.priceGrid, (v) => tr<string>(v, locale, "")),
             options: options
               .filter((o) => o.circuitId === null || o.circuitId === c.id)

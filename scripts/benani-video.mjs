@@ -231,9 +231,28 @@ await caption("Pied de page professionnel", "Coordonnées Benani Travel, Instagr
 
 console.log("▶ Voyages et services");
 await goto("/fr/voyages?type=national");
-await caption("Voyages organisés", "Onglets Nationaux / Internationaux, circuits réservables et destinations", 3200);
+await caption("Voyages nationaux", "Merzouga, Marrakech, Fès, Chefchaouen, Agadir, Dakhla… (exemples signalés « démonstration »)", 3400);
+await scrollTo(700, 1800, 0);
+await wait(800);
+await goto("/fr/voyages?type=international");
+await caption("Voyages internationaux", "Omra à dates fixes, Omra + Turquie, Dubaï, Égypte, Malaisie, croisière au départ d'Istanbul", 3600);
+await scrollTo(700, 1800, 0);
+await wait(800);
+await goto("/fr/circuits/omra-dubai-decembre-2026");
+await caption("Fiche programme Omra", "Dates, durée, vols, hôtels et prestations, tarif publié à confirmer", 3200);
+await scrollToText("h2", "Hôtels et tarifs", 2000);
+await caption("Grille hôtel × type de chambre", "Prix par personne : le client choisit sa formule, le serveur recalcule le total", 3800);
+await goto("/fr/reservation?circuit=omra-dubai-decembre-2026");
+// premier jour de départ cliquable du calendrier
+await page.locator("button[type=button]:not([disabled])").filter({ hasText: /^\s*\d{1,2}\b/ }).first().click().catch(() => {});
+await wait(600);
+await clickText("button", "Continuer");
+await wait(800);
+await page.locator("td button").nth(4).click().catch(() => {});
+await wait(1200);
+await caption("Réservation avec choix de l'hôtel", "Le prix affiché vient du serveur ; la demande est confirmée par l'agence", 3600);
 await goto("/fr/services");
-await caption("Page Services", "Chaque service mène à une demande pré-remplie ou à WhatsApp", 3200);
+await caption("Page Services", "Omra et Hajj, rendez-vous visa, hôtels, transport, billetterie : demande pré-remplie ou WhatsApp", 3400);
 
 console.log("▶ Merzouga");
 await goto("/fr/destinations/merzouga");

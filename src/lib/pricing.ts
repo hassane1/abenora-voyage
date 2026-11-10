@@ -106,11 +106,11 @@ export function computePrice(c: PricingCircuit, input: PricingInput, s: PricingS
     const col = input.grid ? grid.columns.find((x) => x.key === input.grid!.col) : undefined;
     const per = row && col ? row.prices[col.key] : null;
     if (typeof per !== "number" || per <= 0) {
-      return { onRequest: true, isDemo, lines, discounts, subtotal: 0, total: 0, taxIncluded: 0, taxRatePercent: s.taxRatePercent, deposit: 0, balance: 0, travelers };
+      return { onRequest: true, isDemo, noteKind: c.priceStatus === "INDICATIVE" ? "INDICATIVE" : isDemo ? "DEMO" : null, lines, discounts, subtotal: 0, total: 0, taxIncluded: 0, taxRatePercent: s.taxRatePercent, deposit: 0, balance: 0, travelers };
     }
     lines.push({ key: "grid", label: `${row!.label} — ${col!.label}`, detail: `${travelers} × ${per}`, amount: travelers * per });
   } else if (c.priceAdultMad === null) {
-    return { onRequest: true, isDemo, lines, discounts, subtotal: 0, total: 0, taxIncluded: 0, taxRatePercent: s.taxRatePercent, deposit: 0, balance: 0, travelers };
+    return { onRequest: true, isDemo, noteKind: c.priceStatus === "INDICATIVE" ? "INDICATIVE" : isDemo ? "DEMO" : null, lines, discounts, subtotal: 0, total: 0, taxIncluded: 0, taxRatePercent: s.taxRatePercent, deposit: 0, balance: 0, travelers };
   }
   const base = c.priceAdultMad ?? 0;
   if (grid) {
