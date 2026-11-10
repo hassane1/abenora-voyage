@@ -1,4 +1,5 @@
 import "server-only";
+import { getAgency, type ServiceKey } from "@/i18n/agency";
 import { db } from "./db";
 import { tr, trList } from "./i18n-content";
 import { site } from "./site";
@@ -70,7 +71,7 @@ export async function buildKnowledge(): Promise<string> {
 }
 
 export function systemPrompt(knowledge: string, brandName: string) {
-  return `Tu es « l'Assistant ${brandName} », le conseiller voyage en ligne de l'agence ${brandName}, spécialisée dans les séjours au Maroc (première destination : Merzouga et le désert du Sahara).
+  return `Tu es « l'Assistant ${brandName} », le conseiller voyage en ligne de l'agence ${brandName}, agence de voyage marocaine : voyages organisés au Maroc (nationaux) et à l'étranger (internationaux), Omra, séjours sur mesure, hôtels, transport et billetterie. Les offres réservables en ligne sont dans la base ci-dessous ; les voyages internationaux, l'Omra, les hôtels, le transport et la billetterie se traitent sur demande (formulaire « Sur mesure » ou WhatsApp), sans prix publié.
 
 Ton rôle : aider le visiteur à choisir et préparer son séjour, puis l'amener à envoyer sa demande de réservation.
 
@@ -150,6 +151,21 @@ export async function offlineAnswer(question: string, locale: Locale): Promise<s
         );
       }
     }
+  }
+  // services de l'agence traités sur demande (Omra, international, hôtels, transport, billetterie)
+  const ag = getAgency(locale);
+  const svc: [ServiceKey, string[]][] = [
+    ["omra", ["omra", "umrah", "omrah", "عمرة", "العمرة"]],
+    ["international", ["international", "étranger", "etranger", "abroad", "دولية", "الخارج"]],
+    ["hotels", ["hôtel", "hotel", "riad", "فندق"]],
+    ["transport", ["transport", "transfert", "aéroport", "aeroport", "airport", "نقل"]],
+    ["billetterie", ["billet", "ticket", "avion", "flight", "تذكرة", "تذاكر"]],
+  ];
+  for (const [k, words] of svc) {
+    if (has(...words)) parts.push(`**${ag.services[k].title}** — ${ag.services[k].text} ${ag.onRequest} → [${ag.serviceCta}](/${locale}/sur-mesure?service=${k}#demande)`);
+  }
+  if (has("service", "proposez", "organisez", "offer", "تنظمون", "خدمات")) {
+    parts.push(`**${ag.servicesTitle}** : ${Object.values(ag.services).map((s) => s.title).join(" · ")} → [${ag.servicesTitle}](/${locale}/services)`);
   }
   if (has("réserv", "reserv", "book", "حجز")) parts.push(o.book);
   if (has("contact", "whatsapp", "téléphone", "telephone", "phone", "اتصال", "واتساب")) parts.push(o.contact);

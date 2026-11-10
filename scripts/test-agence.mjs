@@ -124,12 +124,13 @@ try {
 
   // identité : le nom saisi apparaît sur le site
   await a.goto(`${BASE}/admin/identite`);
+  const phoneBefore = db.prepare("select value from Setting where key = 'brand.phone'").get()?.value ?? "";
   await a.fill('input[name="phone"]', "+212 5 00 00 00 00");
   await a.click("button:has-text('Enregistrer')");
   await a.waitForURL(/ok=1/);
   const footer = await (await fetch(`${BASE}/fr`)).text();
   ok(footer.includes("+212 5 00 00 00 00"), "Coordonnées modifiées dans l'admin affichées sur le site");
-  db.prepare("update Setting set value = '' where key = 'brand.phone'").run(); // remise à zéro (numéro fictif de test)
+  db.prepare("update Setting set value = ? where key = 'brand.phone'").run(phoneBefore); // on remet le numéro d'origine
 
   // ---------------------------------------------------------------- voyageur : compte
   const cctx = await browser.newContext();

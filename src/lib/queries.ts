@@ -12,7 +12,7 @@ export async function getPublishedDestinations() {
 
 export async function getUpcomingDestinations() {
   await connection();
-  return cached("dest:soon", 60, () => db.destination.findMany({ where: { published: false }, orderBy: { sortOrder: "asc" } }));
+  return cached("dest:soon", 60, () => db.destination.findMany({ where: { published: false, slug: { not: "voyages-sur-mesure" } }, orderBy: { sortOrder: "asc" } }));
 }
 
 export async function getDestination(slug: string) {
@@ -27,12 +27,12 @@ export async function getDestination(slug: string) {
   }));
 }
 
-export async function getCircuits(filter?: { destination?: string; maxPrice?: number; minDays?: number; maxDays?: number }) {
+export async function getCircuits(filter?: { destination?: string; maxPrice?: number; minDays?: number; maxDays?: number; scope?: "NATIONAL" | "INTERNATIONAL" }) {
   await connection();
   return cached(`circuits:${JSON.stringify(filter ?? {})}`, 60, () => db.circuit.findMany({
     where: {
       published: true,
-      destination: { published: true, ...(filter?.destination ? { slug: filter.destination } : {}) },
+      destination: { published: true, ...(filter?.destination ? { slug: filter.destination } : {}), ...(filter?.scope ? { scope: filter.scope } : {}) },
       ...(filter?.maxPrice ? { OR: [{ priceAdultMad: { lte: filter.maxPrice } }, { priceAdultMad: null }] } : {}),
       ...(filter?.minDays || filter?.maxDays ? { days: { gte: filter?.minDays ?? 0, lte: filter?.maxDays ?? 99 } } : {}),
     },

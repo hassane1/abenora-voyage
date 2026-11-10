@@ -1,0 +1,157 @@
+import type { Locale } from "./config";
+
+/** Textes « agence » : services, typologies de voyages (national / international), navigation */
+export type ServiceKey = "national" | "international" | "omra" | "surMesure" | "hotels" | "transport" | "billetterie";
+
+const fr = {
+  nav: { trips: "Voyages organisés", services: "Services", destinations: "Destinations", about: "L'agence" },
+  heroEyebrow: "Agence de voyage marocaine",
+  heroTitle: "Votre agence de voyage, au Maroc et dans le monde.",
+  heroSubtitle: "Voyages organisés nationaux et internationaux, Omra, séjours sur mesure, hôtels, transport et billetterie : une seule agence pour tous vos voyages.",
+  ctaTrips: "Voir nos voyages",
+  ctaServices: "Nos services",
+  ctaTailor: "Organiser mon voyage",
+  typologies: {
+    eyebrow: "Nos voyages",
+    title: "Deux façons de voyager avec nous",
+    national: { title: "Voyages nationaux", text: "Le Maroc dans toute sa diversité : désert, montagnes, villes impériales, côtes. Départs organisés et séjours privés.", cta: "Voyager au Maroc" },
+    international: { title: "Voyages internationaux", text: "Séjours et circuits à l'étranger organisés par l'agence, sur demande : destination, dates, budget.", cta: "Voyager à l'étranger" },
+  },
+  servicesTitle: "Nos services",
+  servicesText: "Tout ce dont vous avez besoin pour voyager, auprès d'un seul interlocuteur.",
+  services: {
+    national: { icon: "route", title: "Voyages organisés au Maroc", text: "Circuits et séjours en groupe ou en privé, avec transport, hébergement et accompagnement." },
+    international: { icon: "globe", title: "Voyages internationaux", text: "Séjours à l'étranger préparés par l'agence selon vos dates et votre budget." },
+    omra: { icon: "moon", title: "Omra", text: "Organisation de votre Omra : vols, hébergement, transferts et accompagnement, sur demande." },
+    surMesure: { icon: "sparkle", title: "Séjours sur mesure", text: "Un programme construit pour vous, avec devis personnalisé et sans engagement." },
+    hotels: { icon: "tent", title: "Hôtels", text: "Réservation d'hôtels, riads et campements au Maroc et à l'étranger." },
+    transport: { icon: "car", title: "Transport", text: "Autocar, minibus, véhicule privé avec chauffeur, transferts aéroport." },
+    billetterie: { icon: "calendar", title: "Billetterie", text: "Billets d'avion et de transport, sur demande." },
+  } as Record<ServiceKey, { icon: string; title: string; text: string }>,
+  serviceCta: "Faire une demande",
+  onRequest: "Sur demande — l'agence vous répond avec une proposition et un devis.",
+  tripsPage: {
+    title: "Voyages organisés",
+    intro: "Choisissez votre type de voyage. Les offres réservables en ligne affichent leurs dates et leurs places ; les autres se préparent sur demande.",
+    tabNational: "Nationaux",
+    tabInternational: "Internationaux",
+    circuits: "Circuits réservables",
+    destinations: "Destinations",
+    noInternational: "Aucun voyage international n'est encore publié en ligne. L'agence organise vos voyages à l'étranger sur demande : indiquez la destination, les dates et le nombre de voyageurs.",
+    requestInternational: "Demander un voyage international",
+    noCircuits: "Aucun circuit publié pour le moment.",
+  },
+  trust: [
+    { icon: "shield", title: "Rien à payer en ligne", text: "Vous ne payez rien avant la confirmation de votre voyage" },
+    { icon: "globe", title: "Maroc et international", text: "Voyages organisés, Omra, séjours sur mesure" },
+    { icon: "whatsapp", title: "Un interlocuteur joignable", text: "Par téléphone, e-mail ou WhatsApp" },
+    { icon: "route", title: "Programmes clairs", text: "Étapes, inclus et conditions indiqués à l'avance" },
+  ],
+  popularText: "Nos départs organisés, avec programme jour par jour, places disponibles et prix.",
+  destinationsText: "Les destinations ouvertes à la réservation en ligne, et celles que nous préparons.",
+  merzougaSignature: "Merzouga",
+};
+
+export type Agency = typeof fr;
+
+const en: Agency = {
+  nav: { trips: "Organised trips", services: "Services", destinations: "Destinations", about: "The agency" },
+  heroEyebrow: "Moroccan travel agency",
+  heroTitle: "Your travel agency, in Morocco and around the world.",
+  heroSubtitle: "Organised domestic and international trips, Umrah, tailor-made stays, hotels, transport and ticketing: one agency for all your journeys.",
+  ctaTrips: "See our trips",
+  ctaServices: "Our services",
+  ctaTailor: "Plan my trip",
+  typologies: {
+    eyebrow: "Our trips",
+    title: "Two ways to travel with us",
+    national: { title: "Domestic trips", text: "Morocco in all its diversity: desert, mountains, imperial cities, coasts. Group departures and private stays.", cta: "Travel in Morocco" },
+    international: { title: "International trips", text: "Stays and tours abroad organised by the agency, on request: destination, dates, budget.", cta: "Travel abroad" },
+  },
+  servicesTitle: "Our services",
+  servicesText: "Everything you need to travel, from a single contact.",
+  services: {
+    national: { icon: "route", title: "Organised trips in Morocco", text: "Group or private tours and stays, with transport, accommodation and support." },
+    international: { icon: "globe", title: "International trips", text: "Stays abroad prepared by the agency according to your dates and budget." },
+    omra: { icon: "moon", title: "Umrah", text: "Organisation of your Umrah: flights, accommodation, transfers and support, on request." },
+    surMesure: { icon: "sparkle", title: "Tailor-made stays", text: "A programme built for you, with a personalised, no-obligation quote." },
+    hotels: { icon: "tent", title: "Hotels", text: "Hotels, riads and camps in Morocco and abroad." },
+    transport: { icon: "car", title: "Transport", text: "Coach, minibus, private vehicle with driver, airport transfers." },
+    billetterie: { icon: "calendar", title: "Ticketing", text: "Flight and transport tickets, on request." },
+  },
+  serviceCta: "Send a request",
+  onRequest: "On request — the agency replies with a proposal and a quote.",
+  tripsPage: {
+    title: "Organised trips",
+    intro: "Choose your type of trip. Offers bookable online show their dates and seats; others are prepared on request.",
+    tabNational: "Domestic",
+    tabInternational: "International",
+    circuits: "Bookable tours",
+    destinations: "Destinations",
+    noInternational: "No international trip is published online yet. The agency organises your trips abroad on request: tell us the destination, dates and number of travellers.",
+    requestInternational: "Request an international trip",
+    noCircuits: "No tour published yet.",
+  },
+  trust: [
+    { icon: "shield", title: "Nothing to pay online", text: "You pay nothing before your trip is confirmed" },
+    { icon: "globe", title: "Morocco and abroad", text: "Organised trips, Umrah, tailor-made stays" },
+    { icon: "whatsapp", title: "Easy to reach", text: "By phone, e-mail or WhatsApp" },
+    { icon: "route", title: "Clear programmes", text: "Stages, inclusions and conditions stated upfront" },
+  ],
+  popularText: "Our organised departures, with day-by-day programme, available seats and prices.",
+  destinationsText: "Destinations open for online booking, and those we are preparing.",
+  merzougaSignature: "Merzouga",
+};
+
+const ar: Agency = {
+  nav: { trips: "رحلات منظمة", services: "خدماتنا", destinations: "الوجهات", about: "الوكالة" },
+  heroEyebrow: "وكالة أسفار مغربية",
+  heroTitle: "وكالة أسفارك، في المغرب وحول العالم.",
+  heroSubtitle: "رحلات منظمة داخل المغرب وخارجه، العمرة، إقامات حسب الطلب، فنادق، نقل وتذاكر: وكالة واحدة لكل أسفارك.",
+  ctaTrips: "اكتشف رحلاتنا",
+  ctaServices: "خدماتنا",
+  ctaTailor: "نظّم رحلتي",
+  typologies: {
+    eyebrow: "رحلاتنا",
+    title: "طريقتان للسفر معنا",
+    national: { title: "رحلات وطنية", text: "المغرب بكل تنوعه: الصحراء، الجبال، المدن العتيقة، الشواطئ. انطلاقات منظمة وإقامات خاصة.", cta: "السفر داخل المغرب" },
+    international: { title: "رحلات دولية", text: "إقامات وجولات خارج المغرب تنظمها الوكالة حسب الطلب: الوجهة، التواريخ، الميزانية.", cta: "السفر إلى الخارج" },
+  },
+  servicesTitle: "خدماتنا",
+  servicesText: "كل ما تحتاجه للسفر لدى محاور واحد.",
+  services: {
+    national: { icon: "route", title: "رحلات منظمة في المغرب", text: "جولات وإقامات جماعية أو خاصة مع النقل والإقامة والمرافقة." },
+    international: { icon: "globe", title: "رحلات دولية", text: "إقامات في الخارج تعدها الوكالة حسب تواريخك وميزانيتك." },
+    omra: { icon: "moon", title: "العمرة", text: "تنظيم عمرتك: الطيران، الإقامة، التنقلات والمرافقة، حسب الطلب." },
+    surMesure: { icon: "sparkle", title: "إقامات حسب الطلب", text: "برنامج مصمم لك مع عرض سعر مخصص دون التزام." },
+    hotels: { icon: "tent", title: "الفنادق", text: "حجز الفنادق والرياضات والمخيمات في المغرب والخارج." },
+    transport: { icon: "car", title: "النقل", text: "حافلة، حافلة صغيرة، سيارة خاصة مع سائق، نقل من وإلى المطار." },
+    billetterie: { icon: "calendar", title: "التذاكر", text: "تذاكر الطيران والنقل حسب الطلب." },
+  },
+  serviceCta: "أرسل طلباً",
+  onRequest: "حسب الطلب — ترد الوكالة باقتراح وعرض سعر.",
+  tripsPage: {
+    title: "رحلات منظمة",
+    intro: "اختر نوع رحلتك. العروض القابلة للحجز عبر الإنترنت تعرض تواريخها ومقاعدها، والباقي يُعدّ حسب الطلب.",
+    tabNational: "وطنية",
+    tabInternational: "دولية",
+    circuits: "جولات قابلة للحجز",
+    destinations: "الوجهات",
+    noInternational: "لا توجد بعد رحلات دولية منشورة. تنظم الوكالة رحلاتك إلى الخارج حسب الطلب: أخبرنا بالوجهة والتواريخ وعدد المسافرين.",
+    requestInternational: "اطلب رحلة دولية",
+    noCircuits: "لا توجد جولات منشورة حالياً.",
+  },
+  trust: [
+    { icon: "shield", title: "لا دفع عبر الإنترنت", text: "لا تدفع شيئاً قبل تأكيد رحلتك" },
+    { icon: "globe", title: "المغرب والخارج", text: "رحلات منظمة، العمرة، إقامات حسب الطلب" },
+    { icon: "whatsapp", title: "محاور متاح", text: "بالهاتف أو البريد أو واتساب" },
+    { icon: "route", title: "برامج واضحة", text: "المراحل والخدمات والشروط مبينة مسبقاً" },
+  ],
+  popularText: "انطلاقاتنا المنظمة مع البرنامج يوماً بيوم والمقاعد المتاحة والأسعار.",
+  destinationsText: "الوجهات المتاحة للحجز عبر الإنترنت، وتلك التي نعدها.",
+  merzougaSignature: "مرزوكة",
+};
+
+const all: Record<Locale, Agency> = { fr, en, ar };
+export const getAgency = (l: Locale) => all[l];
+export const SERVICE_KEYS: ServiceKey[] = ["national", "international", "omra", "surMesure", "hotels", "transport", "billetterie"];

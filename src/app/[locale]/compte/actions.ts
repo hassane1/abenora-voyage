@@ -24,7 +24,7 @@ async function sendVerification(customerId: string, email: string, locale: Local
   await sendMail({
     to: email,
     subject: v.account.space,
-    html: await emailLayout(v.account.space, `<p>${escapeHtml(v.account.created)}</p><p><a href="${link}" style="display:inline-block;background:#B96543;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">✓ ${escapeHtml(v.account.email)}</a></p>`, locale === "ar" ? "rtl" : "ltr"),
+    html: await emailLayout(v.account.space, `<p>${escapeHtml(v.account.created)}</p><p><a href="${link}" style="display:inline-block;background:#8C6420;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">✓ ${escapeHtml(v.account.email)}</a></p>`, locale === "ar" ? "rtl" : "ltr"),
   });
 }
 

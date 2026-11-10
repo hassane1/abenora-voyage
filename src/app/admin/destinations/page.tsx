@@ -12,7 +12,7 @@ const faqText = (v: unknown, l: string) => ((v ?? []) as Faq).map((f) => `Q: ${f
 export default async function DestinationsAdmin({ searchParams }: PageProps<"/admin/destinations">) {
   await requireAdmin("catalog.write");
   const sp = await searchParams;
-  const destinations = await db.destination.findMany({ orderBy: { sortOrder: "asc" }, include: { _count: { select: { circuits: true, activities: true, media: true } } } });
+  const destinations = await db.destination.findMany({ where: { slug: { not: "voyages-sur-mesure" } }, orderBy: [{ scope: "asc" }, { sortOrder: "asc" }], include: { _count: { select: { circuits: true, activities: true, media: true } } } });
   return (
     <div className="max-w-6xl">
       <PageTitle title="Destinations" />
@@ -26,7 +26,7 @@ export default async function DestinationsAdmin({ searchParams }: PageProps<"/ad
           <details key={d.id} id={d.slug} className="rounded-2xl bg-white ring-1 ring-night/5">
             <summary className="flex cursor-pointer flex-wrap items-center justify-between gap-2 p-4">
               <span className="font-semibold">
-                {L(d.name, "fr")} <span className="text-xs text-muted">· {d.region} · /{d.slug}</span>
+                {L(d.name, "fr")} <span className="text-xs text-muted">· {d.scope === "INTERNATIONAL" ? `International · ${d.country}` : `Maroc · ${d.region}`} · /{d.slug}</span>
               </span>
               <span className="flex items-center gap-2 text-xs">
                 {d._count.circuits} circuit(s) · {d._count.activities} activité(s) · {d._count.media} média(s)
@@ -50,6 +50,17 @@ export default async function DestinationsAdmin({ searchParams }: PageProps<"/ad
             </form>
             <form action={updateDestinationDetails} className="grid gap-3 border-t border-night/5 p-4 lg:grid-cols-4">
               <input type="hidden" name="id" value={d.id} />
+              <label className="block">
+                <span className="label">Typologie</span>
+                <select name="scope" defaultValue={d.scope} className="field !py-1.5 text-sm">
+                  <option value="NATIONAL">Voyage national (Maroc)</option>
+                  <option value="INTERNATIONAL">Voyage international</option>
+                </select>
+              </label>
+              <label className="block">
+                <span className="label">Pays</span>
+                <input name="country" defaultValue={d.country} className="field !py-1.5 text-sm" />
+              </label>
               <label className="block">
                 <span className="label">Région</span>
                 <input name="region" defaultValue={d.region} className="field !py-1.5 text-sm" />
@@ -85,10 +96,15 @@ export default async function DestinationsAdmin({ searchParams }: PageProps<"/ad
         ))}
       </div>
       <Card title="Nouvelle destination" className="mt-6">
-        <form action={createDestination} className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <form action={createDestination} className="grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
           <input name="name_fr" required placeholder="Nom (FR)" className="field !py-2 text-sm" />
           <input name="name_en" placeholder="Name (EN)" className="field !py-2 text-sm" />
           <input name="name_ar" placeholder="الاسم (AR)" dir="rtl" className="field !py-2 text-sm" />
+          <select name="scope" className="field !py-2 text-sm" defaultValue="NATIONAL">
+            <option value="NATIONAL">National (Maroc)</option>
+            <option value="INTERNATIONAL">International</option>
+          </select>
+          <input name="country" placeholder="Pays (si international)" className="field !py-2 text-sm" />
           <input name="region" placeholder="Région" className="field !py-2 text-sm" />
           <input name="latitude" placeholder="Latitude" className="field !py-2 text-sm" />
           <input name="longitude" placeholder="Longitude" className="field !py-2 text-sm" />

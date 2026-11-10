@@ -21,6 +21,8 @@ model Destination {
   tagline     Json
   description Json
   region      String
+  scope       String   @default("NATIONAL") // NATIONAL (Maroc) | INTERNATIONAL
+  country     String   @default("Maroc")
   latitude    Float
   longitude   Float
   sections    Json // blocs éditoriaux { erg, accommodation, ... } traduits

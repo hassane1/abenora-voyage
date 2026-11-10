@@ -200,6 +200,14 @@ Les remboursements sont effectués par le moyen de paiement initial, dans un dé
 
 export const generalFaq = [
   {
+    q: { fr: "Organisez-vous des voyages à l'étranger et l'Omra ?", en: "Do you organise trips abroad and Umrah?", ar: "هل تنظمون رحلات إلى الخارج والعمرة؟" },
+    a: {
+      fr: "Oui. Les voyages internationaux et l'Omra se préparent sur demande : indiquez vos dates, le nombre de voyageurs et vos souhaits via le formulaire « Sur mesure » ou WhatsApp, l'agence vous envoie une proposition et un devis.",
+      en: "Yes. International trips and Umrah are prepared on request: send your dates, number of travellers and wishes via the tailor-made form or WhatsApp, and the agency sends you a proposal and a quote.",
+      ar: "نعم. تُعدّ الرحلات الدولية والعمرة حسب الطلب عبر استمارة « حسب الطلب » أو واتساب، وسترسل لك الوكالة اقتراحاً وعرض سعر.",
+    },
+  },
+  {
     q: { fr: "Ma réservation est-elle confirmée immédiatement ?", en: "Is my booking confirmed immediately?", ar: "هل يتم تأكيد حجزي فوراً؟" },
     a: {
       fr: "Non. Votre demande est enregistrée avec un numéro de dossier, puis l'agence vérifie les disponibilités et vous confirme par e-mail. Vous ne payez rien avant cette confirmation.",

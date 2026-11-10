@@ -52,7 +52,7 @@ export async function sendQuoteEmail(quoteId: string) {
       v.quote.title,
       `<p>${escapeHtml(q.request.name)},</p><p><strong>${escapeHtml(q.title)}</strong></p>
        <p>${v.quote.total} : <strong>${q.totalMad.toLocaleString("fr-FR")} MAD</strong> · ${v.quote.validUntil} ${q.validUntil.toISOString().slice(0, 10)}</p>
-       <p><a href="${quoteUrl(q, locale)}" style="display:inline-block;background:#B96543;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">${escapeHtml(v.quote.title)}</a></p>
+       <p><a href="${quoteUrl(q, locale)}" style="display:inline-block;background:#8C6420;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">${escapeHtml(v.quote.title)}</a></p>
        <p style="font-size:12px;color:#6b7280">${escapeHtml(v.quote.notBinding)}</p>`,
       locale === "ar" ? "rtl" : "ltr",
     ),
@@ -70,7 +70,15 @@ export async function convertQuoteToBooking(quoteId: string, actor: string) {
   if (!q.startDate) throw new Error("Renseignez la date de début du devis avant de le transformer.");
   const dest =
     (q.request.destination && (await db.destination.findUnique({ where: { slug: q.request.destination } }))) ||
-    (await db.destination.findUniqueOrThrow({ where: { slug: "merzouga" } }));
+    // demande sans destination du catalogue (international, Omra…) : destination technique non publiée
+    (await db.destination.upsert({
+      where: { slug: "voyages-sur-mesure" },
+      update: {},
+      create: {
+        slug: "voyages-sur-mesure", name: { fr: "Voyages sur mesure", en: "Tailor-made trips" }, tagline: { fr: "" }, description: { fr: "Destination technique des devis hors catalogue (non publiée)." },
+        region: "—", scope: "INTERNATIONAL", country: "—", latitude: 31.8, longitude: -7.1, sections: {}, tips: { fr: [] }, faq: [], published: false, sortOrder: 999,
+      },
+    }));
   const days = Math.max(1, q.request.durationDays ?? 1);
   const slug = `sur-mesure-${dest.slug}`;
   const circuit =

@@ -14,7 +14,7 @@ const content = {
     blocks: [
       ["shield", "Des engagements vérifiables", "Les programmes sont présentés comme des exemples ajustables, les temps de route sont calculés et les tarifs sont clairement identifiés. Aucune réservation n'est annoncée comme confirmée avant validation par notre équipe."],
       ["palm", "Un tourisme respectueux", "Nous privilégions les guides et prestataires de la région, limitons l'impact sur les dunes et refusons toute mise en scène des communautés locales."],
-      ["sparkle", "Le Maroc, destination par destination", "Nous commençons par Merzouga et le Sahara. Chaque nouvelle destination sera ouverte uniquement lorsque ses offres auront été construites et validées."],
+      ["globe", "Au Maroc et à l'international", "Voyages organisés nationaux et internationaux, Omra, séjours sur mesure, hôtels, transport et billetterie. Les offres sont publiées en ligne au fur et à mesure qu'elles sont validées."],
     ],
     note: "Présentation de l'équipe, coordonnées légales et licences de l'agence : section à compléter par l'administrateur.",
   },
@@ -23,7 +23,7 @@ const content = {
     blocks: [
       ["shield", "Verifiable commitments", "Programmes are presented as adjustable examples, driving times are computed and prices are clearly labelled. No booking is announced as confirmed before our team validates it."],
       ["palm", "Respectful tourism", "We favour local guides and providers, limit our impact on the dunes and refuse any staging of local communities."],
-      ["sparkle", "Morocco, one destination at a time", "We begin with Merzouga and the Sahara. Each new destination will open only once its offers have been built and validated."],
+      ["globe", "In Morocco and abroad", "Organised domestic and international trips, Umrah, tailor-made stays, hotels, transport and ticketing. Offers are published online as they are validated."],
     ],
     note: "Team presentation, legal details and agency licences: section to be completed by the administrator.",
   },
@@ -32,7 +32,7 @@ const content = {
     blocks: [
       ["shield", "التزامات قابلة للتحقق", "البرامج أمثلة قابلة للتعديل، وأوقات الطريق محسوبة، والأسعار واضحة. لا يُعلن عن تأكيد أي حجز قبل مصادقة فريقنا."],
       ["palm", "سياحة محترمة", "نفضل المرشدين ومقدمي الخدمات المحليين ونحد من التأثير على الكثبان."],
-      ["sparkle", "المغرب وجهة بعد وجهة", "نبدأ بمرزوكة والصحراء، ولن تُفتح أي وجهة جديدة إلا بعد المصادقة على عروضها."],
+      ["globe", "في المغرب وخارجه", "رحلات منظمة وطنية ودولية، العمرة، إقامات حسب الطلب، فنادق، نقل وتذاكر. تُنشر العروض تباعاً بعد المصادقة عليها."],
     ],
     note: "تقديم الفريق والمعلومات القانونية: قسم يكمله المسؤول.",
   },

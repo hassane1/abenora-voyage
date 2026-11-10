@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-sand: #d8a45d;
-  --color-sand-light: #ecd3a8;
-  --color-sand-dark: #b8853f;
-  --color-terracotta: #b96543;
-  --color-terracotta-dark: #9a4f31;
-  --color-night: #14283f;
-  --color-night-light: #23405f;
+  /* Palette Benani Travel, tirée du logo : bleu nuit profond, or métallisé, blanc */
+  --color-sand: #d4a845; /* or du logo */
+  --color-sand-light: #efd596;
+  --color-sand-dark: #b08a2e;
+  --color-terracotta: #8c6420; /* or bronze : accents et textes (contraste AA sur ivoire) */
+  --color-terracotta-dark: #6e4e18;
+  --color-night: #0b1a2e; /* bleu nuit du logo */
+  --color-night-light: #16304f;
   --color-ivory: #faf7f1;
   --color-ink: #1d2733;
   --color-muted: #6a7480;
@@ -47,6 +48,11 @@ body {
 }
 [dir="rtl"] .eyebrow { letter-spacing: 0; }
 
+/* Accueil : diaporama en fondu de plusieurs destinations */
+.hero-slide { opacity: 0; animation-name: hero-fade; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+.hero-slide:first-child { opacity: 1; }
+@keyframes hero-fade { 0% { opacity: 0; transform: scale(1.06); } 6% { opacity: 1; } 25% { opacity: 1; } 31% { opacity: 0; } 100% { opacity: 0; transform: scale(1); } }
+
 /* Révélation au défilement */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
 .reveal.is-visible { opacity: 1; transform: none; }
@@ -72,10 +78,15 @@ body {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   border-radius: 999px; padding: 0.8rem 1.5rem; font-weight: 600; transition: all 0.25s;
 }
-.btn-primary { background: var(--color-terracotta); color: #fff; }
-.btn-primary:hover { background: var(--color-terracotta-dark); }
-.btn-sand { background: var(--color-sand); color: var(--color-night); }
-.btn-sand:hover { background: var(--color-sand-light); }
+/* bouton principal : or métallisé du logo, texte bleu nuit */
+.btn-primary { background: linear-gradient(135deg, #f3dc97 0%, #d4a845 45%, #b8892c 70%, #e6c46c 100%); color: var(--color-night); box-shadow: 0 6px 18px rgb(176 138 46 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.45); }
+.btn-primary:hover { filter: brightness(1.06); box-shadow: 0 8px 24px rgb(176 138 46 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.5); }
+.btn-sand { background: var(--color-night); color: #f3dc97; border: 1px solid rgb(212 168 69 / 0.5); }
+.btn-sand:hover { background: var(--color-night-light); }
+/* sur fond sombre : le bouton « sand » reste doré */
+.bg-night .btn-sand, [class*="from-night"] .btn-sand, .text-white .btn-sand { background: linear-gradient(135deg, #f3dc97, #d4a845 55%, #c39a3a); color: var(--color-night); border: 0; }
+/* texte doré métallisé (titres d'accent) */
+.text-gold { background: linear-gradient(135deg, #f6e3a6, #d4a845 50%, #a97f27); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .btn-ghost { border: 1px solid currentColor; }
 .btn-ghost:hover { background: rgb(255 255 255 / 0.1); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }

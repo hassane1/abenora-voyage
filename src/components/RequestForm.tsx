@@ -16,11 +16,15 @@ export default function RequestForm({
   kind,
   circuits = [],
   destinations = [],
+  initialMessage = "",
+  defaultDestination,
 }: {
   locale: Locale;
   kind: "SUR_MESURE" | "CONTACT";
   circuits?: Suggestable[];
   destinations?: { slug: string; name: string }[];
+  initialMessage?: string;
+  defaultDestination?: string;
 }) {
   const t = getDictionary(locale);
   const v = getV2(locale);
@@ -86,7 +90,7 @@ export default function RequestForm({
           <div className="grid gap-4 sm:grid-cols-2">
             <label>
               <span className="label">{t.home.searchDestination}</span>
-              <select name="destination" className="field" defaultValue={destinations[0]?.slug ?? "merzouga"}>
+              <select name="destination" className="field" defaultValue={defaultDestination ?? destinations[0]?.slug ?? "merzouga"}>
                 {destinations.map((d) => (
                   <option key={d.slug} value={d.slug}>
                     {d.name}
@@ -171,7 +175,7 @@ export default function RequestForm({
 
       <label>
         <span className="label">{kind === "CONTACT" ? t.contact.message : t.tailor.message} *</span>
-        <textarea name="message" required minLength={5} rows={5} className="field" maxLength={4000} />
+        <textarea name="message" required minLength={5} rows={5} className="field" maxLength={4000} defaultValue={initialMessage} />
       </label>
       {kind === "SUR_MESURE" && (
         <label>

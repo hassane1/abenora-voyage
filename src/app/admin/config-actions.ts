@@ -227,6 +227,8 @@ export async function createDestination(formData: FormData) {
   const d = await db.destination.create({
     data: {
       slug, name: { fr, en: str(formData, "name_en"), ar: str(formData, "name_ar") }, tagline: { fr: "" }, description: { fr: "" },
+      scope: str(formData, "scope") === "INTERNATIONAL" ? "INTERNATIONAL" : "NATIONAL",
+      country: str(formData, "scope") === "INTERNATIONAL" ? str(formData, "country") || "—" : "Maroc",
       region: str(formData, "region") || "—", latitude: Number.isFinite(lat) ? lat : 31.8, longitude: Number.isFinite(lng) ? lng : -7.1,
       sections: {}, tips: { fr: [] }, faq: [], published: false, sortOrder: 100,
     },
@@ -250,6 +252,8 @@ export async function updateDestinationDetails(formData: FormData) {
     where: { id },
     data: {
       region: str(formData, "region") || d.region,
+      scope: str(formData, "scope") === "INTERNATIONAL" ? "INTERNATIONAL" : "NATIONAL",
+      country: str(formData, "scope") === "INTERNATIONAL" ? str(formData, "country") || d.country : "Maroc",
       latitude: Number.isFinite(lat) && lat !== 0 ? lat : d.latitude,
       longitude: Number.isFinite(lng) && lng !== 0 ? lng : d.longitude,
       sortOrder: Number(str(formData, "sortOrder")) || d.sortOrder,

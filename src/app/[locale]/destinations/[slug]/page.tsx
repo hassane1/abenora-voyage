@@ -16,6 +16,8 @@ import CircuitMapTabs from "@/components/CircuitMapTabs";
 import TripComposer from "@/components/TripComposer";
 import { getComposerData } from "@/lib/composer-data";
 import { Icon } from "@/components/Icon";
+import HourByHour from "@/components/HourByHour";
+import { getExtra } from "@/i18n/extra";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/destinations/[slug]">): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -166,6 +168,16 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
           </div>
         ))}
       </section>
+
+      {/* SIGNATURE DU DÉSERT : LE SAHARA HEURE PAR HEURE (Merzouga uniquement) */}
+      {d.slug === "merzouga" && (
+        <section className="mx-auto max-w-7xl px-4 pb-24 lg:px-8">
+          <SectionTitle eyebrow="Merzouga" title={getExtra(locale).hourTitle} text={getExtra(locale).hourText} />
+          <div className="mt-10">
+            <HourByHour locale={locale} />
+          </div>
+        </section>
+      )}
 
       {/* CIRCUITS */}
       <section id="circuits" className="scroll-mt-32 bg-white py-24">

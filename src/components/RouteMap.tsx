@@ -19,7 +19,7 @@ export type MapStop = {
 
 type Leg = { from: string; to: string; mode: string; distanceKm?: number; durationMin?: number };
 
-const COLORS = { DRIVE: "#B96543", WALK: "#14283F", CAMEL: "#14283F" } as Record<string, string>;
+const COLORS = { DRIVE: "#8C6420", WALK: "#0B1A2E", CAMEL: "#0B1A2E" } as Record<string, string>;
 
 /**
  * Carte interactive d'un circuit (Leaflet + tuiles OpenStreetMap).
@@ -56,7 +56,7 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
       for (const group of seen.values()) {
         n++;
         const s = group[0];
-        const color = s.kind === "NIGHT" ? "#14283F" : s.kind === "POI" ? "#D8A45D" : "#B96543";
+        const color = s.kind === "NIGHT" ? "#0B1A2E" : s.kind === "POI" ? "#D4A845" : "#8C6420";
         const icon = L.divIcon({
           className: "",
           html: `<div style="background:${color};color:#fff;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font:600 12px sans-serif;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)">${n}</div>`,
@@ -67,7 +67,7 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
         const desc = group.map((g) => g.description).filter(Boolean).join("<br/>");
         L.marker([s.latitude, s.longitude], { icon, title: s.name })
           .addTo(map)
-          .bindPopup(`<strong style="font-size:14px">${s.name}</strong><br/><span style="color:#B96543;font-size:11px">${days}</span><p style="margin:6px 0 0">${desc}</p>`);
+          .bindPopup(`<strong style="font-size:14px">${s.name}</strong><br/><span style="color:#8C6420;font-size:11px">${days}</span><p style="margin:6px 0 0">${desc}</p>`);
       }
       map.fitBounds(L.latLngBounds(stops.map((s) => [s.latitude, s.longitude])), { padding: [40, 40] });
 

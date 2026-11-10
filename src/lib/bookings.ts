@@ -236,8 +236,8 @@ async function notifyBookingCreated(bookingId: string) {
     html: await emailLayout(
       t.booking.successTitle,
       `<p>${escapeHtml(b.firstName)},</p><p>${t.booking.successText}</p>${bookingSummaryHtml(b, locale)}
-       ${b.pricesAreDemo ? `<p style="font-size:12px;color:#B96543">${t.common.demoPriceLong}</p>` : ""}
-       <p><a href="${link}" style="display:inline-block;background:#B96543;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">${t.booking.viewFile}</a></p>`,
+       ${b.pricesAreDemo ? `<p style="font-size:12px;color:#8C6420">${t.common.demoPriceLong}</p>` : ""}
+       <p><a href="${link}" style="display:inline-block;background:#8C6420;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">${t.booking.viewFile}</a></p>`,
       localeMeta[locale].dir,
     ),
   });

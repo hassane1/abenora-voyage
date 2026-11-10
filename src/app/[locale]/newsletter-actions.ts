@@ -34,7 +34,7 @@ export async function subscribeNewsletter(_prev: NewsletterState, formData: Form
     subject: v.newsletter.title,
     html: await emailLayout(
       v.newsletter.title,
-      `<p>${escapeHtml(v.newsletter.text)}</p><p><a href="${link}" style="display:inline-block;background:#B96543;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">${escapeHtml(v.newsletter.submit)} ✓</a></p>`,
+      `<p>${escapeHtml(v.newsletter.text)}</p><p><a href="${link}" style="display:inline-block;background:#8C6420;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">${escapeHtml(v.newsletter.submit)} ✓</a></p>`,
       loc === "ar" ? "rtl" : "ltr",
     ),
   });

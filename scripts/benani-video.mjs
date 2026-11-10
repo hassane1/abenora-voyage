@@ -198,56 +198,48 @@ await page.evaluate(() => localStorage.setItem("cookie-notice-v1", "1"));
 
 console.log("▶ Intro");
 await goto("/fr");
-await card("Agence de voyage · Maroc", `${LOGO}<br/>BENANI TRAVEL`, "Explorez le Maroc autrement.<br/>Circuits, excursions, séjours et voyages sur mesure", "Présentation du site — version à valider", 4600);
+await card("Agence de voyage marocaine", `${LOGO}<br/>BENANI TRAVEL`, "Voyages nationaux et internationaux · Omra · Sur mesure<br/>Hôtels · Transport · Billetterie", "Présentation du site — version à valider", 4600);
 
 console.log("▶ Accueil");
 await page.mouse.move(W * 0.7, H * 0.4, { steps: 20 });
-await caption("Un accueil immersif", "Grande photo du Sahara, trois accès directs et une recherche complète", 3600);
-await clickText("button[role=tab]", "Activités");
-await wait(600);
-await clickText("button[role=tab]", "Circuits");
-await caption("Recherche : destination, date, voyageurs, durée, budget", "Les résultats ne montrent que les départs réellement ouverts", 3200);
+await caption("Une agence de voyage, au Maroc et dans le monde", "Logo et couleurs Benani Travel, plusieurs destinations en fondu, trois accès directs", 4200);
+await caption("Recherche : destination, date, voyageurs, durée, budget", "Les résultats ne montrent que les départs réellement ouverts", 3000);
+await scrollToText("h2", "Deux façons de voyager", 1800);
+await caption("Deux typologies de voyages", "Voyages nationaux au Maroc · voyages internationaux sur demande", 3600);
+await scrollTo("#services", 1800, -70);
+await caption("Tous les services de l'agence", "Voyages organisés, international, Omra, sur mesure, hôtels, transport, billetterie", 4000);
 await scrollTo("#destinations", 1800, -70);
-await caption("Destinations incontournables", "Merzouga ouverte à la réservation, les autres destinations prêtes à être publiées depuis l'admin", 3800);
+await caption("Les destinations", "Merzouga ouverte à la réservation, les autres prêtes à être publiées depuis l'admin", 3400);
 await scrollToText("h2", "circuits les plus populaires", 1800);
-await page.mouse.move(W * 0.3, H * 0.6, { steps: 15 });
-await caption("Nos circuits les plus populaires", "Photos, prochain départ, places restantes et prix « à partir de »", 3600);
+await caption("Nos circuits les plus populaires", "Photos, prochain départ, places restantes et prix « à partir de »", 3400);
 await scrollToText("h2", "Places disponibles", 1800);
-await caption("Prochains départs en temps réel", "Dates et places viennent directement du moteur de réservation", 3000);
-await scrollToText("h2", "Expériences et activités", 1800);
-await caption("Expériences et activités", "Dromadaire, bivouac, quad, buggy, 4x4, Khamlia, oasis, ciel étoilé…", 3000);
+await caption("Prochains départs en temps réel", "Dates et places viennent directement du moteur de réservation", 2800);
 
-console.log("▶ Heure par heure");
-await scrollToText("h2", "heure par heure", 1800);
-const slider = page.locator('input[type="range"]').first();
-await caption("Le Sahara heure par heure", "Une journée à Merzouga, de l'aube à la nuit étoilée", 1400);
-for (const v of ["1", "2", "3", "4"]) {
-  await slider.evaluate((el, val) => {
-    const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set;
-    set.call(el, val);
-    el.dispatchEvent(new Event("input", { bubbles: true }));
-    el.dispatchEvent(new Event("change", { bubbles: true }));
-  }, v);
-  await wait(1100);
-}
-
-console.log("▶ Sur mesure + confiance");
-await scrollTo("#composer", 1800, -70);
-await caption("Voyages sur mesure", "Le visiteur compose son séjour ou demande un devis personnalisé", 3200);
+console.log("▶ Confiance");
+await scrollToText("h2", "Voyages sur mesure", 1800);
+await caption("Voyages sur mesure et Omra", "Demande de devis personnalisé, préparée par l'agence", 3000);
 await scrollToText("h2", "Pourquoi voyager avec nous", 1800);
-await caption("Pourquoi voyager avec nous ?", "Rien n'est confirmé sans l'agence, programmes réalistes, contact WhatsApp", 3200);
+await caption("Pourquoi voyager avec nous ?", "Rien n'est confirmé sans l'agence, programmes clairs, contact WhatsApp", 3000);
 await scrollToText("h2", "Témoignages vérifiés", 1600);
-await caption("Témoignages vérifiés uniquement", "Seuls les voyageurs ayant fait un séjour confirmé peuvent publier un avis — aucun faux avis", 3600);
+await caption("Témoignages vérifiés uniquement", "Seuls les voyageurs ayant fait un séjour confirmé peuvent publier un avis — aucun faux avis", 3400);
 await scrollToText("h2", "Questions fréquentes", 1800);
 await page.locator("details summary").first().click().catch(() => {});
 await wait(800);
-await caption("FAQ, conseils, newsletter et contact", "Inscription à la newsletter avec confirmation par e-mail", 3000);
+await caption("FAQ, conseils, newsletter et contact", "Inscription à la newsletter avec confirmation par e-mail", 2800);
 await scrollTo(99999, 2200, 0);
-await caption("Pied de page professionnel", "Coordonnées Benani Travel, Instagram, pages légales", 3000);
+await caption("Pied de page professionnel", "Coordonnées Benani Travel, Instagram, pages légales", 2800);
+
+console.log("▶ Voyages et services");
+await goto("/fr/voyages?type=national");
+await caption("Voyages organisés", "Onglets Nationaux / Internationaux, circuits réservables et destinations", 3200);
+await goto("/fr/services");
+await caption("Page Services", "Chaque service mène à une demande pré-remplie ou à WhatsApp", 3200);
 
 console.log("▶ Merzouga");
 await goto("/fr/destinations/merzouga");
-await caption("Merzouga, vivez la magie du Sahara", "Erg Chebbi, expériences, bivouacs, circuits, carte, conseils, FAQ, calendrier des séjours", 3600);
+await caption("Merzouga, une destination complète", "Erg Chebbi, expériences, bivouacs, circuits, carte, conseils, FAQ, calendrier des séjours", 3400);
+await scrollToText("h2", "heure par heure", 2000);
+await caption("Le Sahara heure par heure", "Une journée à Merzouga, de l'aube à la nuit étoilée", 2600);
 await scrollTo("#carte", 2200, -60);
 await wait(2200);
 await caption("Carte interactive avec trajets réels", "Itinéraires sur OpenStreetMap, temps de route calculés", 3000);
@@ -265,9 +257,8 @@ await caption("Réservation en quelques étapes", "Dates disponibles, voyageurs,
 console.log("▶ Espace voyageur");
 await goto("/fr/compte");
 await caption("Espace voyageur", "Réservations, documents de voyage, reçus, messagerie, demande d'annulation, favoris", 3600);
-await goto("/fr/sur-mesure");
-await scrollToText("h2", "Un autre projet", 1800);
-await caption("Demande de devis sur mesure", "Devis préparé par l'agence → accepté en ligne → transformé en réservation", 3600);
+await goto("/fr/sur-mesure?service=omra");
+await caption("Demande de devis sur mesure (ici : Omra)", "Devis préparé par l'agence → accepté en ligne → transformé en réservation", 3600);
 
 console.log("▶ Multilingue");
 await goto("/ar");
@@ -326,7 +317,7 @@ await caption("Sécurité", "Rôles de l'équipe, journal d'audit, limitation de
 
 console.log("▶ Outro");
 await goto("/fr");
-await card("Benani Travel", `${LOGO}`, "Explorez le Maroc autrement.", "Tarifs et disponibilités de démonstration à remplacer · Photos : Super Morocco Travels · En attente de votre validation", 4800);
+await card("Benani Travel", `${LOGO}`, "Votre agence de voyage, au Maroc et dans le monde.", "Tarifs et disponibilités de démonstration à remplacer · Photos : Super Morocco Travels · En attente de votre validation", 4800);
 
 await context.close();
 await browser.close();

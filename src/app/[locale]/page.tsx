@@ -15,7 +15,6 @@ import {
   getUpcomingDestinations,
 } from "@/lib/queries";
 import { getAllPhotos, getPhotos } from "@/lib/photos";
-import { getComposerData } from "@/lib/composer-data";
 import { getGeneralFaq, getHomeOverrides } from "@/lib/content";
 import { tr } from "@/lib/i18n-content";
 import { formatDate, formatMad } from "@/lib/format";
@@ -23,11 +22,10 @@ import { waLink } from "@/lib/site";
 import { getBrand } from "@/lib/brand";
 import Visual from "@/components/Visual";
 import HeroSearch from "@/components/HeroSearch";
-import HourByHour from "@/components/HourByHour";
 import Reveal from "@/components/Reveal";
-import TripComposer from "@/components/TripComposer";
 import NewsletterForm from "@/components/NewsletterForm";
-import { ActivityCard, CircuitCard, SectionTitle, ZelligeBand } from "@/components/Cards";
+import { ActivityCard, CircuitCard, SectionTitle } from "@/components/Cards";
+import { getAgency, SERVICE_KEYS } from "@/i18n/agency";
 import { Icon } from "@/components/Icon";
 
 export default async function HomePage({ params, searchParams }: PageProps<"/[locale]">) {
@@ -37,12 +35,11 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
   const t = getDictionary(locale);
   const x = getExtra(locale);
   const v = getV2(locale);
-  const [destinations, upcoming, circuits, activities, composer, photo, gallery, nextDeps, departures, reviews, posts, faq, home, brand] = await Promise.all([
+  const [destinations, upcoming, circuits, activities, photo, gallery, nextDeps, departures, reviews, posts, faq, home, brand] = await Promise.all([
     getPublishedDestinations(),
     getUpcomingDestinations(),
     getCircuits(),
     getActivities(),
-    getComposerData(locale),
     getPhotos(locale),
     getAllPhotos(locale),
     getNextDepartures(),
@@ -53,7 +50,10 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
     getHomeOverrides(locale),
     getBrand(),
   ]);
-  const heroPhoto = photo("hero");
+  const a = getAgency(locale);
+  // visuel d'accueil : plusieurs destinations en fondu (photos avec droits confirmés)
+  const heroSlides = [photo("hero"), photo("aitbenhaddou"), photo("valley"), photo("palm")].filter((p) => !!p);
+  if (heroSlides.length === 0) heroSlides.push(undefined as never);
   const categories = (["AVENTURE", "CULTURE", "EXCEPTION"] as const).map((k) => ({ key: k, label: t.categories[k] }));
   const featured = ["dromadaire-coucher-soleil", "campement-luxe", "quad-desert", "degustation", "4x4-chauffeur", "bivouac-traditionnel", "khamlia-gnawa", "oasis"]
     .map((s) => activities.find((a) => a.slug === s))
@@ -67,33 +67,41 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
 
   return (
     <>
-      {/* ───────── HERO ───────── */}
-      <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden pb-10 pt-28 text-white md:items-center md:pb-16">
-        <div className="absolute inset-0 -z-10 animate-slow-pan">
-          <Visual photo={heroPhoto} variant="sunset" seed={42} caravan className="h-full w-full" priority title="Erg Chebbi, Merzouga" />
+      {/* ───────── HERO : agence, plusieurs destinations en fondu ───────── */}
+      <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-night pb-10 pt-28 text-white md:items-center md:pb-16">
+        <div className="absolute inset-0 -z-10">
+          {heroSlides.map((p, i) => (
+            <div key={i} className="hero-slide absolute inset-0" style={{ animationDelay: `${i * 6}s`, animationDuration: `${heroSlides.length * 6}s` }}>
+              <Visual photo={p} variant="sunset" seed={42 + i} className="h-full w-full" priority={i === 0} />
+            </div>
+          ))}
         </div>
         {home.heroVideo && (
-          <video className="absolute inset-0 -z-10 h-full w-full object-cover motion-reduce:hidden" src={home.heroVideo} autoPlay muted loop playsInline preload="metadata" poster={heroPhoto?.src} aria-hidden />
+          <video className="absolute inset-0 -z-10 h-full w-full object-cover motion-reduce:hidden" src={home.heroVideo} autoPlay muted loop playsInline preload="metadata" poster={heroSlides[0]?.src} aria-hidden />
         )}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/30 to-night/40" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-night/60 to-transparent rtl:bg-gradient-to-l" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/40 to-night/50" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-night/80 to-transparent rtl:bg-gradient-to-l" />
         <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
-          <p className="eyebrow inline-flex animate-fade-up items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 !text-sand backdrop-blur">
-            <Icon name="pin" className="h-3.5 w-3.5" /> {brand.name} · {t.brandTagline}
-          </p>
-          <h1 className="font-display mt-5 max-w-4xl animate-fade-up text-5xl font-semibold leading-[0.98] [animation-delay:120ms] sm:text-6xl lg:text-[5.25rem]">
-            {home.heroTitle || t.home.heroTitle}
+          <div className="flex animate-fade-up items-center gap-4">
+            {brand.logoUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={brand.logoUrl} alt={brand.name} className="h-20 w-20 rounded-full shadow-[0_0_0_3px_rgba(212,168,69,0.6),0_20px_50px_rgba(0,0,0,0.5)] md:h-24 md:w-24" />
+            )}
+            <p className="eyebrow rounded-full bg-white/10 px-3 py-1.5 !text-sand backdrop-blur">{a.heroEyebrow}</p>
+          </div>
+          <h1 className="font-display mt-6 max-w-4xl animate-fade-up text-5xl font-semibold leading-[0.98] [animation-delay:120ms] sm:text-6xl lg:text-[5rem]">
+            {home.heroTitle || a.heroTitle}
           </h1>
-          <p className="mt-6 max-w-2xl animate-fade-up text-lg text-white/85 [animation-delay:240ms] md:text-xl">{home.heroSubtitle || t.home.heroSubtitle}</p>
+          <p className="mt-6 max-w-2xl animate-fade-up text-lg text-white/85 [animation-delay:240ms] md:text-xl">{home.heroSubtitle || a.heroSubtitle}</p>
           <div className="mt-8 flex animate-fade-up flex-wrap gap-3 [animation-delay:360ms]">
-            <a href="#destinations" className="btn btn-sand">
-              {v.hero.exploreDestinations} <Icon name="arrow" className="h-4 w-4 rtl:rotate-180" />
-            </a>
-            <Link href={`/${locale}/circuits`} className="btn btn-ghost text-white">
-              {v.hero.discoverCircuits}
+            <Link href={`/${locale}/voyages`} className="btn btn-primary">
+              {a.ctaTrips} <Icon name="arrow" className="h-4 w-4 rtl:rotate-180" />
             </Link>
+            <a href="#services" className="btn btn-ghost text-white">
+              {a.ctaServices}
+            </a>
             <Link href={`/${locale}/sur-mesure`} className="btn btn-ghost text-white">
-              {v.hero.planTrip}
+              {a.ctaTailor}
             </Link>
           </div>
           <div className="mt-10 animate-fade-up [animation-delay:480ms]">
@@ -104,16 +112,16 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
               upcoming={upcoming.map((d) => ({ slug: d.slug, name: tr(d.name, locale) }))}
             />
           </div>
-          {heroPhoto?.credit && <p className="mt-4 text-[11px] text-white/50">© {heroPhoto.credit}</p>}
+          {heroSlides.some((p) => p?.credit) && <p className="mt-4 text-[11px] text-white/50">© {Array.from(new Set(heroSlides.map((p) => p?.credit).filter(Boolean))).join(", ")}</p>}
         </div>
       </section>
 
       {/* ───────── BARRE DE CONFIANCE ───────── */}
       <section className="border-b border-night/5 bg-white">
         <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-7 lg:grid-cols-4 lg:px-8">
-          {x.trust.map((it) => (
+          {a.trust.map((it) => (
             <li key={it.title} className="flex items-start gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sand/15 text-terracotta">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-night text-sand">
                 <Icon name={it.icon} className="h-5 w-5" />
               </span>
               <span>
@@ -125,21 +133,85 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
         </ul>
       </section>
 
+      {/* ───────── NOS VOYAGES : NATIONAL / INTERNATIONAL ───────── */}
+      <section className="mx-auto max-w-7xl px-4 pt-24 lg:px-8">
+        <SectionTitle eyebrow={a.typologies.eyebrow} title={a.typologies.title} />
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          {(
+            [
+              ["national", a.typologies.national, photo("aitbenhaddou") ?? heroSlides[0]],
+              ["international", a.typologies.international, undefined],
+            ] as const
+          ).map(([key, ty, p]) => (
+            <Link key={key} href={`/${locale}/voyages?type=${key}`} className="group relative isolate flex min-h-80 flex-col justify-end overflow-hidden rounded-[2rem] bg-night p-8 text-white ring-1 ring-sand/20">
+              {p ? (
+                <Visual photo={p} className="absolute inset-0 -z-10 h-full w-full" imgClassName="transition duration-700 group-hover:scale-105" />
+              ) : (
+                <span className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_10%,rgba(212,168,69,0.35),transparent_45%),linear-gradient(160deg,#16304f,#0B1A2E)]">
+                  <Icon name="globe" className="absolute -end-10 -top-10 h-72 w-72 text-sand/10" />
+                </span>
+              )}
+              <span className="absolute inset-0 -z-10 bg-gradient-to-t from-night/95 via-night/40 to-transparent" />
+              <span className="eyebrow !text-sand">{key === "national" ? "Maroc" : "International"}</span>
+              <span className="font-display mt-2 text-4xl font-semibold">{ty.title}</span>
+              <span className="mt-2 max-w-md text-white/80">{ty.text}</span>
+              <span className="mt-5 inline-flex items-center gap-2 font-semibold text-sand">
+                {ty.cta} <Icon name="arrow" className="h-4 w-4 transition group-hover:translate-x-1 rtl:rotate-180" />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ───────── NOS SERVICES ───────── */}
+      <section id="services" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-24 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <SectionTitle eyebrow={brand.name} title={a.servicesTitle} text={a.servicesText} />
+          <Link href={`/${locale}/services`} className="inline-flex items-center gap-2 font-semibold text-terracotta hover:underline">
+            {t.common.seeAll} <Icon name="arrow" className="h-4 w-4 rtl:rotate-180" />
+          </Link>
+        </div>
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SERVICE_KEYS.map((k) => {
+            const s = a.services[k];
+            return (
+              <li key={k}>
+                <Link href={k === "national" ? `/${locale}/voyages?type=national` : `/${locale}/sur-mesure?service=${k}#demande`} className="group flex h-full flex-col rounded-3xl bg-white p-6 ring-1 ring-night/5 transition hover:-translate-y-1 hover:shadow-xl hover:ring-sand/50">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-night text-sand transition group-hover:bg-sand group-hover:text-night">
+                    <Icon name={s.icon} className="h-6 w-6" />
+                  </span>
+                  <span className="font-display mt-4 text-2xl font-semibold text-night">{s.title}</span>
+                  <span className="mt-2 flex-1 text-sm leading-relaxed text-muted">{s.text}</span>
+                  <span className="mt-4 text-sm font-semibold text-terracotta">{k === "national" ? a.typologies.national.cta : a.serviceCta} →</span>
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <Link href={`/${locale}/contact`} className="flex h-full flex-col justify-center rounded-3xl bg-night p-6 text-white ring-1 ring-sand/30">
+              <span className="font-display text-2xl font-semibold text-sand">{v.sections.contactTitle}</span>
+              <span className="mt-2 text-sm text-white/75">{v.sections.contactText}</span>
+            </Link>
+          </li>
+        </ul>
+      </section>
+
       {/* ───────── 1. DESTINATIONS INCONTOURNABLES ───────── */}
       <section id="destinations" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-24 lg:px-8">
-        <SectionTitle eyebrow={v.sections.destinationsEyebrow} title={v.sections.destinationsTitle} text={v.sections.destinationsText} />
+        <SectionTitle eyebrow={v.sections.destinationsEyebrow} title={v.sections.destinationsTitle} text={a.destinationsText} />
         <div className="mt-12 grid auto-rows-[220px] grid-cols-2 gap-4 md:grid-cols-4">
           {allDestinations.slice(0, 10).map((d, i) => {
             const open = d.published;
             const p = photo(`destination:${d.slug}`);
-            const big = i === 0;
+            const big = false; // toutes les destinations au même niveau : le site présente l'agence, pas une seule destination
+            void i;
             const inner = (
               <>
                 {p ? (
                   <Visual photo={p} className="absolute inset-0 h-full w-full" imgClassName="transition duration-700 group-hover:scale-105" />
                 ) : (
-                  <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#23405f_0%,#14283f_70%)]">
-                    <span className="absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(45deg,#d8a45d_0_1px,transparent_1px_14px)]" />
+                  <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#16304f_0%,#0B1A2E_70%)]">
+                    <span className="absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(45deg,#D4A845_0_1px,transparent_1px_14px)]" />
                   </span>
                 )}
                 <span className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/20 to-transparent" />
@@ -174,7 +246,7 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
       <section className="bg-white py-24">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionTitle eyebrow={t.nav.circuits} title={v.sections.popularTitle} text={t.home.featuredText} />
+            <SectionTitle eyebrow={t.nav.circuits} title={v.sections.popularTitle} text={a.popularText} />
             <Link href={`/${locale}/comparer`} className="inline-flex items-center gap-2 font-semibold text-terracotta hover:underline">
               <Icon name="route" className="h-4 w-4" /> {t.nav.compare}
             </Link>
@@ -250,33 +322,30 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
         </div>
       </section>
 
-      {/* ───────── SIGNATURE : HEURE PAR HEURE ───────── */}
-      <section className="px-4 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <SectionTitle eyebrow="Merzouga" title={x.hourTitle} text={x.hourText} />
-          <div className="mt-10">
-            <HourByHour locale={locale} />
-          </div>
-        </div>
-      </section>
-
       {/* ───────── 4. VOYAGES SUR MESURE ───────── */}
-      {composer.circuits.length > 0 && (
-        <section id="composer" className="mt-24 scroll-mt-20 bg-[linear-gradient(180deg,#f3e6cf_0%,#faf7f1_100%)] py-24">
-          <ZelligeBand className="-mt-24 mb-16" />
-          <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <SectionTitle eyebrow={t.nav.tailorMade} title={v.sections.tailorTitle} text={v.sections.tailorText} />
-              <Link href={`/${locale}/sur-mesure`} className="btn btn-primary">
+      <section className="px-4 lg:px-8">
+        <div className="relative isolate mx-auto grid max-w-7xl items-center gap-8 overflow-hidden rounded-[2rem] bg-[linear-gradient(135deg,#efe4c8_0%,#faf7f1_100%)] p-8 ring-1 ring-sand/30 sm:p-12 lg:grid-cols-[1.2fr_1fr]">
+          <div>
+            <SectionTitle eyebrow={t.nav.tailorMade} title={v.sections.tailorTitle} text={v.sections.tailorText} />
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href={`/${locale}/sur-mesure#demande`} className="btn btn-primary">
                 {v.sections.tailorCta} <Icon name="arrow" className="h-4 w-4 rtl:rotate-180" />
               </Link>
-            </div>
-            <div className="mt-10">
-              <TripComposer locale={locale} {...composer} />
+              <Link href={`/${locale}/sur-mesure?service=omra#demande`} className="btn btn-sand">
+                {a.services.omra.title}
+              </Link>
             </div>
           </div>
-        </section>
-      )}
+          <ul className="grid grid-cols-2 gap-3 text-sm">
+            {(["surMesure", "hotels", "transport", "billetterie"] as const).map((k) => (
+              <li key={k} className="flex items-center gap-3 rounded-2xl bg-white/80 p-4 ring-1 ring-night/5">
+                <Icon name={a.services[k].icon} className="h-5 w-5 shrink-0 text-terracotta" />
+                <span className="font-semibold text-night">{a.services[k].title}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       {/* ───────── 5. POURQUOI VOYAGER AVEC NOUS ───────── */}
       <section className="px-4 py-24 lg:px-8">
@@ -418,7 +487,7 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
 
       {/* ───────── 10. NEWSLETTER ET CONTACT ───────── */}
       <section id="newsletter" className="scroll-mt-24 px-4 pb-24 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-10 rounded-[2rem] bg-[linear-gradient(135deg,#14283f_0%,#23405f_100%)] p-8 text-white sm:p-12 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-7xl gap-10 rounded-[2rem] bg-[linear-gradient(135deg,#0B1A2E_0%,#16304f_100%)] p-8 text-white sm:p-12 lg:grid-cols-2">
           <div>
             <p className="eyebrow !text-sand">Newsletter</p>
             <h2 className="font-display mt-2 text-4xl font-semibold">{v.newsletter.title}</h2>

@@ -16,7 +16,7 @@ export default function BottomNav({ locale }: { locale: Locale }) {
   if (/\/(circuits\/[^/]+|reservation)$/.test(pathname)) return null;
   const items = [
     { href: `/${locale}`, label: x.bottomNav.home, icon: "globe", exact: true },
-    { href: `/${locale}/circuits`, label: x.bottomNav.circuits, icon: "route" },
+    { href: `/${locale}/voyages`, label: locale === "ar" ? "رحلات" : locale === "en" ? "Trips" : "Voyages", icon: "route" },
     { href: `/${locale}/sur-mesure`, label: x.bottomNav.compose, icon: "sparkle", primary: true },
     { href: `/${locale}/favoris`, label: x.bottomNav.favorites, icon: "heart", badge: favs.list.length + trip.list.length },
     { href: `/${locale}/contact`, label: x.bottomNav.contact, icon: "phone" },

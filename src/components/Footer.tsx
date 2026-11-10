@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getV2 } from "@/i18n/v2";
+import { getAgency } from "@/i18n/agency";
 import { getBrand } from "@/lib/brand";
 import { LEGAL_SLUGS } from "@/lib/content";
 import { BrandMark } from "./Header";
@@ -10,16 +11,17 @@ import { Icon } from "./Icon";
 export default async function Footer({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
   const v = getV2(locale);
+  const ag = getAgency(locale);
   const brand = await getBrand();
   const tagline = brand.tagline[locale] || t.brandTagline;
   const cols = [
     {
-      title: t.nav.destinations,
+      title: ag.nav.trips,
       links: [
-        { href: `/${locale}/destinations/merzouga`, label: "Merzouga" },
+        { href: `/${locale}/voyages?type=national`, label: ag.typologies.national.title },
+        { href: `/${locale}/voyages?type=international`, label: ag.typologies.international.title },
         { href: `/${locale}/destinations`, label: t.nav.destinations },
-        { href: `/${locale}/circuits`, label: t.nav.circuits },
-        { href: `/${locale}/activites`, label: t.nav.activities },
+        { href: `/${locale}/services`, label: ag.nav.services },
         { href: `/${locale}/sur-mesure`, label: t.nav.tailorMade },
       ],
     },

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { localeMeta, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getV2 } from "@/i18n/v2";
+import { getAgency } from "@/i18n/agency";
 import { FAVORITES_KEY, TRIP_KEY, useLocalList } from "./useLocalList";
 import { Icon } from "./Icon";
 import { useBrand } from "./BrandProvider";
@@ -15,6 +16,7 @@ export default function Header({ locale, banner }: { locale: Locale; banner?: Ac
   const t = getDictionary(locale);
   const pathname = usePathname();
   const brand = useBrand();
+  const ag = getAgency(locale);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const favs = useLocalList(FAVORITES_KEY);
@@ -37,18 +39,19 @@ export default function Header({ locale, banner }: { locale: Locale; banner?: Ac
   }
 
   const links = [
-    { href: `/${locale}/destinations/merzouga`, label: "Merzouga" },
-    { href: `/${locale}/circuits`, label: t.nav.circuits },
-    { href: `/${locale}/activites`, label: t.nav.activities },
+    { href: `/${locale}/voyages`, label: ag.nav.trips },
+    { href: `/${locale}/destinations`, label: ag.nav.destinations },
+    { href: `/${locale}/services`, label: ag.nav.services },
     { href: `/${locale}/sur-mesure`, label: t.nav.tailorMade },
-    { href: `/${locale}/destinations`, label: t.nav.destinations },
+    { href: `/${locale}/a-propos`, label: ag.nav.about },
     { href: `/${locale}/contact`, label: t.nav.contact },
   ];
   const secondary = [
+    { href: `/${locale}/circuits`, label: t.nav.circuits },
+    { href: `/${locale}/activites`, label: t.nav.activities },
     { href: `/${locale}/blog`, label: t.nav.blog },
     { href: `/${locale}/galerie`, label: t.nav.gallery },
     { href: `/${locale}/avis`, label: t.nav.reviews },
-    { href: `/${locale}/a-propos`, label: t.nav.about },
     { href: `/${locale}/comparer`, label: t.nav.compare },
     { href: `/${locale}/compte`, label: getV2(locale).account.space },
     { href: `/${locale}/espace-client`, label: t.nav.account },
