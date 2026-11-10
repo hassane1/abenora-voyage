@@ -4,6 +4,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { aiEnabled, buildKnowledge, offlineAnswer, systemPrompt } from "@/lib/assistant";
+import { clientIp, rateLimit } from "@/lib/security";
 
 const schema = z.object({
   locale: z.string(),
@@ -13,14 +14,10 @@ const schema = z.object({
     .max(24),
 });
 
-// Limitation de débit simple (mémoire du processus)
-const hits = new Map<string, number[]>();
-function limited(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 60 * 60_000);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > 40;
+// Limitation de débit persistée (40 messages / h et 10 / min par client) ; l'IP n'est pas lue dans un en-tête falsifiable
+async function limited(ip: string) {
+  const [h, m] = await Promise.all([rateLimit(`chat:h:${ip}`, 40, 3600), rateLimit(`chat:m:${ip}`, 10, 60)]);
+  return !h.ok || !m.ok;
 }
 
 let client: Anthropic | null = null;
@@ -30,11 +27,11 @@ function textResponse(text: string, status = 200) {
 }
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  const ip = await clientIp();
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return textResponse("Requête invalide.", 400);
   const locale: Locale = hasLocale(parsed.data.locale) ? parsed.data.locale : "fr";
-  if (limited(ip)) return textResponse(locale === "en" ? "Too many messages, please try again later." : "Trop de messages, réessayez plus tard.", 429);
+  if (await limited(ip)) return textResponse(locale === "en" ? "Too many messages, please try again later." : "Trop de messages, réessayez plus tard.", 429);
 
   // la conversation doit commencer et finir par un message du visiteur
   const msgs = parsed.data.messages.slice(-12);

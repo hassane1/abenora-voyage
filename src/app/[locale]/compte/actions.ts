@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { getV2 } from "@/i18n/v2";
 import { checkPassword, hashPassword } from "@/lib/auth";
+import { needsRehash } from "@/lib/password";
 import { createCustomerSession, consumeCustomerToken, destroyCustomerSession, getCustomer, issueCustomerToken } from "@/lib/customer";
 import { audit, clientIp, passwordProblem, rateLimit, resetRateLimit } from "@/lib/security";
 import { emailLayout, escapeHtml, sendMail } from "@/lib/mail";
@@ -74,12 +75,14 @@ export async function login(formData: FormData) {
   const [a, b] = await Promise.all([rateLimit(`clogin:acct:${email}`, 8, 900), rateLimit(`clogin:ip:${ip}`, 30, 900)]);
   if (!a.ok || !b.ok) redirect(`/${locale}/compte?error=locked`);
   const c = await db.customer.findUnique({ where: { email } });
-  const ok = await checkPassword(s(formData, "password", 200), c?.passwordHash ?? "$2a$12$C6UzMDM.H6dfI/f/IKcEeO5bvYxYbqJ9b1u5zQ3bM5i8eWqk6Xq2a");
+  const pw = s(formData, "password", 200);
+  const ok = await checkPassword(pw, c?.passwordHash);
   if (!c || !ok) {
     await audit(`client:${email}`, "CUSTOMER_LOGIN_FAIL");
     redirect(`/${locale}/compte?error=login`);
   }
   await resetRateLimit(`clogin:acct:${email}`);
+  if (needsRehash(c.passwordHash)) await db.customer.update({ where: { id: c.id }, data: { passwordHash: await hashPassword(pw) } });
   await createCustomerSession(c.id);
   redirect(`/${locale}/compte`);
 }

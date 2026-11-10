@@ -282,8 +282,27 @@ model AdminUser {
   active       Boolean   @default(true)
   mfaSecret    String? // secret TOTP chiffré (AES-256-GCM)
   mfaEnabled   Boolean   @default(false)
+  mfaLastStep  Int? // dernier pas TOTP accepté (anti-rejeu du code)
   lastLoginAt  DateTime?
   createdAt    DateTime  @default(now())
+  sessions     AdminSession[]
+}
+
+/** Sessions de l'équipe : révocables (déconnexion, mot de passe, rôle, désactivation), inactivité 60 min */
+model AdminSession {
+  id         String    @id // empreinte SHA-256 de l'identifiant de session (jamais stocké en clair)
+  userId     String
+  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mfaPassed  Boolean   @default(false)
+  authAt     DateTime  @default(now()) // dernière saisie du mot de passe (ré-authentification)
+  createdAt  DateTime  @default(now())
+  lastSeenAt DateTime  @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  ip         String?
+  userAgent  String?
+
+  @@index([userId])
 }
 
 model PromoCode {

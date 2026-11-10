@@ -8,7 +8,7 @@ import { randomBytes } from "node:crypto";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { audit } from "@/lib/security";
-import { DOCS_DIR, sniffDocument } from "@/lib/files";
+import { DOCS_DIR, sniffDocument, stripImageMetadata } from "@/lib/files";
 import { convertQuoteToBooking, newQuoteNumber, newQuoteToken, parseQuoteLines, quoteTotal, sendQuoteEmail } from "@/lib/quotes";
 import { emailLayout, escapeHtml, sendMail } from "@/lib/mail";
 import { site } from "@/lib/site";
@@ -111,7 +111,7 @@ export async function uploadBookingDocument(formData: FormData) {
   if (!sniff) redirect(`/admin/reservations/${bookingId}?error=file#documents`);
   await mkdir(DOCS_DIR, { recursive: true });
   const fileName = `${Date.now()}-${randomBytes(8).toString("hex")}.${sniff.ext}`;
-  await writeFile(path.join(DOCS_DIR, fileName), buf);
+  await writeFile(path.join(DOCS_DIR, fileName), sniff.ext === "pdf" ? buf : stripImageMetadata(buf, sniff.ext));
   const kind = DOC_KINDS.has(str(formData, "kind")) ? str(formData, "kind") : "OTHER";
   await db.bookingDocument.create({ data: { bookingId, kind, title: str(formData, "title", 120) || file.name.slice(0, 120), fileName, mimeType: sniff.mime, size: buf.length, uploadedBy: admin.email } });
   await audit(admin.email, "DOCUMENT_UPLOAD", bookingId, { kind, size: buf.length });

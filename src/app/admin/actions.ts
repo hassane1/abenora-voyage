@@ -7,9 +7,9 @@ import path from "node:path";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { getAdmin, requireAdmin, signIn, signOut, verifyMfaStep } from "@/lib/auth";
+import { getAdmin, reauthenticate, requireAdmin, requireRecentAuth, safeAdminPath, signIn, signOut, verifyMfaStep } from "@/lib/auth";
 import { audit, clientIp, rateLimit, resetRateLimit } from "@/lib/security";
-import { sniffImage, sniffVideo } from "@/lib/files";
+import { sniffImage, sniffVideo, stripImageMetadata } from "@/lib/files";
 import { BookingError, changeBookingStatus } from "@/lib/bookings";
 import { addDays } from "@/lib/format";
 
@@ -47,6 +47,22 @@ export async function loginMfa(formData: FormData) {
   }
   await audit(r.email!, "LOGIN_OK", null, { mfa: true });
   redirect("/admin");
+}
+
+/** Ré-authentification avant une opération critique (écran /admin/confirmer) */
+export async function confirmIdentity(formData: FormData) {
+  const admin = await requireAdmin();
+  const next = safeAdminPath(String(formData.get("next") ?? ""));
+  const lim = await rateLimit(`admin-reauth:${admin.id}`, 5, 900);
+  if (!lim.ok) redirect(`/admin/confirmer?error=locked&next=${encodeURIComponent(next)}`);
+  const ok = await reauthenticate(admin, String(formData.get("password") ?? "").slice(0, 200), String(formData.get("code") ?? ""));
+  if (!ok) {
+    await audit(admin.email, "REAUTH_FAIL");
+    redirect(`/admin/confirmer?error=1&next=${encodeURIComponent(next)}`);
+  }
+  await resetRateLimit(`admin-reauth:${admin.id}`);
+  await audit(admin.email, "REAUTH_OK");
+  redirect(next);
 }
 
 export async function logout() {
@@ -87,7 +103,10 @@ export async function recordPayment(formData: FormData) {
   const id = str(formData, "id");
   const amount = Math.round(Number(str(formData, "amount")));
   const kind = str(formData, "kind") === "REFUND" ? "REFUND" : "PAYMENT";
-  if (!amount || amount <= 0) redirect(`/admin/reservations/${id}?error=amount`);
+  if (!/^[\w-]{1,40}$/.test(id)) redirect("/admin/reservations");
+  if (!amount || amount <= 0 || amount > 10_000_000) redirect(`/admin/reservations/${id}?error=amount`);
+  // un remboursement est une opération critique : mot de passe + code saisis il y a moins de 15 min
+  if (kind === "REFUND") await requireRecentAuth(admin, `/admin/reservations/${id}`);
   const b = await db.booking.findUniqueOrThrow({ where: { id }, include: { payments: true } });
   await db.payment.create({ data: { bookingId: id, amountMad: amount, method: str(formData, "method") || "VIREMENT", reference: str(formData, "reference") || null, kind, recordedBy: admin.email } });
   const paid = b.payments.reduce((s, p) => s + (p.kind === "REFUND" ? -p.amountMad : p.amountMad), 0) + (kind === "REFUND" ? -amount : amount);
@@ -392,9 +411,10 @@ export async function uploadMedia(formData: FormData) {
   const admin = await requireAdmin("content.write");
   const file = formData.get("file");
   if (!(file instanceof File) || file.size > 50 * 1024 * 1024) redirect("/admin/medias?error=file");
-  const buf = Buffer.from(await file.arrayBuffer());
+  const raw = Buffer.from(await file.arrayBuffer());
   // type déterminé par le contenu réel du fichier (SVG / HTML / exécutables refusés)
-  const ext = sniffImage(buf) ?? sniffVideo(buf);
+  const ext = sniffImage(raw) ?? sniffVideo(raw);
+  const buf = ext && ext !== "mp4" ? stripImageMetadata(raw, ext) : raw; // EXIF (GPS, appareil) retirés
   if (!ext || (ext !== "mp4" && buf.length > 20 * 1024 * 1024)) redirect("/admin/medias?error=file");
   const name = `${Date.now()}-${randomBytes(4).toString("hex")}.${ext}`;
   const dir = path.join(process.cwd(), "public", "uploads");

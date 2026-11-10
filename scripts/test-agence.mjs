@@ -108,6 +108,8 @@ try {
   await a.click("button:has-text('Valider')");
   await a.waitForURL(/error=1/);
   ok(true, "Code MFA faux refusé");
+  // le serveur refuse de réutiliser un code déjà accepté (anti-rejeu) : on attend la fenêtre suivante
+  await new Promise((r) => setTimeout(r, 30000 - (Date.now() % 30000) + 300));
   await a.fill('input[name="code"]', totp(secret));
   await a.click("button:has-text('Valider')");
   await a.waitForURL(`${BASE}/admin`);

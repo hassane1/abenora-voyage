@@ -2,9 +2,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { BookingError, quote } from "@/lib/bookings";
 import { hasLocale } from "@/i18n/config";
+import { clientIp, rateLimit } from "@/lib/security";
 
 const schema = z.object({
-  circuitId: z.string(),
+  circuitId: z.string().max(40),
   adults: z.number().int().min(1).max(30),
   childAges: z.array(z.number().int().min(0).max(17)).max(20),
   privateTour: z.boolean(),
@@ -16,6 +17,9 @@ const schema = z.object({
 
 /** Calcul du prix faisant foi (mêmes règles que lors de l'enregistrement) */
 export async function POST(req: NextRequest) {
+  // 60 calculs / min par client : empêche l'énumération automatisée des codes promo
+  const lim = await rateLimit(`quote:${await clientIp()}`, 60, 60);
+  if (!lim.ok) return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429, headers: { "retry-after": String(lim.retryAfter) } });
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "INVALID" }, { status: 400 });
   const locale = hasLocale(parsed.data.locale) ? parsed.data.locale : "fr";

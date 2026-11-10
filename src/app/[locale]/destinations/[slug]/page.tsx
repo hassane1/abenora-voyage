@@ -88,7 +88,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
       {/* HERO */}
       <section className="relative isolate flex min-h-[88svh] items-end overflow-hidden pb-20 pt-32 text-white">

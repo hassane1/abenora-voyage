@@ -6,6 +6,9 @@ import { getCustomer } from "@/lib/customer";
 import { getAdmin } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import { DOCS_DIR } from "@/lib/files";
+import { timingSafeEqual } from "node:crypto";
+
+const sameToken = (a: string, b: string) => a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
 
 /**
@@ -14,10 +17,11 @@ import { DOCS_DIR } from "@/lib/files";
  */
 export async function GET(req: NextRequest, ctx: RouteContext<"/api/documents/[id]">) {
   const { id } = await ctx.params;
+  if (!/^[A-Za-z0-9_-]{1,40}$/.test(id)) return new NextResponse("Not found", { status: 404 });
   const doc = await db.bookingDocument.findUnique({ where: { id }, include: { booking: { select: { customerId: true, accessToken: true } } } });
   if (!doc) return new NextResponse("Not found", { status: 404 });
   const token = req.nextUrl.searchParams.get("token");
-  let allowed = !!token && token.length >= 20 && token === doc.booking.accessToken;
+  let allowed = !!token && token.length >= 20 && sameToken(token, doc.booking.accessToken);
   if (!allowed) {
     const c = await getCustomer();
     allowed = !!c && c.id === doc.booking.customerId;
@@ -34,8 +38,11 @@ export async function GET(req: NextRequest, ctx: RouteContext<"/api/documents/[i
   return new NextResponse(new Uint8Array(buf), {
     headers: {
       "content-type": doc.mimeType,
-      "content-disposition": `inline; filename="${safeName}.${doc.fileName.split(".").pop()}"`,
+      "content-disposition": `attachment; filename="${safeName}.${doc.fileName.split(".").pop()}"`,
       "x-content-type-options": "nosniff",
+      // le document ne peut exécuter aucun script, même ouvert directement dans le navigateur
+      "content-security-policy": "sandbox; default-src 'none'; img-src 'self'; style-src 'unsafe-inline'",
+      "referrer-policy": "no-referrer",
       "cache-control": "private, no-store",
     },
   });

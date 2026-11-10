@@ -7,12 +7,12 @@ import path from "node:path";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { checkPassword, hashPassword, openSession, requireAdmin } from "@/lib/auth";
-import { audit, decrypt, encrypt, newTotpSecret, passwordProblem, verifyTotp } from "@/lib/security";
+import { checkPassword, consumeTotp, hashPassword, openSession, requireAdmin, requireRecentAuth, revokeAllSessions } from "@/lib/auth";
+import { audit, encrypt, newTotpSecret, passwordProblem } from "@/lib/security";
 import { BRAND_KEYS } from "@/lib/brand";
 import { isRole } from "@/lib/rbac";
 import { LEGAL_SLUGS } from "@/lib/content";
-import { sniffImage } from "@/lib/files";
+import { sniffImage, stripImageMetadata } from "@/lib/files";
 
 const str = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
 const bool = (f: FormData, k: string) => f.get(k) === "on" || f.get(k) === "true";
@@ -36,9 +36,10 @@ export async function confirmMfaSetup(formData: FormData) {
   const admin = await requireAdmin(undefined, { allowWithoutMfa: true });
   const user = await db.adminUser.findUniqueOrThrow({ where: { id: admin.id } });
   if (!user.mfaSecret || user.mfaEnabled) redirect("/admin/securite");
-  if (!verifyTotp(decrypt(user.mfaSecret), str(formData, "code"))) redirect("/admin/securite?setup=1&error=code");
+  if (!(await consumeTotp(user.id, user.mfaSecret, str(formData, "code")))) redirect("/admin/securite?setup=1&error=code");
   await db.adminUser.update({ where: { id: admin.id }, data: { mfaEnabled: true } });
-  await openSession(admin.id, true); // la session courante devient « MFA validée »
+  await revokeAllSessions(admin.id); // les autres appareils devront se reconnecter avec le code
+  await openSession(admin.id, true); // nouvelle session (rotation), « MFA validée »
   await audit(admin.email, "MFA_ENABLED", admin.id);
   redirect("/admin/securite?ok=mfa");
 }
@@ -48,8 +49,9 @@ export async function changeOwnPassword(formData: FormData) {
   const user = await db.adminUser.findUniqueOrThrow({ where: { id: admin.id } });
   const next = str(formData, "next");
   if (!(await checkPassword(str(formData, "current"), user.passwordHash))) redirect("/admin/securite?error=current");
-  if (passwordProblem(next, user.email) || next !== str(formData, "confirm")) redirect("/admin/securite?error=weak");
+  if (passwordProblem(next, user.email, { staff: true }) || next !== str(formData, "confirm")) redirect("/admin/securite?error=weak");
   await db.adminUser.update({ where: { id: admin.id }, data: { passwordHash: await hashPassword(next) } });
+  await revokeAllSessions(admin.id, admin.sessionId); // déconnecte les autres appareils
   await audit(admin.email, "PASSWORD_CHANGED", admin.id);
   redirect("/admin/securite?ok=password");
 }
@@ -59,10 +61,11 @@ export async function changeOwnPassword(formData: FormData) {
 // ---------------------------------------------------------------------------
 export async function createAdminUser(formData: FormData) {
   const admin = await requireAdmin("users.manage");
+  await requireRecentAuth(admin, "/admin/utilisateurs");
   const email = str(formData, "email").toLowerCase();
   const role = str(formData, "role");
   const password = str(formData, "password");
-  if (!z.string().email().safeParse(email).success || !isRole(role) || passwordProblem(password, email)) redirect("/admin/utilisateurs?error=1");
+  if (!z.string().email().safeParse(email).success || !isRole(role) || passwordProblem(password, email, { staff: true })) redirect("/admin/utilisateurs?error=1");
   if (await db.adminUser.findUnique({ where: { email } })) redirect("/admin/utilisateurs?error=exists");
   await db.adminUser.create({ data: { email, name: str(formData, "name") || email, role, passwordHash: await hashPassword(password) } });
   await audit(admin.email, "USER_CREATED", email, { role });
@@ -71,13 +74,15 @@ export async function createAdminUser(formData: FormData) {
 
 export async function updateAdminUser(formData: FormData) {
   const admin = await requireAdmin("users.manage");
+  await requireRecentAuth(admin, "/admin/utilisateurs");
   const id = str(formData, "id");
   const role = str(formData, "role");
   const action = str(formData, "action");
   if (id === admin.id && action !== "save") redirect("/admin/utilisateurs?error=self");
   const target = await db.adminUser.findUniqueOrThrow({ where: { id } });
   if (action === "reset-mfa") {
-    await db.adminUser.update({ where: { id }, data: { mfaEnabled: false, mfaSecret: null } });
+    await db.adminUser.update({ where: { id }, data: { mfaEnabled: false, mfaSecret: null, mfaLastStep: null } });
+    await revokeAllSessions(id);
     await audit(admin.email, "USER_MFA_RESET", target.email);
   } else {
     if (!isRole(role)) redirect("/admin/utilisateurs?error=1");
@@ -88,6 +93,8 @@ export async function updateAdminUser(formData: FormData) {
       if (others === 0) redirect("/admin/utilisateurs?error=lastadmin");
     }
     await db.adminUser.update({ where: { id }, data: { role, active, name: str(formData, "name") || target.name } });
+    // changement de rôle ou désactivation : sessions révoquées (les droits sont aussi relus à chaque requête)
+    if (id !== admin.id && (role !== target.role || !active)) await revokeAllSessions(id);
     await audit(admin.email, "USER_UPDATED", target.email, { role, active });
   }
   redirect("/admin/utilisateurs?ok=1");
@@ -98,6 +105,7 @@ export async function updateAdminUser(formData: FormData) {
 // ---------------------------------------------------------------------------
 export async function saveBrand(formData: FormData) {
   const admin = await requireAdmin("settings.write");
+  await requireRecentAuth(admin, "/admin/identite");
   for (const k of BRAND_KEYS) {
     if (k === "logoUrl") continue;
     let v = str(formData, k).slice(0, 500);
@@ -116,7 +124,7 @@ export async function saveBrand(formData: FormData) {
     const name = `logo-${Date.now()}-${randomBytes(3).toString("hex")}.${ext}`;
     const dir = path.join(process.cwd(), "public", "uploads", "brand");
     await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, name), buf);
+    await writeFile(path.join(dir, name), stripImageMetadata(buf, ext));
     await setSetting("brand.logoUrl", `/uploads/brand/${name}`);
   }
   if (bool(formData, "removeLogo")) await setSetting("brand.logoUrl", "");

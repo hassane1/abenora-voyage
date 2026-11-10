@@ -35,7 +35,7 @@ export default async function PostPage({ params }: PageProps<"/[locale]/blog/[sl
   };
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <PageHero eyebrow={formatDate(p.publishedAt, locale)} title={tr(p.title, locale)} text={tr(p.excerpt, locale)} variant={(["dawn", "dusk", "night", "noon"] as const)[hashSeed(p.slug) % 4]} seed={hashSeed(p.slug)} />
       <article className="mx-auto max-w-3xl px-4 py-16">
         {isFallback(p.body, locale) && <p className="mb-6 text-xs text-muted">{t.common.translationPending}</p>}

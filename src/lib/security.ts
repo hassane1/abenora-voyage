@@ -73,13 +73,18 @@ export function totpCode(secret: string, counter: number) {
 }
 /** Vérifie un code à 6 chiffres (tolérance ± 30 s) */
 export function verifyTotp(secret: string, code: string, now = Date.now()) {
+  return totpStep(secret, code, now) !== null;
+}
+/** Pas de temps (fenêtre de 30 s) correspondant au code, ou null : sert à refuser la réutilisation d'un code */
+export function totpStep(secret: string, code: string, now = Date.now()): number | null {
   const c = code.replace(/\s/g, "");
-  if (!/^\d{6}$/.test(c)) return false;
+  if (!/^\d{6}$/.test(c)) return null;
   const step = Math.floor(now / 30_000);
-  return [-1, 0, 1].some((d) => {
+  for (const d of [-1, 0, 1]) {
     const expected = totpCode(secret, step + d);
-    return timingSafeEqual(Buffer.from(expected), Buffer.from(c));
-  });
+    if (timingSafeEqual(Buffer.from(expected), Buffer.from(c))) return step + d;
+  }
+  return null;
 }
 export function otpauthUrl(secret: string, account: string, issuer: string) {
   return `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(account)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}&period=30&digits=6`;
@@ -142,8 +147,8 @@ export async function audit(actor: string, action: string, target?: string | nul
 }
 
 /** Politique de mot de passe minimale (ASVS 2.1 : longueur ≥ 10 ici, pas de règles de composition imposées) */
-export function passwordProblem(pw: string, email?: string): string | null {
-  if (pw.length < 10) return "TOO_SHORT";
+export function passwordProblem(pw: string, email?: string, opts: { staff?: boolean } = {}): string | null {
+  if (pw.length < (opts.staff ? 12 : 10)) return "TOO_SHORT";
   if (pw.length > 128) return "TOO_LONG";
   if (email && pw.toLowerCase().includes(email.split("@")[0].toLowerCase()) && email.split("@")[0].length >= 4) return "CONTAINS_EMAIL";
   const common = ["motdepasse", "password", "azertyuiop", "1234567890", "qwertyuiop", "marrakech1", "morocco123"];

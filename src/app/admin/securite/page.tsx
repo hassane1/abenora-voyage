@@ -36,7 +36,7 @@ export default async function SecurityPage({ searchParams }: PageProps<"/admin/s
       {sp.ok && <p className="mb-6 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">{sp.ok === "mfa" ? "Vérification en deux étapes activée." : "Mot de passe modifié."}</p>}
       {sp.error && (
         <p role="alert" className="mb-6 rounded-xl bg-rose-50 p-3 text-sm text-rose-800">
-          {sp.error === "code" ? "Code incorrect : vérifiez l'heure de votre téléphone et réessayez." : sp.error === "current" ? "Mot de passe actuel incorrect." : "Nouveau mot de passe refusé : 10 caractères minimum, différent de l'e-mail, confirmation identique."}
+          {sp.error === "code" ? "Code incorrect : vérifiez l'heure de votre téléphone et réessayez." : sp.error === "current" ? "Mot de passe actuel incorrect." : "Nouveau mot de passe refusé : 12 caractères minimum, différent de l'e-mail, confirmation identique."}
         </p>
       )}
       {needsRelogin && <p className="mb-6 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">Votre session n&apos;a pas été validée par le code MFA. Déconnectez-vous puis reconnectez-vous.</p>}
@@ -73,8 +73,8 @@ export default async function SecurityPage({ searchParams }: PageProps<"/admin/s
         <Card title="Changer mon mot de passe" className="mt-6">
           <form action={changeOwnPassword} className="grid gap-3 sm:grid-cols-3">
             <input name="current" type="password" required autoComplete="current-password" placeholder="Mot de passe actuel" className="field !py-2 text-sm" />
-            <input name="next" type="password" required minLength={10} autoComplete="new-password" placeholder="Nouveau (10 caractères min.)" className="field !py-2 text-sm" />
-            <input name="confirm" type="password" required minLength={10} autoComplete="new-password" placeholder="Confirmation" className="field !py-2 text-sm" />
+            <input name="next" type="password" required minLength={12} autoComplete="new-password" placeholder="Nouveau (12 caractères min.)" className="field !py-2 text-sm" />
+            <input name="confirm" type="password" required minLength={12} autoComplete="new-password" placeholder="Confirmation" className="field !py-2 text-sm" />
             <button className="btn btn-sand !py-2 text-sm sm:w-fit">Modifier</button>
           </form>
         </Card>

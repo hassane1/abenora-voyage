@@ -47,6 +47,20 @@ function securityHeaders(nonce: string) {
   return h;
 }
 
+function allowedOrigins(req: NextRequest) {
+  const list = [req.nextUrl.origin];
+  if (process.env.NEXT_PUBLIC_SITE_URL) list.push(new URL(process.env.NEXT_PUBLIC_SITE_URL).origin);
+  for (const o of (process.env.ALLOWED_ORIGINS ?? "").split(",").map((s) => s.trim()).filter(Boolean)) list.push(o);
+  return list;
+}
+function sameOrigin(req: NextRequest) {
+  const origin = req.headers.get("origin");
+  if (origin) return allowedOrigins(req).includes(origin);
+  // pas d'Origin (anciens navigateurs, outils) : on refuse si le navigateur signale une requête intersite
+  const site = req.headers.get("sec-fetch-site");
+  return !site || site === "same-origin" || site === "none";
+}
+
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const isPublicPage = !pathname.startsWith("/admin") && !pathname.startsWith("/api");
@@ -56,6 +70,13 @@ export function proxy(req: NextRequest) {
     url.pathname = `/${preferredLocale(req)}${pathname === "/" ? "" : pathname}`;
     return NextResponse.redirect(url);
   }
+  // CSRF de l'API : toute écriture doit provenir du site lui-même (en-tête Origin, ou Sec-Fetch-Site)
+  if (pathname.startsWith("/api/") && !["GET", "HEAD", "OPTIONS"].includes(req.method) && !sameOrigin(req)) {
+    return NextResponse.json({ error: "FORBIDDEN_ORIGIN" }, { status: 403 });
+  }
+  // limite de taille des corps JSON de l'API (les téléversements passent par les actions serveur, limitées à part)
+  const len = Number(req.headers.get("content-length") ?? 0);
+  if (pathname.startsWith("/api/") && len > 256 * 1024) return NextResponse.json({ error: "TOO_LARGE" }, { status: 413 });
   const nonce = btoa(crypto.randomUUID());
   const headers = securityHeaders(nonce);
   const reqHeaders = new Headers(req.headers);
@@ -64,6 +85,8 @@ export function proxy(req: NextRequest) {
   const res = NextResponse.next({ request: { headers: reqHeaders } });
   for (const [k, v] of Object.entries(headers)) res.headers.set(k, v);
   if (pathname.startsWith("/admin")) res.headers.set("Cache-Control", "no-store");
+  // documents privés : aucune exécution possible même ouverts directement dans le navigateur
+  if (pathname.startsWith("/api/documents/")) res.headers.set("Content-Security-Policy", "sandbox; default-src 'none'; img-src 'self'; style-src 'unsafe-inline'");
   return res;
 }
 

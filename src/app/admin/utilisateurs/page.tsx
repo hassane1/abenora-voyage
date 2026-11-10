@@ -6,7 +6,7 @@ import { createAdminUser, updateAdminUser } from "../config-actions";
 import { Badge, Card, PageTitle } from "../ui";
 
 const errors: Record<string, string> = {
-  "1": "Informations invalides (e-mail, rôle ou mot de passe de 10 caractères minimum).",
+  "1": "Informations invalides (e-mail, rôle ou mot de passe de 12 caractères minimum).",
   exists: "Un compte existe déjà avec cet e-mail.",
   self: "Vous ne pouvez pas désactiver ni réinitialiser votre propre compte.",
   lastadmin: "Il doit rester au moins un administrateur actif.",
@@ -76,7 +76,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/util
               <option key={r}>{r}</option>
             ))}
           </select>
-          <input name="password" type="password" minLength={10} required autoComplete="new-password" placeholder="Mot de passe provisoire" className="field !py-2 text-sm" />
+          <input name="password" type="password" minLength={12} required autoComplete="new-password" placeholder="Mot de passe provisoire" className="field !py-2 text-sm" />
           <button className="btn btn-primary !py-2 text-sm">Créer</button>
         </form>
         <p className="mt-2 text-xs text-muted">Transmettez le mot de passe provisoire par un canal sûr. Le membre configurera sa vérification en deux étapes à la première connexion.</p>

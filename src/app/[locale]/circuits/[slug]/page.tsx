@@ -69,7 +69,7 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <section className="relative isolate overflow-hidden pt-32 pb-16 text-white">
         {!photo(`circuit:${c.slug}`) && (c.programType !== "CIRCUIT" || c.destination.scope === "INTERNATIONAL") ? (
           <ProgramArt type={c.programType} className="absolute inset-0 -z-10 h-full w-full" />
