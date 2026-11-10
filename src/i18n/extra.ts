@@ -1,0 +1,146 @@
+import type { Locale } from "./config";
+
+/** Textes de la refonte (accueil commercial, navigation mobile, signature « heure par heure ») */
+const fr = {
+  tabs: { circuits: "Circuits", activities: "Activités", tailor: "Sur mesure" },
+  activityType: "Type d'expérience",
+  allActivities: "Toutes les expériences",
+  tailorPitch: "Composez votre séjour en 1 minute : départ, durée, hébergement, activités.",
+  tailorCta: "Composer mon séjour",
+  trust: [
+    { icon: "shield", title: "Aucun paiement en ligne", text: "Vous ne payez rien avant la confirmation de votre séjour" },
+    { icon: "palm", title: "Équipe locale", text: "Guides et partenaires du Tafilalet" },
+    { icon: "whatsapp", title: "Conseil personnalisé", text: "Par e-mail ou WhatsApp, avant et pendant le voyage" },
+    { icon: "route", title: "100 % personnalisable", text: "Dates, rythme, hébergement, activités" },
+  ],
+  nextDepartures: "Prochains départs",
+  nextDeparturesText: "Places disponibles en temps réel sur nos prochaines dates.",
+  nextDeparture: "Prochain départ",
+  seatsLeft: (n: number) => (n <= 3 ? `Plus que ${n} place${n > 1 ? "s" : ""}` : `${n} places`),
+  bookThisDate: "Réserver cette date",
+  labels: {
+    "escapade-saharienne-2j": "Idéal pour une première fois",
+    "immersion-desert-3j": "Le plus complet au désert",
+    "grand-sud-marocain-4j": "Grand voyage au départ de Marrakech",
+  } as Record<string, string>,
+  highlightsTitle: "Au programme",
+  categoriesTitle: "Que voulez-vous vivre ?",
+  hourTitle: "Le Sahara, heure par heure",
+  hourText: "Faites glisser le curseur : une journée à Merzouga, de l'aube à la nuit étoilée.",
+  hours: [
+    { h: "06:30", variant: "dawn", title: "Lever du soleil sur l'Erg Chebbi", text: "Ascension d'une dune avant l'aube, thé chaud, silence absolu.", activity: "lever-soleil" },
+    { h: "10:00", variant: "noon", title: "Le désert en 4x4 ou en quad", text: "Villages, oasis et pistes autour de l'erg, avant les heures chaudes.", activity: "4x4-chauffeur" },
+    { h: "17:30", variant: "sunset", title: "Caravane au coucher du soleil", text: "En dromadaire vers le bivouac, quand le sable s'embrase.", activity: "dromadaire-coucher-soleil" },
+    { h: "20:00", variant: "dusk", title: "Dîner berbère et rythmes gnawa", text: "Tajine au campement, musique autour du feu.", activity: "diner-etoiles" },
+    { h: "23:00", variant: "night", title: "Nuit sous la Voie lactée", text: "Loin de toute lumière, le ciel le plus pur du Maroc.", activity: "ciel-nocturne" },
+  ] as { h: string; variant: "dawn" | "noon" | "sunset" | "dusk" | "night"; title: string; text: string; activity: string }[],
+  inPictures: "Merzouga en images",
+  photoCredit: "Photos",
+  guaranteeTitle: "Réservez l'esprit tranquille",
+  guarantees: [
+    "Demande gratuite et sans engagement",
+    "Confirmation par notre équipe après vérification des disponibilités",
+    "Acompte uniquement après confirmation",
+    "Conditions d'annulation claires sur chaque circuit",
+  ],
+  askUs: "Une question ? Écrivez-nous",
+  bottomNav: { home: "Accueil", circuits: "Circuits", compose: "Composer", favorites: "Favoris", contact: "Contact" },
+  from: "dès",
+  viewCircuit: "Voir le circuit",
+  perPersonShort: "/pers.",
+};
+
+type Extra = typeof fr;
+
+const en: Extra = {
+  tabs: { circuits: "Tours", activities: "Activities", tailor: "Tailor-made" },
+  activityType: "Type of experience",
+  allActivities: "All experiences",
+  tailorPitch: "Build your stay in 1 minute: departure, length, accommodation, activities.",
+  tailorCta: "Build my stay",
+  trust: [
+    { icon: "shield", title: "No online payment", text: "You pay nothing before your stay is confirmed" },
+    { icon: "palm", title: "Local team", text: "Guides and partners from Tafilalet" },
+    { icon: "whatsapp", title: "Personal advice", text: "By email or WhatsApp, before and during your trip" },
+    { icon: "route", title: "100% customisable", text: "Dates, pace, accommodation, activities" },
+  ],
+  nextDepartures: "Upcoming departures",
+  nextDeparturesText: "Live availability on our next dates.",
+  nextDeparture: "Next departure",
+  seatsLeft: (n) => (n <= 3 ? `Only ${n} seat${n > 1 ? "s" : ""} left` : `${n} seats`),
+  bookThisDate: "Book this date",
+  labels: {
+    "escapade-saharienne-2j": "Perfect for a first time",
+    "immersion-desert-3j": "Most complete desert stay",
+    "grand-sud-marocain-4j": "Grand tour from Marrakesh",
+  },
+  highlightsTitle: "Highlights",
+  categoriesTitle: "What would you like to experience?",
+  hourTitle: "The Sahara, hour by hour",
+  hourText: "Slide through a day in Merzouga, from dawn to the starry night.",
+  hours: [
+    { h: "06:30", variant: "dawn", title: "Sunrise over Erg Chebbi", text: "Climb a dune before dawn, hot tea, absolute silence.", activity: "lever-soleil" },
+    { h: "10:00", variant: "noon", title: "The desert by 4x4 or quad", text: "Villages, oases and tracks around the erg, before the heat.", activity: "4x4-chauffeur" },
+    { h: "17:30", variant: "sunset", title: "Sunset caravan", text: "By camel to the camp as the sand catches fire.", activity: "dromadaire-coucher-soleil" },
+    { h: "20:00", variant: "dusk", title: "Berber dinner and Gnawa rhythms", text: "Tagine at camp, music around the fire.", activity: "diner-etoiles" },
+    { h: "23:00", variant: "night", title: "A night under the Milky Way", text: "Far from any light, Morocco's clearest sky.", activity: "ciel-nocturne" },
+  ],
+  inPictures: "Merzouga in pictures",
+  photoCredit: "Photos",
+  guaranteeTitle: "Book with peace of mind",
+  guarantees: ["Free, no-obligation request", "Confirmed by our team after checking availability", "Deposit only after confirmation", "Clear cancellation terms on every tour"],
+  askUs: "A question? Write to us",
+  bottomNav: { home: "Home", circuits: "Tours", compose: "Build", favorites: "Saved", contact: "Contact" },
+  from: "from",
+  viewCircuit: "View tour",
+  perPersonShort: "/pers.",
+};
+
+const ar: Extra = {
+  tabs: { circuits: "الجولات", activities: "الأنشطة", tailor: "حسب الطلب" },
+  activityType: "نوع التجربة",
+  allActivities: "كل التجارب",
+  tailorPitch: "صمّم إقامتك في دقيقة: الانطلاق، المدة، الإقامة، الأنشطة.",
+  tailorCta: "صمّم إقامتي",
+  trust: [
+    { icon: "shield", title: "لا دفع عبر الإنترنت", text: "لا تدفع شيئاً قبل تأكيد إقامتك" },
+    { icon: "palm", title: "فريق محلي", text: "مرشدون وشركاء من تافيلالت" },
+    { icon: "whatsapp", title: "نصيحة شخصية", text: "عبر البريد أو واتساب قبل الرحلة وأثناءها" },
+    { icon: "route", title: "قابل للتخصيص بالكامل", text: "التواريخ، الإيقاع، الإقامة، الأنشطة" },
+  ],
+  nextDepartures: "الانطلاقات القادمة",
+  nextDeparturesText: "الأماكن المتاحة مباشرة في تواريخنا القادمة.",
+  nextDeparture: "أقرب انطلاق",
+  seatsLeft: (n) => (n <= 3 ? `تبقى ${n} أماكن فقط` : `${n} أماكن`),
+  bookThisDate: "احجز هذا التاريخ",
+  labels: {
+    "escapade-saharienne-2j": "مثالية لأول مرة",
+    "immersion-desert-3j": "الإقامة الأكمل في الصحراء",
+    "grand-sud-marocain-4j": "رحلة كبرى من مراكش",
+  },
+  highlightsTitle: "في البرنامج",
+  categoriesTitle: "ماذا تريد أن تعيش؟",
+  hourTitle: "الصحراء ساعة بساعة",
+  hourText: "حرّك المؤشر: يوم في مرزوكة من الفجر إلى الليل المرصع بالنجوم.",
+  hours: [
+    { h: "06:30", variant: "dawn", title: "شروق الشمس على عرق الشبي", text: "تسلق كثيب قبل الفجر وشاي ساخن وصمت مطلق.", activity: "lever-soleil" },
+    { h: "10:00", variant: "noon", title: "الصحراء بالسيارة أو الدراجة الرباعية", text: "قرى وواحات ومسالك حول العرق قبل الحر.", activity: "4x4-chauffeur" },
+    { h: "17:30", variant: "sunset", title: "قافلة الغروب", text: "على الجمل نحو المخيم حين تتوهج الرمال.", activity: "dromadaire-coucher-soleil" },
+    { h: "20:00", variant: "dusk", title: "عشاء أمازيغي وإيقاعات كناوة", text: "طاجين في المخيم وموسيقى حول النار.", activity: "diner-etoiles" },
+    { h: "23:00", variant: "night", title: "ليلة تحت درب التبانة", text: "بعيداً عن الأضواء، أصفى سماء في المغرب.", activity: "ciel-nocturne" },
+  ],
+  inPictures: "مرزوكة بالصور",
+  photoCredit: "الصور",
+  guaranteeTitle: "احجز براحة بال",
+  guarantees: ["طلب مجاني ودون التزام", "تأكيد من فريقنا بعد التحقق من التوفر", "العربون فقط بعد التأكيد", "شروط إلغاء واضحة لكل جولة"],
+  askUs: "سؤال؟ راسلنا",
+  bottomNav: { home: "الرئيسية", circuits: "الجولات", compose: "صمّم", favorites: "المفضلة", contact: "اتصل" },
+  from: "ابتداءً من",
+  viewCircuit: "عرض الجولة",
+  perPersonShort: "/للفرد",
+};
+
+const extras = { fr, en, ar };
+export function getExtra(locale: Locale) {
+  return extras[locale];
+}

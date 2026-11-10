@@ -1,0 +1,330 @@
+// Schéma de données — plateforme touristique Maroc
+// Développement : SQLite (fichier local). Production : PostgreSQL (Supabase, Neon…)
+// en changeant `provider` et l'adaptateur Prisma (voir README).
+//
+// Champs « Json » traduisibles : objets { fr, en, ar } (voir src/lib/i18n-content.ts).
+// Statuts de prix : DEMO (fictif, démonstration) | VALIDATED (validé par l'admin) | ON_REQUEST (sur devis).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        Json
+  tagline     Json
+  description Json
+  region      String
+  latitude    Float
+  longitude   Float
+  sections    Json     // blocs éditoriaux { erg, accommodation, ... } traduits
+  tips        Json     // conseils avant le départ { fr: string[] ... }
+  faq         Json     // [{ q: {fr,en,ar}, a: {fr,en,ar} }]
+  published   Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  posts      Post[]
+  circuits   Circuit[]
+  activities Activity[]
+  media      Media[]
+}
+
+model Media {
+  id              String   @id @default(cuid())
+  kind            String   @default("IMAGE") // IMAGE | VIDEO
+  url             String
+  alt             Json
+  credit          String?
+  license         String?
+  sourceUrl       String?
+  rightsConfirmed Boolean  @default(false) // n'est affiché publiquement que si true
+  destinationId   String?
+  destination     Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  tags            String   @default("") // ex. "hero,erg-chebbi"
+  createdAt       DateTime @default(now())
+}
+
+model Activity {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  destinationId    String
+  destination      Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  category         String   // AVENTURE | CULTURE | EXCEPTION
+  icon             String   @default("sparkle")
+  title            Json
+  summary          Json
+  description      Json
+  duration         Json
+  difficulty       String   // FACILE | MODERE | SPORTIF
+  minAge           Int?
+  restrictions     Json
+  included         Json     // { fr: string[], en: string[], ar: string[] }
+  excluded         Json
+  safety           Json
+  availability     Json
+  priceMad         Int?
+  priceUnit        String   @default("PER_PERSON") // PER_PERSON | PER_GROUP
+  priceStatus      String   @default("DEMO")
+  bookingOptionCode String? // option de réservation liée (« Ajouter à mon séjour »)
+  published        Boolean  @default(true)
+  sortOrder        Int      @default(0)
+  updatedAt        DateTime @updatedAt
+}
+
+model Circuit {
+  id                   String   @id @default(cuid())
+  slug                 String   @unique
+  destinationId        String
+  destination          Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  title                Json
+  summary              Json
+  days                 Int
+  nights               Int
+  desertNights         Int      @default(1) // nuits au bivouac (options d'hébergement désert)
+  startPoint           String
+  endPoint             String
+  transport            Json
+  accommodation        Json
+  meals                Json
+  included             Json
+  excluded             Json
+  optionalActivities   Json
+  cancellationPolicy   Json
+  warnings             Json     // avertissements (ex. journée de route longue)
+  pricingMode          String   @default("PER_PERSON") // PER_PERSON | PER_GROUP
+  priceAdultMad        Int?
+  childPricePercent    Int      @default(50) // % du prix adulte pour les 4-11 ans
+  childFreeUnderAge    Int      @default(4)
+  privateSupplementMad Int      @default(0) // par personne, si voyage privé
+  depositPercent       Int      @default(30)
+  priceStatus          String   @default("DEMO")
+  defaultCapacity      Int      @default(12)
+  published            Boolean  @default(true)
+  sortOrder            Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  itinerary  CircuitDay[]
+  stops      CircuitStop[]
+  departures Departure[]
+  options    BookingOption[]
+  bookings   Booking[]
+}
+
+model CircuitDay {
+  id          String  @id @default(cuid())
+  circuitId   String
+  circuit     Circuit @relation(fields: [circuitId], references: [id], onDelete: Cascade)
+  dayNumber   Int
+  title       Json
+  description Json
+  items       Json    // { fr: string[], ... }
+
+  @@unique([circuitId, dayNumber])
+}
+
+model CircuitStop {
+  id          String  @id @default(cuid())
+  circuitId   String
+  circuit     Circuit @relation(fields: [circuitId], references: [id], onDelete: Cascade)
+  order       Int
+  dayNumber   Int
+  name        String
+  latitude    Float
+  longitude   Float
+  kind        String  @default("STAGE") // STAGE | POI | NIGHT
+  modeToNext  String? // DRIVE | WALK | CAMEL | null (dernière étape)
+  description Json
+
+  @@unique([circuitId, order])
+}
+
+model Departure {
+  id          String   @id @default(cuid())
+  circuitId   String
+  circuit     Circuit  @relation(fields: [circuitId], references: [id], onDelete: Cascade)
+  date        DateTime // date de départ (00:00 UTC)
+  capacity    Int
+  seatsHeld   Int      @default(0) // places bloquées par les demandes en attente + confirmées
+  status      String   @default("OPEN") // OPEN | CLOSED
+  isDemo      Boolean  @default(true)
+  bookings    Booking[]
+
+  @@unique([circuitId, date])
+}
+
+model BookingOption {
+  id          String   @id @default(cuid())
+  code        String
+  circuitId   String?  // null = option disponible pour tous les circuits
+  circuit     Circuit? @relation(fields: [circuitId], references: [id], onDelete: Cascade)
+  group       String   // HEBERGEMENT | ACTIVITE | REPAS | TRANSFERT | SERVICE
+  label       Json
+  description Json
+  priceMad    Int
+  unit        String   @default("PER_PERSON") // PER_PERSON | PER_BOOKING | PER_PERSON_NIGHT
+  exclusiveGroup String? // options mutuellement exclusives (ex. "camp")
+  isDefault   Boolean  @default(false)
+  priceStatus String   @default("DEMO")
+  published   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  @@unique([code, circuitId])
+}
+
+model Booking {
+  id             String    @id @default(cuid())
+  reference      String    @unique
+  accessToken    String    @unique
+  circuitId      String
+  circuit        Circuit   @relation(fields: [circuitId], references: [id])
+  departureId    String
+  departure      Departure @relation(fields: [departureId], references: [id])
+  startDate      DateTime
+  endDate        DateTime
+  adults         Int
+  children       Int       @default(0)
+  childAges      Json
+  privateTour    Boolean   @default(false)
+  options        Json      // instantané des options choisies
+  pricing        Json      // instantané du calcul (lignes, totaux)
+  totalMad       Int
+  depositMad     Int
+  pricesAreDemo  Boolean   // true si au moins un tarif utilisé n'est pas validé
+  promoCode      String?
+  status         String    @default("PENDING") // PENDING | CONFIRMED | REJECTED | CANCELLED
+  paymentStatus  String    @default("NONE")    // NONE | DEPOSIT_PAID | PAID | REFUNDED
+  firstName      String
+  lastName       String
+  email          String
+  phone          String
+  whatsapp       String?
+  country        String
+  departureCity  String?
+  specialNeeds   String?
+  comments       String?
+  locale         String    @default("fr")
+  consentAt      DateTime
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  events   BookingEvent[]
+  payments Payment[]
+  review   Review?
+
+  @@index([status])
+  @@index([email])
+}
+
+model BookingEvent {
+  id         String   @id @default(cuid())
+  bookingId  String
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  type       String   // CREATED | STATUS_CHANGED | UPDATED | PAYMENT_RECORDED | NOTE | EMAIL
+  fromStatus String?
+  toStatus   String?
+  note       String?
+  actor      String   // "client" | email admin | "system"
+  createdAt  DateTime @default(now())
+}
+
+model Payment {
+  id         String   @id @default(cuid())
+  bookingId  String
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amountMad  Int
+  method     String   // VIREMENT | ESPECES | CARTE | PRESTATAIRE_EN_LIGNE
+  reference  String?
+  kind       String   @default("PAYMENT") // PAYMENT | REFUND
+  recordedBy String
+  recordedAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  channel   String   @default("EMAIL")
+  to        String
+  subject   String
+  body      String
+  status    String   // SENT | LOGGED (SMTP non configuré) | FAILED
+  error     String?
+  bookingId String?
+  createdAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+}
+
+model PromoCode {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  description String?
+  percentOff  Int
+  validFrom   DateTime?
+  validTo     DateTime?
+  minPeople   Int       @default(1)
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  bookingId  String   @unique
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  rating     Int
+  title      String
+  comment    String
+  authorName String
+  published  Boolean  @default(false) // modération par l'administrateur
+  createdAt  DateTime @default(now())
+}
+
+model QuoteRequest {
+  id          String   @id @default(cuid())
+  kind        String   @default("SUR_MESURE") // SUR_MESURE | CONTACT
+  name        String
+  email       String
+  phone       String?
+  destination String?
+  durationDays Int?
+  budgetMad   Int?
+  travelers   Int?
+  interests   String?
+  message     String
+  status      String   @default("NEW") // NEW | IN_PROGRESS | CLOSED
+  locale      String   @default("fr")
+  createdAt   DateTime @default(now())
+}
+
+model Post {
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  title         Json
+  excerpt       Json
+  body          Json         // { fr: string (markdown simple), en, ar }
+  category      String       @default("CONSEILS")
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  published     Boolean      @default(true)
+  publishedAt   DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Setting {
+  key   String @id
+  value String
+}
