@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { getCircuits } from "@/lib/queries";
+import { getCircuits, getPublishedDestinations, getUpcomingDestinations } from "@/lib/queries";
 import { getComposerData } from "@/lib/composer-data";
 import { tr } from "@/lib/i18n-content";
 import { getPhotos } from "@/lib/photos";
@@ -26,7 +26,7 @@ export default async function TailorMadePage({ params }: PageProps<"/[locale]/su
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const t = getDictionary(locale);
-  const [circuits, composer] = await Promise.all([getCircuits(), getComposerData(locale)]);
+  const [circuits, composer, open, soon] = await Promise.all([getCircuits(), getComposerData(locale), getPublishedDestinations(), getUpcomingDestinations()]);
   const heroPhoto = (await getPhotos(locale))("camp");
   const otherProject = locale === "en" ? "Another project? Tell us more" : locale === "ar" ? "مشروع آخر؟ أخبرنا أكثر" : "Un autre projet ? Décrivez-le-nous";
   return (
@@ -40,6 +40,7 @@ export default async function TailorMadePage({ params }: PageProps<"/[locale]/su
         <RequestForm
           locale={locale}
           kind="SUR_MESURE"
+          destinations={[...open, ...soon].map((d) => ({ slug: d.slug, name: tr(d.name, locale) }))}
           circuits={circuits.map((c) => ({ slug: c.slug, title: tr(c.title, locale), days: c.days, priceAdultMad: c.priceAdultMad, tags: TAGS[c.slug] ?? [] }))}
         />
       </section>

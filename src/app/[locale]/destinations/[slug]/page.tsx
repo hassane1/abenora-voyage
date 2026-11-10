@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { hasLocale, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { getDestination, getNextDepartures, getPublishedReviews } from "@/lib/queries";
+import { getDestination, getNextDepartures, getPublishedReviews, getUpcomingDepartures } from "@/lib/queries";
+import { formatDate } from "@/lib/format";
 import { isFallback, tr, trList } from "@/lib/i18n-content";
 import { site } from "@/lib/site";
 import DuneArt from "@/components/DuneArt";
@@ -36,14 +37,20 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
   const d = await getDestination(slug);
   if (!d) notFound();
   const reviews = await getPublishedReviews(d.id);
-  const [photo, nextDeps] = await Promise.all([getPhotos(locale), getNextDepartures()]);
+  const [photo, nextDeps, allDeps] = await Promise.all([getPhotos(locale), getNextDepartures(), getUpcomingDepartures(60)]);
+  const calendar = allDeps.filter((x) => d.circuits.some((c) => c.id === x.circuitId)).slice(0, 12);
   const composer = d.slug === "merzouga" ? await getComposerData(locale) : null;
   const sections = (d.sections ?? {}) as Record<string, unknown>;
   const faq = (Array.isArray(d.faq) ? d.faq : []) as { q: unknown; a: unknown }[];
   const tips = trList(d.tips, locale);
   const byCat = (cat: string) => d.activities.filter((a) => a.category === cat);
+  // sections éditoriales propres à une destination (Merzouga : Erg Chebbi, bivouacs, Tafilalet) : affichées seulement si renseignées
+  const has = (k: string) => !!tr<string>(sections[k], locale, "");
+  const excursionActs = d.activities.filter((a) => ["rissani-souk", "4x4-chauffeur", "khamlia-gnawa", "oasis"].includes(a.slug));
+  const heroPhoto = photo(`destination:${d.slug}`) ?? (d.slug === "merzouga" ? photo("merzouga") : undefined);
 
-  const toc = [
+  const calTitle = locale === "en" ? "Departure calendar" : locale === "ar" ? "رزنامة الانطلاقات" : "Le calendrier des séjours";
+  const toc = ([
     ["presentation", t.merzouga.intro],
     ["erg", t.merzouga.erg],
     ["experiences", t.merzouga.experiences],
@@ -56,8 +63,9 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
     ["galerie", t.merzouga.gallery],
     ["conseils", t.merzouga.tips],
     ["faq", t.merzouga.faq],
+    ["calendrier", calTitle],
     ["reserver", t.merzouga.book],
-  ];
+  ] as [string, string][]).filter(([id]) => (id === "erg" ? has("erg") : id === "hebergements" ? has("accommodation") : id === "excursions" ? has("excursions") || excursionActs.length > 0 : id === "composer" ? !!composer?.circuits.length : id === "calendrier" ? calendar.length > 0 : true));
 
   const jsonLd = [
     {
@@ -83,7 +91,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
       {/* HERO */}
       <section className="relative isolate flex min-h-[88svh] items-end overflow-hidden pb-20 pt-32 text-white">
         <div className="absolute inset-0 -z-10 animate-slow-pan">
-          <Visual photo={photo("merzouga")} variant="sunset" seed={11} caravan className="h-full w-full" priority title={tr(d.name, locale)} />
+          <Visual photo={heroPhoto} variant="sunset" seed={11} caravan={d.slug === "merzouga"} className="h-full w-full" priority title={tr(d.name, locale)} />
         </div>
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/20 to-night/30" />
         <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
@@ -128,6 +136,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
       </section>
 
       {/* ERG CHEBBI */}
+      {has("erg") && (
       <section id="erg" className="scroll-mt-32 bg-night py-24 text-white">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 lg:grid-cols-2 lg:px-8">
           <Reveal className="overflow-hidden rounded-[2rem]">
@@ -139,6 +148,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
           </Reveal>
         </div>
       </section>
+      )}
 
       {/* EXPÉRIENCES */}
       <section id="experiences" className="mx-auto max-w-7xl scroll-mt-32 px-4 py-24 lg:px-8">
@@ -189,6 +199,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
       )}
 
       {/* HÉBERGEMENTS */}
+      {has("accommodation") && (
       <section id="hebergements" className="mx-auto grid max-w-7xl scroll-mt-32 items-center gap-12 px-4 py-24 lg:grid-cols-2 lg:px-8">
         <Reveal>
           <SectionTitle eyebrow={t.circuit.accommodation} title={t.merzouga.accommodation} />
@@ -203,6 +214,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
           </div>
         </Reveal>
       </section>
+      )}
 
       {/* CARTE */}
       <section id="carte" className="scroll-mt-32 bg-sand-light/30 py-24">
@@ -222,16 +234,16 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
       </section>
 
       {/* EXCURSIONS */}
+      {(has("excursions") || excursionActs.length > 0) && (
       <section id="excursions" className="mx-auto max-w-7xl scroll-mt-32 px-4 py-24 lg:px-8">
-        <SectionTitle eyebrow="Tafilalet" title={t.merzouga.excursions} text={tr(sections.excursions, locale)} />
+        <SectionTitle eyebrow={d.slug === "merzouga" ? "Tafilalet" : d.region} title={t.merzouga.excursions} text={tr(sections.excursions, locale)} />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {d.activities
-            .filter((a) => ["rissani-souk", "4x4-chauffeur", "khamlia-gnawa", "oasis"].includes(a.slug))
-            .map((a) => (
-              <ActivityCard key={a.id} a={a} locale={locale} photo={photo(`activity:${a.slug}`)} />
-            ))}
+          {excursionActs.map((a) => (
+            <ActivityCard key={a.id} a={a} locale={locale} photo={photo(`activity:${a.slug}`)} />
+          ))}
         </div>
       </section>
+      )}
 
       {/* AVIS */}
       <section id="avis" className="scroll-mt-32 bg-white py-24">
@@ -313,6 +325,23 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
           ))}
         </div>
       </section>
+
+      {/* CALENDRIER DES SÉJOURS (départs réellement ouverts, avec places restantes) */}
+      {calendar.length > 0 && (
+        <section id="calendrier" className="mx-auto max-w-7xl scroll-mt-32 px-4 pb-24 lg:px-8">
+          <SectionTitle eyebrow={t.booking.chooseDate} title={calTitle} />
+          {calendar.some((x) => x.isDemo) && <p className="mt-2 text-xs text-terracotta">● {t.common.demoAvailability}</p>}
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {calendar.map((x) => (
+              <Link key={x.id} href={`/${locale}/reservation?circuit=${x.circuit.slug}`} className="rounded-2xl bg-white p-4 ring-1 ring-night/5 transition hover:ring-sand">
+                <p className="text-xs font-semibold uppercase tracking-wider text-terracotta">{formatDate(x.date, locale, { weekday: "long", day: "numeric", month: "long" })}</p>
+                <p className="mt-1 line-clamp-1 font-semibold text-night">{tr(x.circuit.title, locale)}</p>
+                <p className="mt-1 text-xs text-muted">{t.common.daysNights(x.circuit.days, x.circuit.nights)} · {x.capacity - x.seatsHeld} / {x.capacity}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* RÉSERVER */}
       <section id="reserver" className="scroll-mt-32 px-4 pb-24 lg:px-8">

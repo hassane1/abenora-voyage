@@ -4,12 +4,16 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { hasLocale } from "@/i18n/config";
+import { clientIp, rateLimit } from "@/lib/security";
 
 export async function lookupBooking(formData: FormData) {
   const locale = String(formData.get("locale"));
   const loc = hasLocale(locale) ? locale : "fr";
-  const ref = String(formData.get("ref") ?? "").trim().toUpperCase();
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const ref = String(formData.get("ref") ?? "").trim().toUpperCase().slice(0, 40);
+  const email = String(formData.get("email") ?? "").trim().toLowerCase().slice(0, 160);
+  // anti-énumération des dossiers : 10 recherches / 15 min par IP
+  const lim = await rateLimit(`lookup:${await clientIp()}`, 10, 900);
+  if (!lim.ok) redirect(`/${loc}/espace-client?notfound=locked`);
   const b = ref && email ? await db.booking.findFirst({ where: { reference: ref, email } }) : null;
   if (!b) redirect(`/${loc}/espace-client?notfound=1`);
   redirect(`/${loc}/espace-client?ref=${b.reference}&token=${b.accessToken}`);

@@ -1,21 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { BookingError, createBooking } from "@/lib/bookings";
-
-// Limitation simple du nombre de demandes par IP (mémoire du processus)
-const hits = new Map<string, number[]>();
-function rateLimited(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60_000);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > 10;
-}
+import { getCustomer } from "@/lib/customer";
+import { clientIp, rateLimit } from "@/lib/security";
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  if (rateLimited(ip)) return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  // 10 demandes / 10 min par IP (limite persistée en base)
+  const lim = await rateLimit(`booking:${await clientIp()}`, 10, 600);
+  if (!lim.ok) return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429, headers: { "retry-after": String(lim.retryAfter) } });
   try {
-    const booking = await createBooking(await req.json().catch(() => null));
+    const customer = await getCustomer();
+    const booking = await createBooking(await req.json().catch(() => null), { customerId: customer?.id ?? null });
     return NextResponse.json({ reference: booking.reference, token: booking.accessToken, status: booking.status }, { status: 201 });
   } catch (e) {
     if (e instanceof BookingError) {

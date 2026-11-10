@@ -17,6 +17,8 @@ export default async function NewsletterAdmin() {
   return (
     <div>
       <PageTitle title="Newsletter">
+        {/* téléchargement de fichier : lien HTML classique */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/admin/newsletter/export" className="btn btn-sand !py-2 text-sm">
           Exporter les inscrits confirmés (CSV)
         </a>

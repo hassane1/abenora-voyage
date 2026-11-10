@@ -5,7 +5,7 @@ import { tr } from "@/lib/i18n-content";
 import { Badge, PageTitle, paymentLabel, statusBadge, statusLabel } from "../ui";
 
 export default async function BookingsList({ searchParams }: PageProps<"/admin/reservations">) {
-  await requireAdmin();
+  await requireAdmin("bookings.read");
   const sp = await searchParams;
   const status = typeof sp.status === "string" ? sp.status : "";
   const q = typeof sp.q === "string" ? sp.q.trim() : "";
@@ -13,7 +13,9 @@ export default async function BookingsList({ searchParams }: PageProps<"/admin/r
   const from = typeof sp.from === "string" ? sp.from : "";
   const to = typeof sp.to === "string" ? sp.to : "";
 
+  const cancel = sp.cancel === "1";
   const where = {
+    ...(cancel ? { cancelRequestedAt: { not: null }, status: { in: ["PENDING", "CONFIRMED"] } } : {}),
     ...(status ? { status } : {}),
     ...(circuitId ? { circuitId } : {}),
     ...(from || to ? { startDate: { ...(from ? { gte: new Date(`${from}T00:00:00Z`) } : {}), ...(to ? { lte: new Date(`${to}T23:59:59Z`) } : {}) } } : {}),

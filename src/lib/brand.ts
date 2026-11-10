@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { connection } from "next/server";
 import { db } from "./db";
+import { cached } from "./cache";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -37,7 +38,7 @@ export const DEFAULT_BRAND_NAME = "Morocco Évasion Travel";
 
 export const getBrand = cache(async (): Promise<Brand> => {
   await connection();
-  const rows = await db.setting.findMany({ where: { key: { startsWith: "brand." } } });
+  const rows = await cached("settings:brand", 60, () => db.setting.findMany({ where: { key: { startsWith: "brand." } } }));
   const s = Object.fromEntries(rows.map((r) => [r.key.slice(6), r.value])) as Record<string, string | undefined>;
   const num = (v?: string) => (v && Number(v) > 0 ? Number(v) : null);
   return {

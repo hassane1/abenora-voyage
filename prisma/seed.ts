@@ -10,6 +10,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { activities, bookingOptions, circuits, futureDestinations, merzouga } from "./seed-data/merzouga";
 import { merzougaFaq, merzougaSections, merzougaTips, posts } from "./seed-data/editorial";
+import { applyDefaults } from "./defaults";
 
 const db = new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? "file:./dev.db" }) });
 const reset = process.argv.includes("--reset");
@@ -20,7 +21,13 @@ function utcDay(d: Date) {
 
 async function main() {
   if (reset) {
+    await db.message.deleteMany();
+    await db.quote.deleteMany();
     await db.booking.deleteMany();
+    await db.customer.deleteMany();
+    await db.newsletterSubscriber.deleteMany();
+    await db.rateLimit.deleteMany();
+    await db.auditLog.deleteMany();
     await db.notification.deleteMany();
     await db.quoteRequest.deleteMany();
   }
@@ -151,6 +158,7 @@ async function main() {
     console.warn("⚠ ADMIN_EMAIL / ADMIN_PASSWORD absents : aucun administrateur créé.");
   }
 
+  await applyDefaults(db);
   console.log("✔ Seed terminé.");
 }
 

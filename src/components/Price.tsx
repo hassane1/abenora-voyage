@@ -1,6 +1,7 @@
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { formatMad } from "@/lib/format";
+import FxNote from "./FxNote";
 
 /** Affichage d'un prix avec son statut (démonstration / validé / sur devis) */
 export function Price({
@@ -31,6 +32,7 @@ export function Price({
         {formatMad(amount, locale)}
         <span className="ms-1 font-sans text-xs font-normal text-muted">{unit === "PER_GROUP" ? t.common.perGroup : t.common.perPerson}</span>
       </span>
+      {size === "lg" && <FxNote mad={amount} locale={locale} />}
       {status !== "VALIDATED" && <DemoBadge locale={locale} />}
     </span>
   );

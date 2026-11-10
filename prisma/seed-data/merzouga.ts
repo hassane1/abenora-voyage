@@ -27,9 +27,9 @@ export const merzouga = {
   sortOrder: 1,
   name: l("Merzouga", "Merzouga", "مرزوكة"),
   tagline: l(
-    "Merzouga : une aventure inoubliable au cœur du Sahara",
-    "Merzouga: an unforgettable adventure in the heart of the Sahara",
-    "مرزوكة: مغامرة لا تُنسى في قلب الصحراء",
+    "Merzouga, vivez la magie du Sahara.",
+    "Merzouga, experience the magic of the Sahara.",
+    "مرزوكة، عِش سحر الصحراء.",
   ),
   description: l(
     "Aux portes du Sahara, dans le sud-est du Maroc, le village de Merzouga s'adosse à l'Erg Chebbi, un massif de dunes dont les plus hautes dépassent 150 mètres. Ici, le sable change de couleur au fil des heures, du rose de l'aube à l'or du couchant, et les nuits révèlent un ciel d'une rare pureté.",

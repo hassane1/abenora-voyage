@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { loginMfa } from "../../actions";
 
 export default async function MfaPage({ searchParams }: PageProps<"/admin/login/mfa">) {
@@ -14,9 +15,9 @@ export default async function MfaPage({ searchParams }: PageProps<"/admin/login/
         )}
         <input name="code" inputMode="numeric" pattern="\d{6}" maxLength={6} required autoFocus autoComplete="one-time-code" className="field mt-6 text-center text-2xl tracking-[0.5em]" aria-label="Code à 6 chiffres" />
         <button className="btn btn-primary mt-6 w-full">Valider</button>
-        <a href="/admin/login" className="mt-4 block text-center text-xs text-muted hover:underline">
+        <Link href="/admin/login" className="mt-4 block text-center text-xs text-muted hover:underline">
           Recommencer la connexion
-        </a>
+        </Link>
       </form>
     </div>
   );

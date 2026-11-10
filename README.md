@@ -1,182 +1,156 @@
-# Rimal — plateforme touristique Maroc (phase 1 : Merzouga)
+# Morocco Évasion Travel — site officiel d'une agence de voyages au Maroc
 
-Site de découverte et de réservation de voyages au Maroc : interface client multilingue (FR / EN / AR avec RTL),
-moteur de réservation **sur demande** de bout en bout, base de données persistante, notifications e-mail et
-espace d'administration. Première destination complète : **Merzouga – désert du Sahara**.
+Site vitrine et outil de gestion **mono-agence** (pas de marketplace) : circuits, excursions, séjours et voyages
+sur mesure, réservation **sur demande** avec validation par l'agence, espace voyageur, back-office complet.
+Première destination développée entièrement : **Merzouga — désert du Sahara**. Langues : FR, EN, AR (RTL).
 
-> ⚠️ **Données de démonstration.** Les tarifs et disponibilités fournis sont **fictifs** (statut `DEMO`) et sont
-> signalés comme tels sur le site, dans les e-mails et dans l'admin. Ils doivent être remplacés et passés en
-> « Validé » dans l'administration avant toute mise en ligne. Aucun avis client, partenaire ou hébergement n'est inventé.
+> Nom provisoire. **Le nom, le logo, les coordonnées, les réseaux sociaux et les informations légales se modifient
+> dans Administration → Identité & coordonnées**, sans toucher au code.
+
+> ⚠️ **Données de démonstration.** Tarifs et départs fournis sont **fictifs** (statut `DEMO`), signalés partout
+> (site, e-mails, admin). Aucun avis, statistique ou partenaire n'est inventé. Les pages légales sont des **modèles**
+> affichés avec un avertissement tant qu'elles ne sont pas marquées « validées » par un juriste.
+
+Ce projet est l'évolution de la plateforme « Rimal » (même dépôt, historique Git conservé).
 
 ---
 
-## 1. Démarrage rapide (Windows / macOS / Linux)
+## 1. Démarrage rapide
 
-Prérequis : Node.js 20+ (testé avec Node 26 LTS), npm.
+Prérequis : Node.js 20+ (testé avec Node 26), npm.
 
 ```bash
-npm install                # installe et génère le client Prisma
-cp .env.example .env       # puis renseigner AUTH_SECRET et ADMIN_PASSWORD (voir §4)
-npm run db:migrate         # crée la base SQLite locale (dev.db)
-npm run db:seed            # charge Merzouga, les options, le blog et le compte admin
+npm install
+cp .env.example .env       # renseigner AUTH_SECRET (32+ caractères) et ADMIN_EMAIL / ADMIN_PASSWORD
+npm run db:deploy          # applique les migrations (SQLite local : dev.db)
+npm run db:seed            # catalogue Merzouga, 14 destinations « bientôt », pages légales, FAQ, compte admin
 npm run dev                # http://localhost:3000
 ```
 
-- Site public : http://localhost:3000 (redirige vers `/fr`, `/en` ou `/ar` selon le navigateur)
-- Administration : http://localhost:3000/admin — identifiants = `ADMIN_EMAIL` / `ADMIN_PASSWORD` du fichier `.env`
-- Remettre la démonstration à zéro (supprime réservations, demandes et e-mails journalisés, recrée circuits et départs) : `npm run db:reset`
+Base existante (version précédente) : `npm run db:deploy && npm run db:upgrade` — ajoute pages légales, FAQ et
+identité par défaut **sans rien écraser**.
 
-### Vérifications
-
-```bash
-npm run typecheck          # TypeScript
-npm run lint               # ESLint
-npm run build              # build de production
-npm run test:booking       # test du moteur de réservation (serveur lancé)
-```
-
-`test:booking` vérifie : calcul du prix, création d'un dossier « En attente », numéro unique, notifications
-enregistrées, **6 demandes simultanées sur le même départ sans dépassement de capacité**, validation serveur.
-Il crée de vraies réservations de test : lancer `npm run db:reset` ensuite.
+- Site : http://localhost:3000 (redirection `/fr`, `/en` ou `/ar`)
+- Espace voyageur : `/fr/compte` (avec compte) ou `/fr/espace-client` (sans compte : n° de dossier + e-mail)
+- Administration : http://localhost:3000/admin — **à la première connexion, configuration obligatoire de la
+  vérification en deux étapes** (Google Authenticator, Microsoft Authenticator, 1Password…). En développement
+  seulement, `ADMIN_MFA_REQUIRED=false` la rend facultative.
+- Remise à zéro de la démonstration : `npm run db:reset`
 
 ---
 
-## 2. Fonctionnalités livrées
+## 2. Fonctionnalités
 
 | Domaine | Contenu |
 |---|---|
-| Accueil | Hero immersif, recherche (destination / date / voyageurs / budget), circuits, expériences, destinations à venir |
-| Merzouga | 12 sections : présentation, Erg Chebbi, expériences (17 fiches), circuits, hébergements, carte, excursions, avis vérifiés, galerie, conseils, FAQ (+ données structurées), réservation |
-| Circuits | 3 fiches complètes : programme jour par jour (chronologie), carte, infos clés, inclus/exclus, options, annulation, avertissements, PDF (impression), WhatsApp contextuel, barre de réservation mobile |
-| Activités | 17 fiches : durée, niveau, âge, restrictions, inclus/exclus, sécurité, disponibilité, prix MAD, « Ajouter à mon séjour » |
-| Carte | Leaflet + tuiles OpenStreetMap ; tracés routiers et durées **calculés par OSRM** ; promenades/dromadaire en pointillés sans durée inventée |
-| Réservation (mode A) | 8 étapes, calendrier des départs (disponible / presque complet / complet / fermé), voyageurs + âges, privé/partagé, options, prix recalculé **côté serveur**, code promo, coordonnées, consentement, n° de dossier `RML-AAMMJJ-XXXX`, statut « En attente de confirmation » |
-| Espace client | Consultation par n° de dossier + e-mail, suivi, dépôt d'avis (uniquement séjour confirmé et terminé) |
-| Premium | Comparateur de circuits, créateur de voyage sur mesure (suggestion instantanée + demande enregistrée), favoris, PDF de programme, galerie avec droits, blog (3 articles), FAQ |
-| Admin | Tableau de bord (KPI, CA basé sur les paiements enregistrés, évolution mensuelle, top circuits, répartition), réservations (filtres, confirmation/refus/annulation, modification date/coordonnées, paiements/remboursements, historique, e-mails, export CSV Excel et PDF), circuits (tarifs, statut du tarif, capacité, textes FR/EN/AR, programme, génération/fermeture des départs), options, activités, destinations (publication), codes promo, réductions famille/groupe, demandes sur mesure/contact, modération des avis, médias avec droits, journal des notifications, paramètres fiscaux |
-| SEO | URL descriptives, title/meta, hreflang, sitemap.xml, robots.txt, JSON-LD (TouristDestination, TouristTrip, FAQPage, Article) |
-| Sécurité | Validation zod côté serveur, réservation atomique des places (anti double réservation), session admin JWT httpOnly, mots de passe bcrypt, blocage après 5 échecs de connexion, limitation de débit des réservations, champ anti-robot, aucune donnée personnelle dans les URL (jeton opaque pour l'espace client) |
+| Identité | Nom, slogan FR/EN/AR, logo (PNG/JPEG/WebP vérifiés), téléphone, WhatsApp, e-mail, adresse, horaires, réseaux sociaux, raison sociale, RC, ICE, IF, patente, licence, préfixe des n° de dossier, taux EUR/USD informatifs |
+| Accueil | Hero photo (ou vidéo réelle téléversée), titre éditable, 3 boutons, recherche destination/date/voyageurs/durée/budget, puis : destinations incontournables, circuits populaires, prochains départs, expériences, « heure par heure », voyages sur mesure, pourquoi nous, témoignages vérifiés (vrais avis modérés uniquement, état vide honnête), galerie, conseils, FAQ, newsletter + contact, pied de page professionnel |
+| Destinations | 15 destinations administrables (création, textes FR/EN/AR, région, coordonnées carte, conseils, FAQ, ordre, publication, photo de bannière via l'étiquette `slot:destination:<id>`). Page Merzouga : Erg Chebbi, expériences, circuits, hébergements & bivouacs, carte, excursions, avis, galerie, conseils, FAQ, **calendrier des séjours**, réservation |
+| Circuits & activités | 3 circuits types (2 j / 3 j / 4 j depuis Marrakech) avec programme jour par jour, carte et temps de route calculés (OSRM), inclus/exclus, annulation, départs et places ; 17 activités avec durée, niveau, âge, prix MAD configurés par l'admin ; conversion EUR/USD informative |
+| Réservation | 8 étapes ; prix **recalculé côté serveur** ; places bloquées par requête SQL conditionnelle (anti-survente testée à 300 requêtes simultanées) ; dossier `MET-AAMMJJ-XXXX` « en attente de confirmation » ; e-mails client + agence ; jamais confirmée automatiquement |
+| Espace voyageur | Compte (mot de passe ≥ 10, vérification d'e-mail, réinitialisation, sessions révocables, « déconnecter tous mes appareils »), tableau de bord, voyages à venir, historique, favoris synchronisés, documents de voyage privés, reçus de paiement imprimables, messagerie avec l'agence, demande d'annulation, avis après séjour, devis. **Sans compte** : accès sécurisé par n° de dossier + e-mail (lien à jeton), mêmes fonctions |
+| Sur mesure | Formulaire complet (destination, ville de départ, date, durée, voyageurs, budget, confort, activités, transport, besoins, consentement) → dossier `SM-AAMM-XXXX` → devis (programme, lignes de prix, acompte, validité, conditions ; total calculé par le serveur) → envoi par e-mail → acceptation/refus en ligne → **transformation en réservation** → PDF (impression navigateur) |
+| Administration | Barre latérale repliable, recherche globale, notifications ; tableau de bord (réservations du jour/mois, CA confirmé, paiements reçus, clients, circuits actifs, voyages à venir, demandes à traiter, graphique 12 mois) ; réservations (filtres, confirmation/refus/annulation, paiements, remboursements, messagerie, documents, demandes d'annulation, export CSV et PDF) ; calendrier des départs ; demandes & devis ; clients ; finances (ventes, encaissements, acomptes et soldes dus, remboursements, par mode et par circuit) ; circuits (création, **duplication**, tarifs, capacités, programme, départs) ; activités, options, destinations ; contenus (titre d'accueil, FAQ, bannières saisonnières) ; pages légales ; médias ; avis ; codes promo ; newsletter ; équipe & rôles ; journal d'audit |
+| Marketing | WhatsApp flottant et contextuel, contact, newsletter **double opt-in** (preuve du consentement, désinscription en un clic, export CSV), codes promo, bannières/offres saisonnières datées, SEO (hreflang, sitemap, JSON-LD), blog |
+| Légal | Mentions légales, CGV, confidentialité, cookies, annulation/remboursement : modèles éditables FR/EN/AR avec variables (`{{raison_sociale}}`, `{{licence}}`…) et bandeau « à valider » ; information cookies (uniquement des cookies nécessaires) |
+
+Ce qui est **signalé comme non configuré** (et non présenté comme opérationnel) : envoi réel des e-mails (SMTP),
+paiement en ligne, IA du chatbot (clé Anthropic), tarifs réels, informations légales.
 
 ---
 
 ## 3. Architecture
 
 ```
-prisma/
-  schema.prisma            Schéma (17 tables) — SQLite en dev, PostgreSQL en prod
-  migrations/              Migrations SQL
-  seed.ts                  Chargement des données (--reset : efface les réservations de test)
-  seed-data/merzouga.ts    Destination, 17 activités, 15 options, 3 circuits (+ étapes GPS) — démo signalée
-  seed-data/editorial.ts   Sections éditoriales, conseils, FAQ, 3 articles de blog
-scripts/test-booking-flow.mjs  Test de bout en bout du moteur de réservation
-src/
-  proxy.ts                 Redirection de langue (/fr, /en, /ar)
-  i18n/                    Configuration des langues + dictionnaires FR/EN/AR
-  lib/
-    db.ts                  Client Prisma (adaptateur SQLite ; voir §5 pour PostgreSQL)
-    pricing.ts             Moteur de prix (fonction pure : adultes, enfants, privé, options, réductions, promo, taxes, acompte)
-    bookings.ts            Création de réservation, contrôle de capacité atomique, changements de statut, e-mails
-    mail.ts                Envoi SMTP ou journalisation
-    auth.ts                Session administrateur
-    queries.ts             Lectures du catalogue public
-  components/              Header, Footer, cartes, DuneArt (illustrations), RouteMap, BookingWizard, Calendar…
-  app/[locale]/            Pages publiques (13 + fiches)
-  app/admin/               Administration
-  app/api/                 departures, quote, bookings
+prisma/schema.prisma         29 tables (SQLite en dev, PostgreSQL en prod)
+prisma/defaults.ts           contenus par défaut non destructifs (pages légales, FAQ, identité)
+prisma/seed-data/legal.ts    modèles juridiques et FAQ
+src/proxy.ts                 langues + en-têtes de sécurité (CSP à nonce, HSTS…)
+src/lib/brand.ts             identité de l'agence (Setting « brand.* »)
+src/lib/auth.ts, rbac.ts     admin : bcrypt, MFA TOTP, rôles et permissions
+src/lib/customer.ts          comptes voyageurs, sessions révocables, accès aux dossiers
+src/lib/security.ts          TOTP, chiffrement AES-GCM, limitation de débit, journal d'audit, IP
+src/lib/quotes.ts            devis et transformation en réservation
+src/lib/cache.ts             cache court du catalogue public (invalidé par l'admin)
+src/lib/files.ts             contrôle du contenu réel des fichiers téléversés
+src/app/[locale]/…           site public, /compte, /espace-client, /devis, /recu, /legal
+src/app/admin/…              back-office
+storage/documents/           documents de voyage PRIVÉS (hors dossier public, non versionné)
 ```
 
-### Schéma de données (résumé)
-
-- **Destination** (textes `Json` traduisibles `{fr,en,ar}`, sections, conseils, FAQ, `published`)
-- **Circuit** → `CircuitDay` (programme), `CircuitStop` (étapes GPS + mode de déplacement), `Departure` (date, capacité, `seatsHeld`, `isDemo`), `BookingOption`
-- **Activity** (prix, `priceStatus` = `DEMO | VALIDATED | ON_REQUEST`, option liée)
-- **Booking** (instantané des options et du calcul, `pricesAreDemo`, statut, statut de paiement, jeton d'accès) → `BookingEvent` (historique), `Payment`, `Review`
-- **Notification** (journal des e-mails), **QuoteRequest**, **PromoCode**, **Post**, **Media** (crédit, licence, `rightsConfirmed`), **AdminUser**, **Setting**
-
-Le schéma complet et commenté est dans `prisma/schema.prisma` ; le SQL généré dans `prisma/migrations/`.
-
-### Règles métier importantes
-
-- Une réservation est créée **En attente** ; elle n'est jamais présentée comme confirmée avant l'action de l'administrateur.
-- Les places sont bloquées dès la demande (`seatsHeld`) par une requête SQL conditionnelle : la capacité ne peut pas être dépassée, même en cas de requêtes simultanées. Elles sont libérées au refus/annulation.
-- Le prix affiché au client est toujours recalculé par le serveur (`/api/quote`) avec les mêmes règles que l'enregistrement.
-- Tout tarif ou départ non validé marque la réservation `pricesAreDemo` et affiche un avertissement au client et à l'admin.
-- Une destination non publiée n'apparaît que dans « Bientôt », sans offre ni tarif.
+Détails sécurité : [docs/SECURITE.md](docs/SECURITE.md) · performance et tests de charge : [docs/PERFORMANCE.md](docs/PERFORMANCE.md) ·
+mise en production : [docs/DEPLOIEMENT.md](docs/DEPLOIEMENT.md).
 
 ---
 
-## 4. Variables d'environnement
+## 4. Tests
 
-| Variable | Obligatoire | Rôle |
-|---|---|---|
-| `DATABASE_URL` | oui | `file:./dev.db` (SQLite) ou URL PostgreSQL |
-| `AUTH_SECRET` | oui | Clé de signature des sessions admin (32+ caractères aléatoires) |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | au seed | Compte administrateur créé/mis à jour par `npm run db:seed` |
-| `NEXT_PUBLIC_SITE_URL` | oui | URL publique (liens e-mail, sitemap, données structurées) |
-| `NEXT_PUBLIC_BRAND_NAME` | non | Nom de marque (défaut « Rimal ») |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER` | **à configurer** | Numéro international sans `+` (ex. `2126XXXXXXXX`). Vide → le bouton renvoie vers Contact |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_FROM` | **à configurer** | Envoi réel des e-mails. Vide → e-mails **journalisés seulement** (Admin → Notifications) |
-| `ADMIN_NOTIFY_EMAIL` | non | Destinataire des alertes de nouvelles demandes |
-| `ANTHROPIC_API_KEY` | **à configurer** | Active l'IA (Claude Opus 5.5) du chatbot « Assistant Rimal ». Vide → mode simplifié (réponses FAQ/catalogue) |
-| `NEXT_PUBLIC_OSRM_URL` | non | Service de routage. Défaut : serveur de démonstration public OSRM (usage limité, à remplacer en production) |
+```bash
+npm run typecheck && npm run lint && npm run build
+npm run test:booking       # moteur de réservation, prix, anti-survente (serveur lancé)
+npm run test:agence        # 28 vérifications : MFA, audit, 23 pages admin, compte voyageur, documents privés,
+                           # reçu, devis → réservation, newsletter, anti-énumération, en-têtes HTTP
+npm run test:load          # charge + survente (contre `npm start`, voir docs/PERFORMANCE.md)
+node scripts/shots.mjs     # captures bureau/mobile + erreurs console + débordements
+```
+
+Les tests créent des données : `npm run db:reset` ensuite. `test:agence` crée un administrateur temporaire
+qu'il supprime à la fin.
+
+Résultats au 2026-11-10 (machine de développement Windows) : typecheck, lint et build OK ; `test:booking` 9/9 ;
+`test:agence` 28/28 ; 12 captures bureau/mobile sans erreur ni débordement ; 300 réservations simultanées sur un
+départ de 12 places → 6 acceptées, 12/12 places, **aucune survente**.
 
 ---
 
-## 5. Ce qui reste à configurer / état réel des intégrations
+## 5. Variables d'environnement
 
-| Intégration | État |
+| Variable | Rôle |
 |---|---|
-| Base de données | ✅ Fonctionnelle (SQLite local). PostgreSQL : voir ci-dessous |
-| Réservation sur demande (mode A) | ✅ Testée de bout en bout (API + interface) |
-| E-mails | ⚙️ Code prêt et testé en mode journalisation. **Envoi réel non testé** : nécessite un SMTP (Brevo, Mailjet, OVH…) |
-| WhatsApp | ⚙️ Liens `wa.me` contextuels prêts ; numéro à renseigner |
-| Carte / routage | ✅ OpenStreetMap + OSRM public (testé). Pour la production : instance OSRM propre ou service commercial |
-| Chatbot | ⚙️ Mode simplifié testé (sans IA). Mode IA (`src/app/api/chat/route.ts`, Claude via le SDK Anthropic, base de connaissances construite depuis la base de données dans `src/lib/assistant.ts`) **non testé faute de clé** : renseigner `ANTHROPIC_API_KEY` |
-| Paiement en ligne (mode B) | ❌ Non activé (voir §6) |
-| Photos / vidéos | ❌ Aucune photo réelle : le site affiche des illustrations vectorielles originales. Ajouter les médias via Admin → Médias avec crédit, licence et confirmation des droits |
-| Traductions | FR complet ; EN complet pour l'interface et presque tous les contenus ; AR complet pour l'interface et les titres/résumés — les descriptions longues sans traduction arabe s'affichent en français avec une mention. À compléter dans l'admin |
-| Fiscalité | Taux de taxe à 0 % par défaut, à paramétrer après avis comptable |
-| Page « À propos » | Mentions légales, équipe, licences d'agence à compléter |
+| `DATABASE_URL` | `file:./dev.db` (SQLite) ou URL PostgreSQL |
+| `AUTH_SECRET` | Signature des sessions admin, chiffrement des secrets MFA (32+ caractères aléatoires, à ne jamais changer sans réinitialiser les MFA) |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Compte administrateur créé par le seed |
+| `ADMIN_MFA_REQUIRED` | `true` (défaut). `false` uniquement en développement |
+| `NEXT_PUBLIC_SITE_URL` | URL publique (liens e-mails, sitemap) |
+| `SMTP_*`, `MAIL_FROM`, `ADMIN_NOTIFY_EMAIL` | Envoi réel des e-mails. Vide → e-mails **journalisés** (Admin → E-mails envoyés) |
+| `TRUST_PROXY` | `1` derrière Cloudflare/Nginx pour l'IP réelle |
+| `RATE_LIMIT_MULTIPLIER` | Tests de charge uniquement |
+| `CATALOG_CACHE` | `off` pour désactiver le cache du catalogue |
+| `ANTHROPIC_API_KEY` | Chatbot IA (sinon mode simplifié) |
+| `NEXT_PUBLIC_OSRM_URL` | Service de routage (serveur public de démonstration par défaut) |
 
-### Passer à PostgreSQL (Supabase, Neon, Railway…)
-
-1. `npm install @prisma/adapter-pg pg`
-2. Dans `prisma/schema.prisma` : `provider = "postgresql"`
-3. Dans `src/lib/db.ts` et `prisma/seed.ts` : remplacer `PrismaBetterSqlite3` par `new PrismaPg({ connectionString: process.env.DATABASE_URL })`
-4. Supprimer `prisma/migrations`, puis `npx prisma migrate dev --name init` contre la base PostgreSQL, et `npm run db:seed`
-
-Les requêtes SQL brutes de contrôle de capacité utilisent une syntaxe compatible SQLite et PostgreSQL.
-
-### Déploiement
-
-- **Vercel / Netlify** : base PostgreSQL obligatoire (système de fichiers éphémère) + stockage objet pour les médias
-  (Supabase Storage, S3, Cloudflare R2) à brancher dans `uploadMedia` (`src/app/admin/actions.ts`).
-  Build : `npm run build`, puis `npm run db:deploy` pour appliquer les migrations.
-- **VPS (Node)** : SQLite possible pour démarrer ; `npm run build && npm start` derrière un proxy HTTPS (Caddy/Nginx),
-  sauvegarde régulière de `dev.db` et `public/uploads`.
+`NEXT_PUBLIC_BRAND_NAME` et `NEXT_PUBLIC_WHATSAPP_NUMBER` ne servent plus que de valeurs initiales : la source
+de vérité est l'écran Identité.
 
 ---
 
-## 6. Mode B — paiement en ligne (architecture préparée)
+## 6. Reste à configurer par l'agence
 
-Déjà en place : statut de paiement par dossier (`NONE`, `DEPOSIT_PAID`, `PAID`, `REFUNDED`), table `Payment`
-(paiements et remboursements, auteur, référence), calcul de l'acompte, réglage `paymentMode`, chiffre d'affaires
-basé uniquement sur les paiements enregistrés.
-
-À faire après choix du prestataire (à vérifier avec la banque de l'agence et selon son statut — par exemple la
-passerelle CMI proposée par les banques marocaines) :
-
-1. Route `POST /api/payments/checkout` : crée la session de paiement de l'acompte **uniquement pour un dossier confirmé**.
-2. Webhook `POST /api/payments/webhook` : vérifie la signature, enregistre un `Payment` (`method = PRESTATAIRE_EN_LIGNE`),
-   met à jour `paymentStatus`, journalise un `BookingEvent`.
-3. Reçu / facture conforme aux obligations applicables.
-4. Remboursements : appel API du prestataire + `Payment` de type `REFUND`.
+1. Identité : raison sociale, RC, ICE, IF, licence, adresse, e-mail, téléphone, réseaux sociaux, logo.
+2. Tarifs réels des circuits, activités et options, puis passage du statut « Démonstration » à « Validé » ; départs réels.
+3. SMTP (Brevo, Mailjet, OVH…) puis test d'envoi réel.
+4. Pages légales : adaptation et validation par un juriste (loi 31-08, loi 09-08 / déclaration CNDP, réglementation
+   des agences de voyages), puis case « Validé ».
+5. Fiscalité (taux de taxe) après avis comptable.
+6. Paiement en ligne : choix d'un prestataire compatible au Maroc (ex. passerelle CMI via la banque de l'agence) —
+   architecture préparée (§7).
+7. Hébergement, PostgreSQL, stockage des médias et sauvegardes : [docs/DEPLOIEMENT.md](docs/DEPLOIEMENT.md).
 
 ---
 
-## 7. Ajouter une destination (Marrakech, Chefchaouen…)
+## 7. Paiement en ligne (préparé, non activé)
 
-Les 14 destinations futures existent déjà en base (non publiées, sans offre). Pour en ouvrir une :
-Admin → Destinations (textes) → Circuits → « Créer un circuit » → compléter tarifs, programme et départs →
-Activités/Options si besoin → publier le circuit puis la destination. Les étapes GPS de la carte se gèrent
-aujourd'hui dans le seed (`CircuitStop`) ; un éditeur visuel d'étapes est une évolution prévue.
+En place : statut de paiement par dossier, table `Payment` (paiements/remboursements, auteur, référence), acompte
+calculé, finances, reçus. À faire après choix du prestataire :
+
+1. `POST /api/payments/checkout` : session de paiement de l'acompte **uniquement pour un dossier confirmé**, montant lu en base.
+2. `POST /api/payments/webhook` : vérification de signature, `Payment` (`PRESTATAIRE_EN_LIGNE`), `paymentStatus`, audit.
+3. Facture conforme ; remboursements via l'API du prestataire.
+
+---
+
+## 8. Ouvrir une nouvelle destination
+
+Admin → Destinations (textes, conseils, FAQ, coordonnées) → Médias (photo avec l'étiquette `slot:destination:<id>`)
+→ Circuits (« Créer » ou « Dupliquer » un circuit, tarifs, programme, départs) → publier le circuit puis la destination.
+Les sections propres au désert (Erg Chebbi, bivouacs, excursions du Tafilalet) n'apparaissent que si elles sont renseignées.

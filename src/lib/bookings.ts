@@ -110,7 +110,7 @@ export async function quote(input: Pick<BookingInput, "circuitId" | "adults" | "
   return { circuit, options, price, promo, settings };
 }
 
-export async function createBooking(raw: unknown) {
+export async function createBooking(raw: unknown, opts: { customerId?: string | null } = {}) {
   const parsed = bookingSchema.safeParse(raw);
   if (!parsed.success) throw new BookingError("INVALID");
   const input = parsed.data;
@@ -161,6 +161,7 @@ export async function createBooking(raw: unknown) {
         comments: input.comments || null,
         locale,
         consentAt: new Date(),
+        customerId: opts.customerId ?? null,
         events: { create: { type: "CREATED", toStatus: "PENDING", actor: "client", note: "Demande de réservation en ligne" } },
       },
     });

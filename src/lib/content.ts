@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { connection } from "next/server";
 import { db } from "./db";
+import { cached } from "./cache";
 import { tr } from "./i18n-content";
 import type { Locale } from "@/i18n/config";
 
@@ -12,10 +13,10 @@ export type ActiveBanner = { text: string; linkUrl: string | null; linkLabel: st
 export async function getActiveBanner(locale: Locale): Promise<ActiveBanner | null> {
   await connection();
   const now = new Date();
-  const b = await db.banner.findFirst({
+  const b = await cached("banner", 60, () => db.banner.findFirst({
     where: { active: true, OR: [{ startsAt: null }, { startsAt: { lte: now } }], AND: [{ OR: [{ endsAt: null }, { endsAt: { gte: now } }] }] },
     orderBy: { createdAt: "desc" },
-  });
+  }));
   if (!b) return null;
   const text = tr<string>(b.text, locale, "");
   if (!text) return null;
@@ -33,7 +34,7 @@ export type FaqItem = { q: Partial<Record<Locale, string>>; a: Partial<Record<Lo
 
 const getSettingsMap = cache(async () => {
   await connection();
-  const rows = await db.setting.findMany({ where: { key: { startsWith: "content." } } });
+  const rows = await cached("settings:content", 60, () => db.setting.findMany({ where: { key: { startsWith: "content." } } }));
   return Object.fromEntries(rows.map((r) => [r.key.slice(8), r.value])) as Record<string, string>;
 });
 

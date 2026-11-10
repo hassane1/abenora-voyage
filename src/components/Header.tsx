@@ -42,10 +42,10 @@ export default function Header({ locale, banner }: { locale: Locale; banner?: Ac
     { href: `/${locale}/activites`, label: t.nav.activities },
     { href: `/${locale}/sur-mesure`, label: t.nav.tailorMade },
     { href: `/${locale}/destinations`, label: t.nav.destinations },
-    { href: `/${locale}/blog`, label: t.nav.blog },
     { href: `/${locale}/contact`, label: t.nav.contact },
   ];
   const secondary = [
+    { href: `/${locale}/blog`, label: t.nav.blog },
     { href: `/${locale}/galerie`, label: t.nav.gallery },
     { href: `/${locale}/avis`, label: t.nav.reviews },
     { href: `/${locale}/a-propos`, label: t.nav.about },
@@ -81,7 +81,7 @@ export default function Header({ locale, banner }: { locale: Locale; banner?: Ac
           <BrandName name={brand.name} />
         </Link>
 
-        <nav className="ms-6 hidden flex-1 items-center gap-6 text-sm font-medium xl:flex" aria-label="Navigation principale">
+        <nav className="ms-6 hidden flex-1 items-center gap-5 text-sm font-medium whitespace-nowrap xl:flex" aria-label="Navigation principale">
           {links.map((l) => (
             <Link key={l.href} href={l.href} className={`transition hover:text-sand ${pathname.startsWith(l.href) ? "text-sand" : ""}`}>
               {l.label}
@@ -115,7 +115,7 @@ export default function Header({ locale, banner }: { locale: Locale; banner?: Ac
               </span>
             )}
           </Link>
-          <Link href={`/${locale}/reservation`} className="btn btn-primary hidden !py-2 text-sm sm:inline-flex">
+          <Link href={`/${locale}/reservation`} className="btn btn-primary !py-2 text-sm max-sm:!hidden">
             {t.nav.book}
           </Link>
           <button className="rounded-full p-2 xl:hidden" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-mobile" aria-label={open ? t.nav.close : t.nav.menu}>
@@ -163,7 +163,7 @@ export function BrandName({ name, className = "" }: { name: string; className?: 
   const sub = words.length > 2 ? words[words.length - 1] : "";
   return (
     <span className={`flex min-w-0 flex-col leading-none ${className}`}>
-      <span className="font-display truncate text-xl font-semibold tracking-[0.12em] uppercase sm:text-2xl">{main}</span>
+      <span className="font-display text-[15px] leading-tight font-semibold tracking-[0.06em] uppercase sm:text-2xl sm:leading-none sm:tracking-[0.12em] sm:whitespace-nowrap">{main}</span>
       {sub && <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.45em] opacity-70">{sub}</span>}
     </span>
   );

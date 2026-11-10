@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { can, type Permission } from "./rbac";
 import { decrypt, verifyTotp } from "./security";
+import { invalidateCatalog } from "./cache";
 
 /**
  * Authentification de l'administration.
@@ -117,6 +118,8 @@ export async function requireAdmin(perm?: Permission, opts: { allowWithoutMfa?: 
     if (!admin.mfaEnabled && mfaRequired()) redirect("/admin/securite?mfa=setup");
   }
   if (perm && !can(admin.role, perm)) redirect("/admin?denied=1");
+  // toute action d'écriture du back-office rafraîchit le cache du site public
+  if (perm && /\.(write|manage)$/.test(perm)) invalidateCatalog();
   return admin;
 }
 

@@ -29,7 +29,7 @@ ok(q.price?.isDemo === true, "Le tarif est signalé comme démonstration");
 const contact = { firstName: "Test", lastName: "Automatique", email: "test.parcours@example.com", phone: "+212600000000", whatsapp: "", country: "Maroc", departureCity: "Fès", specialNeeds: "", comments: "Créée par scripts/test-booking-flow.mjs", consent: true, locale: "fr", website: "", promoCode: "" };
 const r = await post("/api/bookings", { circuitId: circuit.id, departureId: dep.id, adults: 2, childAges: [7], privateTour: false, optionCodes: ["camp-standard"], ...contact });
 const created = await r.json();
-ok(r.status === 201 && /^RML-\d{6}-[A-Z0-9]{4}$/.test(created.reference), `Réservation créée : ${created.reference}`);
+ok(r.status === 201 && /^[A-Z]{2,5}-\d{6}-[A-Z0-9]{4}$/.test(created.reference), `Réservation créée : ${created.reference}`);
 ok(created.status === "PENDING", "Statut « En attente de confirmation »");
 const seats = db.prepare("select seatsHeld from Departure where id = ?").get(dep.id).seatsHeld;
 ok(seats === 3, `Places bloquées sur le départ : ${seats}/3`);

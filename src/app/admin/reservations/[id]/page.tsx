@@ -8,14 +8,15 @@ import { site } from "@/lib/site";
 import { addBookingNote, recordPayment, setBookingStatus, updateBooking } from "../../actions";
 import { Badge, Card, Flash, Input, PageTitle, paymentLabel, statusBadge, statusLabel } from "../../ui";
 import PrintButton from "@/components/PrintButton";
+import { deleteBookingDocument, dismissCancelRequest, replyMessage, uploadBookingDocument } from "../../sales-actions";
 
 export default async function BookingDetail({ params, searchParams }: PageProps<"/admin/reservations/[id]">) {
-  await requireAdmin();
+  await requireAdmin("bookings.read");
   const { id } = await params;
   const sp = await searchParams;
   const b = await db.booking.findUnique({
     where: { id },
-    include: { circuit: { include: { destination: true } }, departure: true, events: { orderBy: { createdAt: "desc" } }, payments: { orderBy: { recordedAt: "desc" } }, review: true },
+    include: { circuit: { include: { destination: true } }, departure: true, events: { orderBy: { createdAt: "desc" } }, payments: { orderBy: { recordedAt: "desc" } }, review: true, documents: { orderBy: { createdAt: "desc" } }, messages: { orderBy: { createdAt: "asc" } } },
   });
   if (!b) notFound();
   const notifications = await db.notification.findMany({ where: { bookingId: id }, orderBy: { createdAt: "desc" } });
@@ -42,6 +43,19 @@ export default async function BookingDetail({ params, searchParams }: PageProps<
         <p className="mb-6 rounded-xl border border-terracotta/30 bg-terracotta/5 p-3 text-sm text-terracotta">
           Ce dossier a été calculé avec au moins un tarif ou une disponibilité de démonstration. Communiquez le prix réel au client avant toute confirmation.
         </p>
+      )}
+
+      {b.cancelRequestedAt && ["PENDING", "CONFIRMED"].includes(b.status) && (
+        <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">
+          <p className="font-semibold">Demande d&apos;annulation du client le {b.cancelRequestedAt.toISOString().slice(0, 16).replace("T", " ")}</p>
+          {b.cancelReason && <p className="mt-1">« {b.cancelReason} »</p>}
+          <p className="mt-2 text-xs">Pour annuler : bloc « Décision » → Annulée (le client est notifié, les places sont libérées). Appliquez les conditions d&apos;annulation du circuit et enregistrez un éventuel remboursement dans « Paiements ».</p>
+          <form action={dismissCancelRequest} className="mt-3 flex flex-wrap gap-2">
+            <input type="hidden" name="id" value={b.id} />
+            <input name="note" placeholder="Motif (ex. report de date convenu)" className="field !w-auto flex-1 !py-1.5 text-sm" />
+            <button className="btn !py-1.5 text-sm ring-1 ring-rose-300">Clore sans annuler</button>
+          </form>
+        </div>
       )}
 
       <div className="grid gap-6 xl:grid-cols-3">
@@ -120,6 +134,65 @@ export default async function BookingDetail({ params, searchParams }: PageProps<
               {b.comments && <p className="rounded-xl bg-ivory p-3 text-sm sm:col-span-2">Commentaire du client : {b.comments}</p>}
               <button className="btn btn-sand !py-2 text-sm sm:w-fit">Enregistrer les modifications</button>
             </form>
+          </Card>
+
+          <Card title="Messagerie avec le client" id="messages">
+            {b.messages.length === 0 ? (
+              <p className="text-sm text-muted">Aucun message. Le client peut écrire depuis son dossier ; votre réponse lui est envoyée par e-mail.</p>
+            ) : (
+              <ul className="space-y-3">
+                {b.messages.map((m) => (
+                  <li key={m.id} className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${m.fromAgency ? "ms-auto bg-night text-white" : "bg-sand/20"}`}>
+                    <p className="text-[11px] opacity-70">
+                      {m.author} · {m.createdAt.toISOString().slice(0, 16).replace("T", " ")} {!m.fromAgency && !m.readAt && "· non lu"}
+                    </p>
+                    <p className="mt-1 whitespace-pre-wrap">{m.body}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <form action={replyMessage} className="mt-4 space-y-2">
+              <input type="hidden" name="bookingId" value={b.id} />
+              <textarea name="body" required rows={3} maxLength={4000} placeholder="Répondre au client…" className="field !py-2 text-sm" />
+              <button className="btn btn-primary !py-2 text-sm">Envoyer</button>
+            </form>
+          </Card>
+
+          <Card title="Documents de voyage" id="documents">
+            {b.documents.length === 0 ? (
+              <p className="text-sm text-muted">Aucun document. Les documents déposés ici sont visibles par le client dans son dossier (stockage privé, hors du site public).</p>
+            ) : (
+              <ul className="space-y-2 text-sm">
+                {b.documents.map((d) => (
+                  <li key={d.id} className="flex items-center gap-3 rounded-xl bg-ivory px-3 py-2">
+                    <a href={`/api/documents/${d.id}`} target="_blank" className="flex-1 font-medium hover:text-terracotta">
+                      {d.title}
+                    </a>
+                    <span className="text-xs text-muted">
+                      {d.kind} · {Math.round(d.size / 1024)} Ko
+                    </span>
+                    <form action={deleteBookingDocument}>
+                      <input type="hidden" name="id" value={d.id} />
+                      <button className="text-xs text-rose-700 hover:underline">Supprimer</button>
+                    </form>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <form action={uploadBookingDocument} className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_1fr_auto]">
+              <input type="hidden" name="bookingId" value={b.id} />
+              <input name="title" required maxLength={120} placeholder="Titre (ex. Bon d'échange bivouac)" className="field !py-2 text-sm" />
+              <select name="kind" className="field !py-2 text-sm">
+                <option value="VOUCHER">Bon d&apos;échange</option>
+                <option value="PROGRAM">Programme</option>
+                <option value="INVOICE">Facture</option>
+                <option value="RECEIPT">Reçu</option>
+                <option value="OTHER">Autre</option>
+              </select>
+              <input type="file" name="file" required accept="application/pdf,image/jpeg,image/png,image/webp" className="text-xs" />
+              <button className="btn btn-sand !py-2 text-sm">Déposer</button>
+            </form>
+            <p className="mt-2 text-xs text-muted">PDF, JPEG, PNG ou WebP, 10 Mo maximum (le contenu réel du fichier est vérifié).</p>
           </Card>
 
           <Card title="Historique des changements">

@@ -1,6 +1,7 @@
 import "server-only";
 import { connection } from "next/server";
 import { db } from "./db";
+import { cached } from "./cache";
 import { tr } from "./i18n-content";
 import type { Locale } from "@/i18n/config";
 
@@ -64,7 +65,7 @@ export type PhotoPicker = (key: string) => Photo | undefined;
 
 export async function getPhotos(locale: Locale): Promise<PhotoPicker> {
   await connection();
-  const media = await db.media.findMany({ where: { rightsConfirmed: true, kind: "IMAGE" } });
+  const media = await cached("media:images", 60, () => db.media.findMany({ where: { rightsConfirmed: true, kind: "IMAGE" } }));
   const byFile = new Map(media.map((m) => [m.url.split("/").pop()!, m]));
   // une photo étiquetée « slot:<clé> » dans Médias remplace l'attribution par défaut (ex. slot:destination:marrakech)
   const bySlot = new Map<string, (typeof media)[number]>();
@@ -79,10 +80,10 @@ export async function getPhotos(locale: Locale): Promise<PhotoPicker> {
 /** Toutes les photos publiques (galeries, mosaïques) */
 export async function getAllPhotos(locale: Locale, tag?: string): Promise<Photo[]> {
   await connection();
-  const media = await db.media.findMany({
+  const media = await cached(`media:all:${tag ?? ""}`, 60, () => db.media.findMany({
     // sans tag : photos du désert et du Grand Sud uniquement (on écarte les vues côtières)
     where: { rightsConfirmed: true, kind: "IMAGE", ...(tag ? { tags: { contains: tag } } : { NOT: { tags: { contains: "coast" } } }) },
     orderBy: { createdAt: "asc" },
-  });
+  }));
   return media.map((m) => ({ src: m.url, alt: tr(m.alt, locale), credit: m.credit }));
 }

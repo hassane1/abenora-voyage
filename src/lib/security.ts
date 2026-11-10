@@ -2,6 +2,7 @@ import "server-only";
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { headers } from "next/headers";
 import { db } from "./db";
+import { invalidateCatalog } from "./cache";
 
 // ---------------------------------------------------------------------------
 // Jetons et empreintes
@@ -128,6 +129,7 @@ export async function resetRateLimit(key: string) {
 // Journal d'audit
 // ---------------------------------------------------------------------------
 export async function audit(actor: string, action: string, target?: string | null, details?: Record<string, unknown>) {
+  if (!/^(LOGIN|LOGOUT|MFA|CUSTOMER)/.test(action)) invalidateCatalog();
   let ip: string | null = null;
   try {
     ip = await clientIp();

@@ -4,14 +4,27 @@ import { useActionState, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { getV2 } from "@/i18n/v2";
 import { submitRequest, type FormState } from "@/app/[locale]/forms-actions";
 import { formatMad } from "@/lib/format";
 import { Icon } from "./Icon";
 
 type Suggestable = { slug: string; title: string; days: number; priceAdultMad: number | null; tags: string[] };
 
-export default function RequestForm({ locale, kind, circuits = [] }: { locale: Locale; kind: "SUR_MESURE" | "CONTACT"; circuits?: Suggestable[] }) {
+export default function RequestForm({
+  locale,
+  kind,
+  circuits = [],
+  destinations = [],
+}: {
+  locale: Locale;
+  kind: "SUR_MESURE" | "CONTACT";
+  circuits?: Suggestable[];
+  destinations?: { slug: string; name: string }[];
+}) {
   const t = getDictionary(locale);
+  const v = getV2(locale);
+  const today = new Date().toISOString().slice(0, 10);
   const [state, action, pending] = useActionState<FormState, FormData>(submitRequest, null);
   const [days, setDays] = useState(3);
   const [budget, setBudget] = useState(3000);
@@ -33,7 +46,12 @@ export default function RequestForm({ locale, kind, circuits = [] }: { locale: L
     return (
       <div className="rounded-3xl bg-white p-10 text-center ring-1 ring-night/5">
         <Icon name="check" className="mx-auto h-10 w-10 text-sand-dark" />
-        <p className="mt-4 text-lg text-night">{kind === "CONTACT" ? t.contact.success : t.tailor.success}</p>
+        <p className="mt-4 text-lg text-night">{kind === "CONTACT" ? t.contact.success : v.tailorForm.sent}</p>
+        {state.reference && (
+          <p className="mt-3 text-sm text-muted">
+            {v.tailorForm.reference} : <strong className="font-mono text-night">{state.reference}</strong>
+          </p>
+        )}
       </div>
     );
 
@@ -65,7 +83,46 @@ export default function RequestForm({ locale, kind, circuits = [] }: { locale: L
 
       {kind === "SUR_MESURE" && (
         <>
-          <input type="hidden" name="destination" value="merzouga" />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label>
+              <span className="label">{t.home.searchDestination}</span>
+              <select name="destination" className="field" defaultValue={destinations[0]?.slug ?? "merzouga"}>
+                {destinations.map((d) => (
+                  <option key={d.slug} value={d.slug}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span className="label">{v.tailorForm.departureCity}</span>
+              <input name="departureCity" maxLength={80} className="field" placeholder="Marrakech, Fès, Casablanca…" />
+            </label>
+            <label>
+              <span className="label">{v.tailorForm.date}</span>
+              <input name="startDate" type="date" min={today} className="field" />
+            </label>
+            <label>
+              <span className="label">{v.tailorForm.comfort}</span>
+              <select name="comfort" className="field" defaultValue="CONFORT">
+                {Object.entries(v.tailorForm.comforts).map(([k, label]) => (
+                  <option key={k} value={k}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="sm:col-span-2">
+              <span className="label">{v.tailorForm.transport}</span>
+              <select name="transport" className="field" defaultValue="PRIVE">
+                {Object.entries(v.tailorForm.transports).map(([k, label]) => (
+                  <option key={k} value={k}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
           <div className="grid gap-6 sm:grid-cols-2">
             <label>
               <span className="label">
@@ -115,6 +172,21 @@ export default function RequestForm({ locale, kind, circuits = [] }: { locale: L
       <label>
         <span className="label">{kind === "CONTACT" ? t.contact.message : t.tailor.message} *</span>
         <textarea name="message" required minLength={5} rows={5} className="field" maxLength={4000} />
+      </label>
+      {kind === "SUR_MESURE" && (
+        <label>
+          <span className="label">{v.tailorForm.needs}</span>
+          <textarea name="needs" rows={2} maxLength={1000} className="field" />
+        </label>
+      )}
+      <label className="flex items-start gap-2 text-sm text-night/80">
+        <input type="checkbox" name="consent" required className="mt-1 accent-terracotta" />
+        <span>
+          {v.tailorForm.consent}{" "}
+          <Link href={`/${locale}/legal/confidentialite`} className="text-terracotta underline">
+            ↗
+          </Link>
+        </span>
       </label>
       {state?.error && (
         <p role="alert" className="text-sm text-rose-700">

@@ -1,4 +1,8 @@
 import "server-only";
+import path from "node:path";
+
+/** Documents de voyage : stockés hors du dossier public (servis par /api/documents/[id] après contrôle d'accès) */
+export const DOCS_DIR = path.join(process.cwd(), "storage", "documents");
 
 /**
  * Contrôle des fichiers téléversés par leur contenu réel (« magic bytes ») et non par l'extension

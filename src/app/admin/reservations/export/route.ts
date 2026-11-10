@@ -1,11 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getAdmin } from "@/lib/auth";
+import { can } from "@/lib/rbac";
 import { db } from "@/lib/db";
 import { tr } from "@/lib/i18n-content";
 
 /** Export CSV (séparateur « ; », UTF-8 avec BOM : s'ouvre directement dans Excel) */
 export async function GET(req: NextRequest) {
-  if (!(await getAdmin())) return NextResponse.redirect(new URL("/admin/login", req.url));
+  const admin = await getAdmin();
+  if (!admin || (admin.mfaEnabled && !admin.mfaPassed) || !can(admin.role, "bookings.read")) return NextResponse.redirect(new URL("/admin/login", req.url));
   const sp = req.nextUrl.searchParams;
   const where = {
     ...(sp.get("status") ? { status: sp.get("status")! } : {}),
@@ -13,8 +15,10 @@ export async function GET(req: NextRequest) {
   };
   const rows = await db.booking.findMany({ where, include: { circuit: true, payments: true }, orderBy: { createdAt: "desc" } });
   const header = ["Dossier", "Statut", "Paiement", "Circuit", "Départ", "Retour", "Adultes", "Enfants", "Âges enfants", "Privé", "Options", "Total MAD", "Acompte MAD", "Encaissé MAD", "Tarif démo", "Prénom", "Nom", "E-mail", "Téléphone", "WhatsApp", "Pays", "Ville de départ", "Besoins", "Commentaires", "Langue", "Créé le"];
+  // neutralise l'injection de formules (CSV injection) sur les champs texte saisis par les clients
   const esc = (v: unknown) => {
-    const s = String(v ?? "");
+    const raw = String(v ?? "");
+    const s = typeof v === "string" && /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
     return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
   const lines = rows.map((b) =>

@@ -261,3 +261,35 @@ export async function updateDestinationDetails(formData: FormData) {
   revalidatePath("/", "layout");
   redirect(`/admin/destinations?ok=1#${d.slug}`);
 }
+
+// ---------------------------------------------------------------------------
+// Circuits : duplication (copie non publiée, sans départs ni réservations)
+// ---------------------------------------------------------------------------
+export async function duplicateCircuit(formData: FormData) {
+  const admin = await requireAdmin("catalog.write");
+  const src = await db.circuit.findUniqueOrThrow({ where: { id: str(formData, "id") }, include: { itinerary: true, stops: true, options: true } });
+  const { id: _id, slug, createdAt: _c, updatedAt: _u, itinerary, stops, options, ...rest } = src;
+  void _id;
+  void _c;
+  void _u;
+  const title = { ...(src.title as Record<string, string>) };
+  title.fr = `${title.fr ?? ""} (copie)`;
+  const copy = await db.circuit.create({
+    data: {
+      ...rest,
+      title,
+      slug: `${slug}-copie-${randomBytes(2).toString("hex")}`,
+      published: false,
+      transport: rest.transport as object, accommodation: rest.accommodation as object, meals: rest.meals as object, included: rest.included as object,
+      excluded: rest.excluded as object, optionalActivities: rest.optionalActivities as object, cancellationPolicy: rest.cancellationPolicy as object,
+      warnings: rest.warnings as object, summary: rest.summary as object,
+      itinerary: { create: itinerary.map((d) => ({ dayNumber: d.dayNumber, title: d.title as object, description: d.description as object, items: d.items as object })) },
+      stops: { create: stops.map((s) => ({ order: s.order, dayNumber: s.dayNumber, name: s.name, latitude: s.latitude, longitude: s.longitude, kind: s.kind, modeToNext: s.modeToNext, description: s.description as object })) },
+      options: {
+        create: options.map((o) => ({ code: o.code, group: o.group, label: o.label as object, description: o.description as object, priceMad: o.priceMad, unit: o.unit, exclusiveGroup: o.exclusiveGroup, isDefault: o.isDefault, priceStatus: o.priceStatus, published: o.published, sortOrder: o.sortOrder })),
+      },
+    },
+  });
+  await audit(admin.email, "CIRCUIT_DUPLICATE", src.slug, { copy: copy.slug });
+  redirect(`/admin/circuits/${copy.id}?ok=created`);
+}

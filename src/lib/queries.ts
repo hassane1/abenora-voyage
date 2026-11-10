@@ -1,34 +1,35 @@
 import "server-only";
 import { connection } from "next/server";
 import { db } from "./db";
+import { cached } from "./cache";
 
 /** Lecture du catalogue public (toujours à la requête : les données sont éditées dans l'admin) */
 
 export async function getPublishedDestinations() {
   await connection();
-  return db.destination.findMany({ where: { published: true }, orderBy: { sortOrder: "asc" } });
+  return cached("dest:pub", 60, () => db.destination.findMany({ where: { published: true }, orderBy: { sortOrder: "asc" } }));
 }
 
 export async function getUpcomingDestinations() {
   await connection();
-  return db.destination.findMany({ where: { published: false }, orderBy: { sortOrder: "asc" } });
+  return cached("dest:soon", 60, () => db.destination.findMany({ where: { published: false }, orderBy: { sortOrder: "asc" } }));
 }
 
 export async function getDestination(slug: string) {
   await connection();
-  return db.destination.findFirst({
+  return cached(`dest:${slug}`, 60, () => db.destination.findFirst({
     where: { slug, published: true },
     include: {
       circuits: { where: { published: true }, orderBy: { sortOrder: "asc" }, include: { stops: { orderBy: { order: "asc" } } } },
       activities: { where: { published: true }, orderBy: { sortOrder: "asc" } },
       media: { where: { rightsConfirmed: true } },
     },
-  });
+  }));
 }
 
 export async function getCircuits(filter?: { destination?: string; maxPrice?: number; minDays?: number; maxDays?: number }) {
   await connection();
-  return db.circuit.findMany({
+  return cached(`circuits:${JSON.stringify(filter ?? {})}`, 60, () => db.circuit.findMany({
     where: {
       published: true,
       destination: { published: true, ...(filter?.destination ? { slug: filter.destination } : {}) },
@@ -37,28 +38,30 @@ export async function getCircuits(filter?: { destination?: string; maxPrice?: nu
     },
     orderBy: [{ destination: { sortOrder: "asc" } }, { sortOrder: "asc" }],
     include: { destination: true },
-  });
+  }));
 }
 
 export async function getCircuit(slug: string) {
   await connection();
-  return db.circuit.findFirst({
+  return cached(`circuit:${slug}`, 60, () => db.circuit.findFirst({
     where: { slug, published: true, destination: { published: true } },
     include: {
       destination: true,
       itinerary: { orderBy: { dayNumber: "asc" } },
       stops: { orderBy: { order: "asc" } },
     },
-  });
+  }));
 }
 
 export async function getActivities(destinationSlug?: string) {
   await connection();
-  return db.activity.findMany({
-    where: { published: true, destination: { published: true, ...(destinationSlug ? { slug: destinationSlug } : {}) } },
-    orderBy: { sortOrder: "asc" },
-    include: { destination: true },
-  });
+  return cached(`acts:${destinationSlug ?? ""}`, 60, () =>
+    db.activity.findMany({
+      where: { published: true, destination: { published: true, ...(destinationSlug ? { slug: destinationSlug } : {}) } },
+      orderBy: { sortOrder: "asc" },
+      include: { destination: true },
+    }),
+  );
 }
 
 export async function getActivity(slug: string) {
@@ -68,11 +71,11 @@ export async function getActivity(slug: string) {
 
 export async function getPublishedReviews(destinationId?: string) {
   await connection();
-  return db.review.findMany({
+  return cached(`reviews:${destinationId ?? ""}`, 60, () => db.review.findMany({
     where: { published: true, ...(destinationId ? { booking: { circuit: { destinationId } } } : {}) },
     orderBy: { createdAt: "desc" },
     include: { booking: { select: { startDate: true, circuit: { select: { title: true } } } } },
-  });
+  }));
 }
 
 export type NextDeparture = { id: string; circuitId: string; date: Date; remaining: number; isDemo: boolean };
@@ -82,11 +85,10 @@ export async function getNextDepartures(): Promise<Map<string, NextDeparture>> {
   await connection();
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
-  const deps = await db.departure.findMany({
-    where: { status: "OPEN", date: { gt: today }, circuit: { published: true } },
-    orderBy: { date: "asc" },
-    take: 400,
-  });
+  // disponibilités : cache de 10 s (la réservation est toujours contrôlée en base)
+  const deps = await cached("deps:next", 10, () =>
+    db.departure.findMany({ where: { status: "OPEN", date: { gt: today }, circuit: { published: true } }, orderBy: { date: "asc" }, take: 400 }),
+  );
   const map = new Map<string, NextDeparture>();
   for (const d of deps) {
     const remaining = d.capacity - d.seatsHeld;
@@ -100,12 +102,14 @@ export async function getUpcomingDepartures(limit = 8) {
   await connection();
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
-  const deps = await db.departure.findMany({
-    where: { status: "OPEN", date: { gt: today }, circuit: { published: true, destination: { published: true } } },
-    orderBy: { date: "asc" },
-    include: { circuit: true },
-    take: 60,
-  });
+  const deps = await cached("deps:upcoming", 10, () =>
+    db.departure.findMany({
+      where: { status: "OPEN", date: { gt: today }, circuit: { published: true, destination: { published: true } } },
+      orderBy: { date: "asc" },
+      include: { circuit: true },
+      take: 60,
+    }),
+  );
   const perCircuit = new Map<string, number>();
   return deps
     .filter((d) => d.capacity - d.seatsHeld > 0)
@@ -119,7 +123,7 @@ export async function getUpcomingDepartures(limit = 8) {
 
 export async function getPosts() {
   await connection();
-  return db.post.findMany({ where: { published: true }, orderBy: { publishedAt: "desc" } });
+  return cached("posts", 60, () => db.post.findMany({ where: { published: true }, orderBy: { publishedAt: "desc" } }));
 }
 
 export async function getPost(slug: string) {

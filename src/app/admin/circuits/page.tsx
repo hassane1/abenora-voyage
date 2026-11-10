@@ -3,10 +3,11 @@ import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { tr } from "@/lib/i18n-content";
 import { createCircuit } from "../actions";
+import { duplicateCircuit } from "../config-actions";
 import { Badge, Card, PageTitle, priceStatusLabel } from "../ui";
 
 export default async function CircuitsAdmin() {
-  await requireAdmin();
+  await requireAdmin("catalog.write");
   const [circuits, destinations] = await Promise.all([
     db.circuit.findMany({ include: { destination: true, _count: { select: { departures: true, bookings: true } } }, orderBy: [{ destination: { sortOrder: "asc" } }, { sortOrder: "asc" }] }),
     db.destination.findMany({ orderBy: { sortOrder: "asc" } }),
@@ -18,7 +19,7 @@ export default async function CircuitsAdmin() {
         <table className="w-full text-sm">
           <thead className="bg-ivory text-xs uppercase tracking-wider text-muted">
             <tr>
-              {["Circuit", "Destination", "Durée", "Prix adulte", "Statut tarif", "Départs", "Réservations", "Publié"].map((h) => (
+              {["Circuit", "Destination", "Durée", "Prix adulte", "Statut tarif", "Départs", "Réservations", "Publié", ""].map((h) => (
                 <th key={h} className="px-4 py-3 text-start">
                   {h}
                 </th>
@@ -44,6 +45,14 @@ export default async function CircuitsAdmin() {
                 <td className="px-4 py-3">{c._count.departures}</td>
                 <td className="px-4 py-3">{c._count.bookings}</td>
                 <td className="px-4 py-3">{c.published ? "Oui" : "Non"}</td>
+                <td className="px-4 py-3">
+                  <form action={duplicateCircuit}>
+                    <input type="hidden" name="id" value={c.id} />
+                    <button className="text-xs text-terracotta hover:underline" title="Crée une copie non publiée (programme, étapes, options, tarifs) sans les départs ni les réservations">
+                      Dupliquer
+                    </button>
+                  </form>
+                </td>
               </tr>
             ))}
           </tbody>
