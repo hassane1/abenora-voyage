@@ -26,6 +26,11 @@ const COLORS = { DRIVE: "#8C6420", WALK: "#0B1A2E", CAMEL: "#0B1A2E" } as Record
  * Les trajets en véhicule sont calculés par OSRM (tracé routier réel, distance et durée de conduite).
  * Les promenades / dromadaire sont des lignes indicatives en pointillés, sans durée inventée.
  */
+
+/** Échappement HTML : le contenu des popups Leaflet est inséré comme HTML */
+const esc = (v: string | null | undefined) =>
+  String(v ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] as string);
+
 export default function RouteMap({ stops, locale, height = 460 }: { stops: MapStop[]; locale: Locale; height?: number }) {
   const t = getDictionary(locale);
   const el = useRef<HTMLDivElement>(null);
@@ -64,10 +69,10 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
           iconAnchor: [15, 15],
         });
         const days = Array.from(new Set(group.map((g) => g.dayNumber))).map((d) => t.circuit.day(d)).join(" · ");
-        const desc = group.map((g) => g.description).filter(Boolean).join("<br/>");
+        const desc = group.map((g) => esc(g.description)).filter(Boolean).join("<br/>");
         L.marker([s.latitude, s.longitude], { icon, title: s.name })
           .addTo(map)
-          .bindPopup(`<strong style="font-size:14px">${s.name}</strong><br/><span style="color:#8C6420;font-size:11px">${days}</span><p style="margin:6px 0 0">${desc}</p>`);
+          .bindPopup(`<strong style="font-size:14px">${esc(s.name)}</strong><br/><span style="color:#8C6420;font-size:11px">${days}</span><p style="margin:6px 0 0">${desc}</p>`);
       }
       map.fitBounds(L.latLngBounds(stops.map((s) => [s.latitude, s.longitude])), { padding: [40, 40] });
 

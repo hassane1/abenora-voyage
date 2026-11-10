@@ -152,8 +152,8 @@ try {
       firstName: "Secu", lastName: "Test", email: `secu-${run}@example.com`, phone: "+212600000000", whatsapp: "", country: "Maroc", departureCity: "", specialNeeds: "", comments: "", consent: true, locale: "fr", website: "", promoCode: "",
       totalMad: 1, status: "CONFIRMED", paymentStatus: "PAID", customerId: "autre",
     });
-    const b = r.status === 201 ? db.prepare("select totalMad, status, paymentStatus, customerId from Booking where reference = ?").get((await r.json()).reference) : null;
-    ok(!!b && b.totalMad > 1 && b.status === "PENDING" && b.paymentStatus !== "PAID" && b.customerId === null, "Prix falsifié et champs interdits ignorés (total recalculé, statut PENDING)");
+    const b = r.status === 201 ? db.prepare("select * from Booking where reference = ?").get((await r.json()).reference) : null;
+    ok(!!b && b.totalMad > 1 && b.status === "PENDING" && b.paymentStatus !== "PAID" && (b.customerId === undefined || b.customerId === null), "Prix falsifié et champs interdits ignorés (total recalculé, statut PENDING)");
   } else skip("Prix falsifié (aucun départ disponible)");
 
   // ------------------------------------------------------------------ traversée / IDOR

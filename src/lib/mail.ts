@@ -33,8 +33,12 @@ export async function sendMail(opts: { to: string; subject: string; html: string
     console.info(`[mail] SMTP non configuré — e-mail journalisé : « ${opts.subject} » → ${opts.to}`);
   }
 
+  // e-mail réellement envoyé : la copie conservée en base ne garde pas les jetons secrets des liens
+  // (accès au dossier, vérification, réinitialisation) — l'équipe ne peut pas les réutiliser.
+  // Sans SMTP (développement), la copie journalisée reste complète : c'est le seul moyen de suivre le lien.
+  const body = status === "SENT" ? opts.html.replace(/([?&](?:token|t)=)[A-Za-z0-9_-]{16,}/g, "$1[masqué]") : opts.html;
   return db.notification.create({
-    data: { to: opts.to, subject: opts.subject, body: opts.html, status, error, bookingId: opts.bookingId ?? null },
+    data: { to: opts.to, subject: opts.subject, body, status, error, bookingId: opts.bookingId ?? null },
   });
 }
 
