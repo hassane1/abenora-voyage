@@ -152,7 +152,7 @@ export default function Header({ locale, banner }: { locale: Locale; banner?: Ac
 /** Logo téléversé dans l'admin, sinon monogramme par défaut */
 export function BrandMark({ logoUrl, className = "" }: { logoUrl: string | null; className?: string }) {
   // eslint-disable-next-line @next/next/no-img-element
-  if (logoUrl) return <img src={logoUrl} alt="" className={`${className} object-contain`} />;
+  if (logoUrl) return <img src={logoUrl} alt="" className={`${className} rounded-full object-cover`} />;
   return <Logo className={className} />;
 }
 

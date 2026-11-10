@@ -67,13 +67,18 @@ export default async function Footer({ locale }: { locale: Locale }) {
           <p className="font-display mt-8 text-lg text-sand">{v.footer.contact}</p>
           {hasContact ? (
             <ul className="mt-3 space-y-2 text-sm">
-              {brand.phone && (
-                <li>
-                  <a href={`tel:${brand.phone.replace(/[^\d+]/g, "")}`} className="inline-flex items-center gap-2 hover:text-sand" dir="ltr">
-                    <Icon name="phone" className="h-4 w-4" /> {brand.phone}
-                  </a>
-                </li>
-              )}
+              {/* plusieurs numéros possibles, séparés par « / » */}
+              {brand.phone
+                .split(/[/|,;]/)
+                .map((p) => p.trim())
+                .filter(Boolean)
+                .map((p) => (
+                  <li key={p}>
+                    <a href={`tel:${p.replace(/[^\d+]/g, "")}`} className="inline-flex items-center gap-2 hover:text-sand" dir="ltr">
+                      <Icon name="phone" className="h-4 w-4" /> {p}
+                    </a>
+                  </li>
+                ))}
               {brand.whatsapp && (
                 <li>
                   <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-sand" dir="ltr">

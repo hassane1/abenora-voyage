@@ -79,7 +79,7 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-night/60 to-transparent rtl:bg-gradient-to-l" />
         <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
           <p className="eyebrow inline-flex animate-fade-up items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 !text-sand backdrop-blur">
-            <Icon name="pin" className="h-3.5 w-3.5" /> {brand.name} · {brand.tagline[locale] || t.brandTagline}
+            <Icon name="pin" className="h-3.5 w-3.5" /> {brand.name} · {t.brandTagline}
           </p>
           <h1 className="font-display mt-5 max-w-4xl animate-fade-up text-5xl font-semibold leading-[0.98] [animation-delay:120ms] sm:text-6xl lg:text-[5.25rem]">
             {home.heroTitle || t.home.heroTitle}
@@ -440,8 +440,8 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
                 <Icon name="mail" className="h-4 w-4" /> {t.nav.contact}
               </Link>
               {brand.phone && (
-                <a href={`tel:${brand.phone.replace(/[^\d+]/g, "")}`} className="btn btn-ghost text-white" dir="ltr">
-                  <Icon name="phone" className="h-4 w-4" /> {brand.phone}
+                <a href={`tel:${brand.phone.split(/[/|,;]/)[0].replace(/[^\d+]/g, "")}`} className="btn btn-ghost text-white" dir="ltr">
+                  <Icon name="phone" className="h-4 w-4" /> {brand.phone.split(/[/|,;]/)[0].trim()}
                 </a>
               )}
             </div>
