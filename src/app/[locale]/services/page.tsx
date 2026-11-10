@@ -30,7 +30,8 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
           {SERVICE_KEYS.map((k) => {
             const s = a.services[k];
             const wa = waLink(brand.whatsapp, `${s.title} — ${brand.name}`);
-            const bookable = k === "national";
+            const bookable = k === "national" || k === "international" || k === "omra";
+            const href = k === "omra" ? `/${locale}/destinations/omra-la-mecque-medine` : `/${locale}/voyages?type=${k}`;
             return (
               <li key={k} id={k} className="flex scroll-mt-28 flex-col rounded-3xl bg-white p-7 ring-1 ring-night/5">
                 <span className="grid h-14 w-14 place-items-center rounded-2xl bg-night text-sand">
@@ -40,8 +41,8 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
                 <p className="mt-2 flex-1 leading-relaxed text-muted">{s.text}</p>
                 {!bookable && <p className="mt-3 text-xs text-terracotta">{a.onRequest}</p>}
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <Link href={bookable ? `/${locale}/voyages?type=national` : `/${locale}/sur-mesure?service=${k}#demande`} className="btn btn-primary !py-2 text-sm">
-                    {bookable ? a.typologies.national.cta : a.serviceCta}
+                  <Link href={bookable ? href : `/${locale}/sur-mesure?service=${k}#demande`} className="btn btn-primary !py-2 text-sm">
+                    {k === "national" ? a.typologies.national.cta : k === "international" ? a.typologies.international.cta : k === "omra" ? (locale === "ar" ? "برامج العمرة" : locale === "en" ? "Umrah programmes" : "Programmes Omra") : a.serviceCta}
                   </Link>
                   {wa && (
                     <a href={wa} target="_blank" rel="noopener noreferrer" className="btn !py-2 text-sm text-night ring-1 ring-night/15 hover:ring-sand">

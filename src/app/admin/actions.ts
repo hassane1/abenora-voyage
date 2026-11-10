@@ -151,7 +151,7 @@ export async function updateBooking(formData: FormData) {
 // ---------------------------------------------------------------------------
 // Circuits, départs, options, activités, destinations
 // ---------------------------------------------------------------------------
-const PRICE_STATUS = z.enum(["DEMO", "VALIDATED", "ON_REQUEST"]);
+const PRICE_STATUS = z.enum(["DEMO", "INDICATIVE", "VALIDATED", "ON_REQUEST"]);
 
 export async function updateCircuit(formData: FormData) {
   const admin = await requireAdmin("catalog.write");

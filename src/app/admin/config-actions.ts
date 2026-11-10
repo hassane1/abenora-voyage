@@ -272,7 +272,7 @@ export async function updateDestinationDetails(formData: FormData) {
 export async function duplicateCircuit(formData: FormData) {
   const admin = await requireAdmin("catalog.write");
   const src = await db.circuit.findUniqueOrThrow({ where: { id: str(formData, "id") }, include: { itinerary: true, stops: true, options: true } });
-  const { id: _id, slug, createdAt: _c, updatedAt: _u, itinerary, stops, options, ...rest } = src;
+  const { id: _id, slug, createdAt: _c, updatedAt: _u, itinerary, stops, options, priceGrid, ...rest } = src;
   void _id;
   void _c;
   void _u;
@@ -282,6 +282,7 @@ export async function duplicateCircuit(formData: FormData) {
     data: {
       ...rest,
       title,
+      priceGrid: priceGrid ?? undefined,
       slug: `${slug}-copie-${randomBytes(2).toString("hex")}`,
       published: false,
       transport: rest.transport as object, accommodation: rest.accommodation as object, meals: rest.meals as object, included: rest.included as object,

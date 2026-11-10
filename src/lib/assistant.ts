@@ -157,6 +157,7 @@ export async function offlineAnswer(question: string, locale: Locale): Promise<s
   const svc: [ServiceKey, string[]][] = [
     ["omra", ["omra", "umrah", "omrah", "عمرة", "العمرة"]],
     ["international", ["international", "étranger", "etranger", "abroad", "دولية", "الخارج"]],
+    ["visa", ["visa", "تأشيرة"]],
     ["hotels", ["hôtel", "hotel", "riad", "فندق"]],
     ["transport", ["transport", "transfert", "aéroport", "aeroport", "airport", "نقل"]],
     ["billetterie", ["billet", "ticket", "avion", "flight", "تذكرة", "تذاكر"]],

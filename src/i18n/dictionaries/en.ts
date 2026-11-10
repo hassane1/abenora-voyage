@@ -63,7 +63,7 @@ const en: Dictionary = {
     free: "Included",
     demoPrice: "Demo price",
     demoPriceLong: "Fictitious demo price, non-binding. The final price will be given on confirmation.",
-    demoAvailability: "Demo availability",
+    demoAvailability: "Indicative dates and seats, confirmed by the agency",
     translationPending: "Translation coming soon: content shown in French.",
     back: "Back",
     next: "Continue",

@@ -150,7 +150,11 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
                     ? `${Math.round(l.distanceKm)} km · ${fmtDur(l.durationMin!)}`
                     : l.mode === "DRIVE"
                       ? "—"
-                      : t.map.offRoad}
+                      : l.mode === "FLIGHT"
+                        ? "✈"
+                        : l.mode === "SEA"
+                          ? "⛴"
+                          : t.map.offRoad}
                 </p>
               </div>
             </li>

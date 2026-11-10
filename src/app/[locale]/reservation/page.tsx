@@ -6,6 +6,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { db } from "@/lib/db";
 import { tr } from "@/lib/i18n-content";
 import BookingWizard from "@/components/booking/BookingWizard";
+import { resolveGrid } from "@/lib/pricing";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/reservation">): Promise<Metadata> {
   const { locale } = await params;
@@ -49,6 +50,7 @@ export default async function ReservationPage({ params, searchParams }: PageProp
             priceAdultMad: c.priceAdultMad,
             priceStatus: c.priceStatus,
             depositPercent: c.depositPercent,
+            priceGrid: resolveGrid(c.priceGrid, (v) => tr<string>(v, locale, "")),
             options: options
               .filter((o) => o.circuitId === null || o.circuitId === c.id)
               .map((o) => ({

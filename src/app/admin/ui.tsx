@@ -42,7 +42,7 @@ export const statusBadge: Record<string, string> = {
 };
 export const statusLabel: Record<string, string> = { PENDING: "En attente", CONFIRMED: "Confirmée", REJECTED: "Refusée", CANCELLED: "Annulée" };
 export const paymentLabel: Record<string, string> = { NONE: "Aucun paiement", DEPOSIT_PAID: "Acompte reçu", PAID: "Soldé", REFUNDED: "Remboursé" };
-export const priceStatusLabel: Record<string, string> = { DEMO: "Démonstration (fictif)", VALIDATED: "Validé", ON_REQUEST: "Sur devis" };
+export const priceStatusLabel: Record<string, string> = { DEMO: "Démonstration (fictif)", INDICATIVE: "Tarif publié, à confirmer", VALIDATED: "Validé", ON_REQUEST: "Sur devis" };
 
 export function Badge({ cls, children }: { cls: string; children: ReactNode }) {
   return <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${cls}`}>{children}</span>;

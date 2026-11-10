@@ -107,7 +107,11 @@ model Circuit {
   childFreeUnderAge    Int         @default(4)
   privateSupplementMad Int         @default(0) // par personne, si voyage privé
   depositPercent       Int         @default(30)
-  priceStatus          String      @default("DEMO")
+  priceStatus          String      @default("DEMO") // DEMO | INDICATIVE (tarif publié, à confirmer) | VALIDATED | ON_REQUEST
+  // grille de prix par personne : hébergement (lignes) × type de chambre (colonnes), ex. programmes Omra
+  priceGrid            Json?
+  programType          String      @default("CIRCUIT") // CIRCUIT | OMRA | CROISIERE | SEJOUR
+  sourceNote           String? // origine des informations (affiche du programme), visible dans l admin uniquement
   defaultCapacity      Int         @default(12)
   published            Boolean     @default(true)
   sortOrder            Int         @default(0)

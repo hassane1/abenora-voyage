@@ -10,6 +10,7 @@ const schema = z.object({
   privateTour: z.boolean(),
   optionCodes: z.array(z.string()).max(30),
   promoCode: z.string().max(40).optional(),
+  grid: z.object({ row: z.number().int().min(0).max(50), col: z.string().max(30) }).nullable().optional(),
   locale: z.string(),
 });
 

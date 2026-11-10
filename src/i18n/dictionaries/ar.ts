@@ -61,7 +61,7 @@ const ar: Dictionary = {
     free: "مشمول",
     demoPrice: "سعر تجريبي",
     demoPriceLong: "سعر تجريبي وهمي وغير ملزم. سيُبلَّغ السعر النهائي عند التأكيد.",
-    demoAvailability: "توفر تجريبي",
+    demoAvailability: "تواريخ ومقاعد إرشادية تؤكدها الوكالة",
     translationPending: "الترجمة قريباً: المحتوى معروض بالفرنسية.",
     back: "رجوع",
     next: "متابعة",

@@ -11,6 +11,7 @@ import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { activities, bookingOptions, circuits, futureDestinations, merzouga } from "./seed-data/merzouga";
 import { merzougaFaq, merzougaSections, merzougaTips, posts } from "./seed-data/editorial";
 import { applyDefaults } from "./defaults";
+import { applyProgrammes } from "./programmes";
 
 const db = new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? "file:./dev.db" }) });
 const reset = process.argv.includes("--reset");
@@ -159,6 +160,7 @@ async function main() {
   }
 
   await applyDefaults(db);
+  await applyProgrammes(db);
   console.log("✔ Seed terminé.");
 }
 

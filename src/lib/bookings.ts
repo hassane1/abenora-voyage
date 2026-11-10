@@ -2,7 +2,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { db } from "./db";
-import { computePrice, defaultLabels, type PricingLabels, type PricingOption } from "./pricing";
+import { computePrice, defaultLabels, resolveGrid, type PricingLabels, type PricingOption } from "./pricing";
 import { getPricingSettings } from "./settings";
 import { tr } from "./i18n-content";
 import { emailLayout, escapeHtml, sendMail } from "./mail";
@@ -20,6 +20,7 @@ export const bookingSchema = z.object({
   privateTour: z.boolean(),
   optionCodes: z.array(z.string()).max(30),
   promoCode: z.string().trim().max(40).optional().or(z.literal("")),
+  grid: z.object({ row: z.number().int().min(0).max(50), col: z.string().max(30) }).nullable().optional(),
   firstName: z.string().trim().min(1).max(80),
   lastName: z.string().trim().min(1).max(80),
   email: z.string().trim().email().max(160),
@@ -87,7 +88,7 @@ export async function findPromo(code: string | undefined | null, travelers: numb
 }
 
 /** Charge circuit, options et réglages puis calcule le prix (fait foi côté serveur) */
-export async function quote(input: Pick<BookingInput, "circuitId" | "adults" | "childAges" | "privateTour" | "optionCodes" | "promoCode">, locale: Locale) {
+export async function quote(input: Pick<BookingInput, "circuitId" | "adults" | "childAges" | "privateTour" | "optionCodes" | "promoCode" | "grid">, locale: Locale) {
   const circuit = await db.circuit.findFirst({ where: { id: input.circuitId, published: true } });
   if (!circuit) throw new BookingError("NOT_FOUND");
   const opts = await db.bookingOption.findMany({
@@ -106,7 +107,8 @@ export async function quote(input: Pick<BookingInput, "circuitId" | "adults" | "
   }
   const settings = await getPricingSettings();
   const promo = await findPromo(input.promoCode, input.adults + input.childAges.length);
-  const price = computePrice(circuit, { adults: input.adults, childAges: input.childAges, privateTour: input.privateTour, options, promo }, settings, labelsFor(locale));
+  const priceGrid = resolveGrid(circuit.priceGrid, (v) => tr<string>(v, locale, ""));
+  const price = computePrice({ ...circuit, priceGrid }, { adults: input.adults, childAges: input.childAges, privateTour: priceGrid ? false : input.privateTour, options, promo, grid: input.grid ?? null }, settings, labelsFor(locale));
   return { circuit, options, price, promo, settings };
 }
 
@@ -118,6 +120,8 @@ export async function createBooking(raw: unknown, opts: { customerId?: string | 
   const travelers = input.adults + input.childAges.length;
 
   const { circuit, options, price, promo } = await quote(input, locale);
+  // programme à grille : le choix hébergement / chambre est obligatoire et doit exister dans la grille
+  if (circuit.priceGrid && price.onRequest) throw new BookingError("INVALID");
   const departure = await db.departure.findFirst({ where: { id: input.departureId, circuitId: circuit.id } });
   if (!departure) throw new BookingError("NOT_FOUND");
   const prefix = (await getBrand()).bookingPrefix;

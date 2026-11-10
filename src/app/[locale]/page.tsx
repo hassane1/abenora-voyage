@@ -176,13 +176,13 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
             const s = a.services[k];
             return (
               <li key={k}>
-                <Link href={k === "national" ? `/${locale}/voyages?type=national` : `/${locale}/sur-mesure?service=${k}#demande`} className="group flex h-full flex-col rounded-3xl bg-white p-6 ring-1 ring-night/5 transition hover:-translate-y-1 hover:shadow-xl hover:ring-sand/50">
+                <Link href={k === "national" ? `/${locale}/voyages?type=national` : k === "international" ? `/${locale}/voyages?type=international` : k === "omra" ? `/${locale}/destinations/omra-la-mecque-medine` : `/${locale}/sur-mesure?service=${k}#demande`} className="group flex h-full flex-col rounded-3xl bg-white p-6 ring-1 ring-night/5 transition hover:-translate-y-1 hover:shadow-xl hover:ring-sand/50">
                   <span className="grid h-12 w-12 place-items-center rounded-2xl bg-night text-sand transition group-hover:bg-sand group-hover:text-night">
                     <Icon name={s.icon} className="h-6 w-6" />
                   </span>
                   <span className="font-display mt-4 text-2xl font-semibold text-night">{s.title}</span>
                   <span className="mt-2 flex-1 text-sm leading-relaxed text-muted">{s.text}</span>
-                  <span className="mt-4 text-sm font-semibold text-terracotta">{k === "national" ? a.typologies.national.cta : a.serviceCta} →</span>
+                  <span className="mt-4 text-sm font-semibold text-terracotta">{k === "national" ? a.typologies.national.cta : k === "international" ? a.typologies.international.cta : a.serviceCta} →</span>
                 </Link>
               </li>
             );

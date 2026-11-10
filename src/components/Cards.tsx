@@ -8,6 +8,8 @@ import type { Photo } from "@/lib/photos";
 import type { NextDeparture } from "@/lib/queries";
 import DuneArt from "./DuneArt";
 import Visual from "./Visual";
+import { priceNote } from "./Price";
+import ProgramArt from "./ProgramArt";
 import { FavoriteButton } from "./TripButtons";
 import { Icon } from "./Icon";
 
@@ -35,6 +37,8 @@ type CircuitCardData = {
   priceStatus: string;
   pricingMode: string;
   included?: unknown;
+  programType?: string;
+  destination?: { scope?: string; name?: unknown };
 };
 
 export function CircuitCard({ c, locale, photo, next }: { c: CircuitCardData; locale: Locale; photo?: Photo; next?: NextDeparture }) {
@@ -45,7 +49,11 @@ export function CircuitCard({ c, locale, photo, next }: { c: CircuitCardData; lo
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white shadow-[0_12px_40px_-24px_rgba(20,40,63,0.45)] ring-1 ring-night/5 transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_30px_70px_-30px_rgba(20,40,63,0.55)]">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <Visual photo={photo} variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} caravan className="h-full w-full" imgClassName="transition duration-[1.2s] group-hover:scale-110" title={tr(c.title, locale)} />
+        {!photo && ((c.programType && c.programType !== "CIRCUIT") || c.destination?.scope === "INTERNATIONAL") ? (
+          <ProgramArt type={c.programType ?? "CIRCUIT"} label={c.destination?.name ? tr<string>(c.destination.name, locale, "") : undefined} className="h-full w-full" />
+        ) : (
+          <Visual photo={photo} variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} caravan className="h-full w-full" imgClassName="transition duration-[1.2s] group-hover:scale-110" title={tr(c.title, locale)} />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-night/70 via-transparent to-night/10" />
         <div className="absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-2 p-4">
           {label ? <span className="rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-terracotta shadow">{label}</span> : <span />}
@@ -84,7 +92,7 @@ export function CircuitCard({ c, locale, photo, next }: { c: CircuitCardData; lo
             </span>
             {next.isDemo && (
               <span className="ms-auto shrink-0 font-normal opacity-70" title={t.common.demoAvailability}>
-                ● {locale === "en" ? "demo" : locale === "ar" ? "تجريبي" : "démo"}
+                ● {c.priceStatus === "INDICATIVE" ? (locale === "en" ? "indicative" : locale === "ar" ? "إرشادي" : "indicatif") : locale === "en" ? "demo" : locale === "ar" ? "تجريبي" : "démo"}
               </span>
             )}
           </p>
@@ -99,7 +107,7 @@ export function CircuitCard({ c, locale, photo, next }: { c: CircuitCardData; lo
                 {c.pricingMode === "PER_GROUP" ? t.common.perGroup : x.perPersonShort}
               </p>
             )}
-            {c.priceStatus !== "VALIDATED" && <p className="text-[11px] text-terracotta" title={t.common.demoPriceLong}>● {t.common.demoPrice}</p>}
+            {c.priceStatus !== "VALIDATED" && <p className="text-[11px] text-terracotta" title={priceNote(locale, c.priceStatus, true)}>● {priceNote(locale, c.priceStatus)}</p>}
           </div>
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-night text-white transition group-hover:bg-terracotta" aria-hidden>
             <Icon name="arrow" className="h-5 w-5 rtl:rotate-180" />
@@ -168,7 +176,7 @@ export function ActivityCard({ a, locale, photo, compact = false }: { a: Activit
           ) : (
             <span className="text-sm text-muted">
               {x.from} <strong className="font-display text-xl text-night">{formatMad(a.priceMad, locale)}</strong>
-              {a.priceStatus !== "VALIDATED" && <span className="block text-[10px] text-terracotta">● {t.common.demoPrice}</span>}
+              {a.priceStatus !== "VALIDATED" && <span className="block text-[10px] text-terracotta">● {priceNote(locale, a.priceStatus)}</span>}
             </span>
           )}
           <Icon name="arrow" className="h-5 w-5 text-terracotta transition group-hover:translate-x-1 rtl:rotate-180" />

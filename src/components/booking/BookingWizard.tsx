@@ -6,11 +6,12 @@ import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { formatDate, formatMad, addDays } from "@/lib/format";
 import { useWhatsApp } from "../BrandProvider";
-import type { PriceResult } from "@/lib/pricing";
+import type { PriceResult, ResolvedGrid } from "@/lib/pricing";
 import { TRIP_KEY, useLocalList } from "../useLocalList";
 import { Icon } from "../Icon";
 import DuneArt from "../DuneArt";
 import { circuitVariant, hashSeed } from "../Cards";
+import { priceNote } from "../Price";
 import Calendar, { type Dep } from "./Calendar";
 
 export type WizardOption = { code: string; group: string; label: string; description: string; priceMad: number; unit: string; exclusiveGroup: string | null; isDefault: boolean; priceStatus: string };
@@ -26,6 +27,7 @@ export type WizardCircuit = {
   priceStatus: string;
   depositPercent: number;
   options: WizardOption[];
+  priceGrid?: ResolvedGrid | null;
 };
 export type WizardDestination = { slug: string; name: string; available: boolean };
 
@@ -58,6 +60,7 @@ export default function BookingWizard({
   const [privateTour, setPrivateTour] = useState(false);
   const [optionCodes, setOptionCodes] = useState<string[] | null>(null);
   const [promoInput, setPromoInput] = useState("");
+  const [gridChoice, setGridChoice] = useState<{ circuitId: string; row: number; col: string } | null>(null);
   const [promo, setPromo] = useState("");
   const [quote, setQuote] = useState<{ price: PriceResult; promoRejected: boolean } | null>(null);
   const [contact, setContact] = useState<Contact>({ firstName: "", lastName: "", email: "", phone: "", whatsapp: "", country: "", departureCity: "", specialNeeds: "", comments: "" });
@@ -69,6 +72,9 @@ export default function BookingWizard({
 
   const circuit = circuits.find((c) => c.id === circuitId) ?? null;
   const travelers = adults + childAges.length;
+  const priceGrid = circuit?.priceGrid ?? null;
+  // choix hébergement × chambre (programmes à grille, ex. Omra) — ignoré si l'on change de circuit
+  const grid = useMemo(() => (priceGrid && gridChoice && gridChoice.circuitId === circuitId ? { row: gridChoice.row, col: gridChoice.col } : null), [priceGrid, gridChoice, circuitId]);
 
   // options : défauts + activités ajoutées depuis les fiches (« Ajouter à mon séjour »)
   const effectiveOptions = useMemo(() => {
@@ -104,7 +110,7 @@ export default function BookingWizard({
       fetch("/api/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ circuitId, adults, childAges, privateTour, optionCodes: effectiveOptions, promoCode: promo || undefined, locale }),
+        body: JSON.stringify({ circuitId, adults, childAges, privateTour, optionCodes: effectiveOptions, promoCode: promo || undefined, locale, grid }),
         signal: ctrl.signal,
       })
         .then((r) => r.json())
@@ -115,7 +121,7 @@ export default function BookingWizard({
       clearTimeout(id);
       ctrl.abort();
     };
-  }, [circuitId, adults, childAges, privateTour, effectiveOptions, promo, locale]);
+  }, [circuitId, adults, childAges, privateTour, effectiveOptions, promo, locale, grid]);
 
   const toggleOption = (o: WizardOption) => {
     let next = effectiveOptions.filter((c) => c !== o.code);
@@ -136,7 +142,7 @@ export default function BookingWizard({
     !!destination,
     !!circuit,
     !!departure && departure.remaining >= travelers,
-    adults >= 1 && childAges.every((a) => a >= 0 && a <= 11),
+    adults >= 1 && childAges.every((a) => a >= 0 && a <= 11) && (!priceGrid || (!!grid && typeof priceGrid.rows[grid.row]?.prices[grid.col] === "number")),
     true,
     !!quote,
     !!contact.firstName && !!contact.lastName && emailOk && contact.phone.trim().length >= 6 && contact.country.trim().length >= 2,
@@ -159,6 +165,7 @@ export default function BookingWizard({
           privateTour,
           optionCodes: effectiveOptions,
           promoCode: promo,
+          grid,
           ...contact,
           consent,
           locale,
@@ -300,7 +307,7 @@ export default function BookingWizard({
                         <p className="mt-1 line-clamp-2 text-sm text-muted">{c.summary}</p>
                         <p className="mt-2 text-sm font-semibold text-night">
                           {c.priceAdultMad ? `${t.common.from} ${formatMad(c.priceAdultMad, locale)} ${t.common.perPerson}` : t.common.onRequest}
-                          {c.priceStatus !== "VALIDATED" && <span className="ms-2 text-xs font-medium text-terracotta">● {t.common.demoPrice}</span>}
+                          {c.priceStatus !== "VALIDATED" && <span className="ms-2 text-xs font-medium text-terracotta">● {priceNote(locale, c.priceStatus)}</span>}
                         </p>
                       </div>
                     </button>
@@ -351,6 +358,56 @@ export default function BookingWizard({
                   ))}
                 </div>
               )}
+              {priceGrid && (
+                <fieldset className="mt-8">
+                  <legend className="label">{locale === "ar" ? "الفندق ونوع الغرفة (السعر للشخص)" : locale === "en" ? "Hotel and room type (price per person)" : "Hôtel et type de chambre (prix par personne)"}</legend>
+                  <div className="mt-2 overflow-x-auto rounded-2xl ring-1 ring-night/10">
+                    <table className="w-full text-sm">
+                      <thead className="bg-ivory text-xs text-muted">
+                        <tr>
+                          <th className="p-2 text-start" />
+                          {priceGrid.columns.map((c) => (
+                            <th key={c.key} className="p-2 text-center">
+                              {c.label}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {priceGrid.rows.map((r, i) => (
+                          <tr key={i} className="border-t border-night/5">
+                            <td className="p-2">
+                              <span className="font-semibold text-night">{r.label}</span>
+                              {r.detail && <span className="block text-xs text-muted">{r.detail}</span>}
+                            </td>
+                            {priceGrid.columns.map((c) => {
+                              const v = r.prices[c.key];
+                              const on = grid?.row === i && grid?.col === c.key;
+                              return (
+                                <td key={c.key} className="p-1 text-center">
+                                  {typeof v === "number" ? (
+                                    <button
+                                      type="button"
+                                      aria-pressed={on}
+                                      onClick={() => setGridChoice({ circuitId, row: i, col: c.key })}
+                                      className={`w-full rounded-xl px-2 py-2 font-semibold transition ${on ? "bg-night text-sand" : "bg-white ring-1 ring-night/10 hover:ring-sand"}`}
+                                    >
+                                      {formatMad(v, locale)}
+                                    </button>
+                                  ) : (
+                                    <span className="text-muted">—</span>
+                                  )}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </fieldset>
+              )}
+              {!priceGrid && (
               <fieldset className="mt-8">
                 <legend className="label">{t.booking.tripType}</legend>
                 <div className="mt-2 grid gap-3 sm:grid-cols-2">
@@ -362,6 +419,7 @@ export default function BookingWizard({
                   ))}
                 </div>
               </fieldset>
+              )}
               {departure && departure.remaining < travelers && <p className="mt-4 text-sm text-rose-700">{t.booking.errors.soldOut}</p>}
             </Step>
           )}
@@ -449,7 +507,7 @@ export default function BookingWizard({
                 {price && <Row k={t.booking.total} v={formatMad(price.total, locale)} />}
               </dl>
               <p className="mt-4 rounded-2xl border border-sand/50 bg-sand/10 p-4 text-sm text-night">{t.booking.subtitle}</p>
-              {(price?.isDemo || departure.isDemo) && <p className="mt-3 text-xs text-terracotta">● {t.common.demoPriceLong}</p>}
+              {(price?.isDemo || departure.isDemo) && <p className="mt-3 text-xs text-terracotta">● {priceNote(locale, price?.noteKind ?? "DEMO", true)}</p>}
               <label className="mt-6 flex items-start gap-3 text-sm">
                 <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-4 w-4 accent-terracotta" />
                 <span>{t.booking.consent}</span>
@@ -500,7 +558,7 @@ export default function BookingWizard({
                     {t.booking.deposit(circuit?.depositPercent ?? 30)} : {formatMad(price.deposit, locale)}
                   </p>
                 </div>
-                {price.isDemo && <p className="mt-3 text-[11px] text-sand-light">● {t.common.demoPriceLong}</p>}
+                {price.isDemo && <p className="mt-3 text-[11px] text-sand-light">● {priceNote(locale, price.noteKind ?? "DEMO", true)}</p>}
               </>
             )}
           </div>
@@ -591,7 +649,7 @@ export function PriceTable({ price, locale, depositPercent }: { price: PriceResu
           <span className="font-medium">{formatMad(price.balance, locale)}</span>
         </div>
       </div>
-      {price.isDemo && <p className="mt-4 rounded-xl bg-terracotta/5 p-3 text-xs text-terracotta">● {t.common.demoPriceLong}</p>}
+      {price.isDemo && <p className="mt-4 rounded-xl bg-terracotta/5 p-3 text-xs text-terracotta">● {priceNote(locale, price.noteKind ?? "DEMO", true)}</p>}
     </div>
   );
 }

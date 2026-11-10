@@ -33,19 +33,34 @@ export function Price({
         <span className="ms-1 font-sans text-xs font-normal text-muted">{unit === "PER_GROUP" ? t.common.perGroup : t.common.perPerson}</span>
       </span>
       {size === "lg" && <FxNote mad={amount} locale={locale} />}
-      {status !== "VALIDATED" && <DemoBadge locale={locale} />}
+      {status !== "VALIDATED" && <DemoBadge locale={locale} status={status} />}
     </span>
   );
 }
 
-export function DemoBadge({ locale, long = false }: { locale: Locale; long?: boolean }) {
+/** Mention à afficher pour un tarif non validé : fictif (DEMO) ou publié mais à confirmer (INDICATIVE) */
+export function priceNote(locale: Locale, kind: string | null | undefined, long = false) {
   const t = getDictionary(locale);
+  if (kind === "INDICATIVE") {
+    const short = locale === "ar" ? "سعر منشور، يُؤكَّد" : locale === "en" ? "Published price, to be confirmed" : "Tarif publié, à confirmer";
+    const full =
+      locale === "ar"
+        ? "سعر منشور من طرف الوكالة، يُؤكَّد عند تأكيد الملف (حسب توفر الأماكن والفنادق)."
+        : locale === "en"
+          ? "Price published by the agency, confirmed when your booking is confirmed (subject to availability of seats and hotels)."
+          : "Tarif publié par l'agence, confirmé lors de la validation de votre dossier (sous réserve de disponibilité des places et des hôtels).";
+    return long ? full : short;
+  }
+  return long ? t.common.demoPriceLong : t.common.demoPrice;
+}
+
+export function DemoBadge({ locale, long = false, status }: { locale: Locale; long?: boolean; status?: string }) {
   return (
     <span
       className={`mt-1 inline-flex w-fit items-center gap-1 rounded-full border border-terracotta/30 bg-terracotta/5 px-2 py-0.5 text-[11px] font-medium text-terracotta ${long ? "rounded-xl text-xs" : ""}`}
-      title={t.common.demoPriceLong}
+      title={priceNote(locale, status, true)}
     >
-      ● {long ? t.common.demoPriceLong : t.common.demoPrice}
+      ● {priceNote(locale, status, long)}
     </span>
   );
 }

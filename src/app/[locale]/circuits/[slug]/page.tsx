@@ -11,7 +11,9 @@ import { formatMad } from "@/lib/format";
 import Visual from "@/components/Visual";
 import { getPhotos } from "@/lib/photos";
 import RouteMap from "@/components/RouteMap";
-import { DemoBadge, Price } from "@/components/Price";
+import { DemoBadge, Price, priceNote } from "@/components/Price";
+import { resolveGrid } from "@/lib/pricing";
+import ProgramArt from "@/components/ProgramArt";
 import { FavoriteButton } from "@/components/TripButtons";
 import { circuitVariant, hashSeed } from "@/components/Cards";
 import { Icon } from "@/components/Icon";
@@ -39,6 +41,7 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
   const photo = await getPhotos(locale);
   const title = tr(c.title, locale);
   const warnings = trList(c.warnings, locale);
+  const grid = resolveGrid(c.priceGrid, (v) => tr<string>(v, locale, ""));
   const brand = await getBrand();
   const wa = waLink(
     brand.whatsapp,
@@ -68,7 +71,11 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <section className="relative isolate overflow-hidden pt-32 pb-16 text-white">
-        <Visual photo={photo(`circuit:${c.slug}`)} variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} caravan className="absolute inset-0 -z-10 h-full w-full" priority title={title} />
+        {!photo(`circuit:${c.slug}`) && (c.programType !== "CIRCUIT" || c.destination.scope === "INTERNATIONAL") ? (
+          <ProgramArt type={c.programType} className="absolute inset-0 -z-10 h-full w-full" />
+        ) : (
+          <Visual photo={photo(`circuit:${c.slug}`)} variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} caravan className="absolute inset-0 -z-10 h-full w-full" priority title={title} />
+        )}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/30 to-night/40" />
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <nav className="no-print text-sm text-white/70" aria-label="Fil d'Ariane">
@@ -126,6 +133,44 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
             </div>
           )}
 
+          {/* Grille de prix hôtel × chambre (programmes Omra, combinés…) */}
+          {grid && (
+            <section className="mt-14">
+              <h2 className="font-display text-4xl font-semibold text-night">{locale === "ar" ? "الفنادق والأسعار" : locale === "en" ? "Hotels and prices" : "Hôtels et tarifs"}</h2>
+              <p className="mt-2 text-sm text-muted">{locale === "ar" ? "السعر للشخص الواحد حسب نوع الغرفة." : locale === "en" ? "Price per person according to room type." : "Prix par personne selon le type de chambre."}</p>
+              <div className="mt-6 overflow-x-auto rounded-3xl bg-white ring-1 ring-night/5">
+                <table className="w-full text-sm">
+                  <thead className="bg-night text-sand">
+                    <tr>
+                      <th className="p-3 text-start font-semibold">{locale === "ar" ? "الإقامة" : locale === "en" ? "Accommodation" : "Hébergement"}</th>
+                      {grid.columns.map((col) => (
+                        <th key={col.key} className="p-3 text-center font-semibold">
+                          {col.label}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {grid.rows.map((r, i) => (
+                      <tr key={i} className="border-t border-night/5">
+                        <td className="p-3">
+                          <span className="font-semibold text-night">{r.label}</span>
+                          {r.detail && <span className="block text-xs text-muted">{r.detail}</span>}
+                        </td>
+                        {grid.columns.map((col) => (
+                          <td key={col.key} className="p-3 text-center font-semibold text-night">
+                            {typeof r.prices[col.key] === "number" ? formatMad(r.prices[col.key]!, locale) : "—"}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {c.priceStatus !== "VALIDATED" && <p className="mt-2 text-xs text-terracotta">● {priceNote(locale, c.priceStatus, true)}</p>}
+            </section>
+          )}
+
           {/* Programme : chronologie */}
           <h2 className="font-display mt-14 text-4xl font-semibold text-night">{t.circuit.program}</h2>
           <p className="mt-2 text-sm text-muted">{t.circuit.exampleProgram}</p>
@@ -136,7 +181,10 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
                   {day.dayNumber}
                 </span>
                 <div className="overflow-hidden rounded-3xl bg-white ring-1 ring-night/5">
-                  <Visual photo={photo(`day:${c.slug}:${day.dayNumber}`)} variant={(["sunset", "dawn", "night", "noon"] as const)[day.dayNumber % 4]} seed={day.dayNumber * 13 + hashSeed(c.slug)} className="h-48 w-full" showCredit />
+                  {/* illustrations du désert seulement pour les circuits au Maroc ; photo réelle si disponible */}
+                  {(photo(`day:${c.slug}:${day.dayNumber}`) || (c.programType === "CIRCUIT" && c.destination.scope !== "INTERNATIONAL")) && (
+                    <Visual photo={photo(`day:${c.slug}:${day.dayNumber}`)} variant={(["sunset", "dawn", "night", "noon"] as const)[day.dayNumber % 4]} seed={day.dayNumber * 13 + hashSeed(c.slug)} className="h-48 w-full" showCredit />
+                  )}
                   <div className="p-6">
                     <p className="eyebrow">{t.circuit.day(day.dayNumber)}</p>
                     <h3 className="font-display mt-1 text-2xl font-semibold text-night">{tr(day.title, locale)}</h3>
@@ -164,7 +212,7 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
           <div className="mt-16 grid gap-6 md:grid-cols-2">
             <ListBox title={t.circuit.included} items={trList(c.included, locale)} icon="check" tone="ok" />
             <ListBox title={t.circuit.excluded} items={trList(c.excluded, locale)} icon="x" tone="no" />
-            <ListBox title={t.circuit.optional} items={trList(c.optionalActivities, locale)} icon="plus" tone="neutral" />
+            {trList(c.optionalActivities, locale).length > 0 && <ListBox title={t.circuit.optional} items={trList(c.optionalActivities, locale)} icon="plus" tone="neutral" />}
             <div className="rounded-3xl bg-white p-6 ring-1 ring-night/5">
               <p className="font-display text-xl font-semibold text-night">{t.circuit.cancellation}</p>
               <p className="mt-3 text-sm leading-relaxed text-muted">{tr(c.cancellationPolicy, locale)}</p>
@@ -187,7 +235,7 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
             </ul>
             {c.priceStatus !== "VALIDATED" && (
               <div className="mt-4">
-                <DemoBadge locale={locale} long />
+                <DemoBadge locale={locale} long status={c.priceStatus} />
               </div>
             )}
             <Link href={`/${locale}/reservation?circuit=${c.slug}`} className="btn btn-primary mt-6 w-full">

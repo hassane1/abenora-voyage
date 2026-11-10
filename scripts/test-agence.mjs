@@ -28,7 +28,8 @@ const lastMailLink = (to, re) => {
   const rows = db.prepare(`select body from Notification where "to" = ? order by createdAt desc limit 5`).all(to);
   for (const r of rows) {
     const m = r.body.match(re);
-    if (m) return m[0].replace(/&amp;/g, "&");
+    // les liens des e-mails utilisent NEXT_PUBLIC_SITE_URL : on les redirige vers le serveur testé
+    if (m) return m[0].replace(/&amp;/g, "&").replace(/^https?:\/\/[^/]+/, BASE);
   }
   return null;
 };

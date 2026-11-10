@@ -1,7 +1,7 @@
 import type { Locale } from "./config";
 
 /** Textes « agence » : services, typologies de voyages (national / international), navigation */
-export type ServiceKey = "national" | "international" | "omra" | "surMesure" | "hotels" | "transport" | "billetterie";
+export type ServiceKey = "national" | "international" | "omra" | "surMesure" | "visa" | "hotels" | "transport" | "billetterie";
 
 const fr = {
   nav: { trips: "Voyages organisés", services: "Services", destinations: "Destinations", about: "L'agence" },
@@ -22,7 +22,8 @@ const fr = {
   services: {
     national: { icon: "route", title: "Voyages organisés au Maroc", text: "Circuits et séjours en groupe ou en privé, avec transport, hébergement et accompagnement." },
     international: { icon: "globe", title: "Voyages internationaux", text: "Séjours à l'étranger préparés par l'agence selon vos dates et votre budget." },
-    omra: { icon: "moon", title: "Omra", text: "Organisation de votre Omra : vols, hébergement, transferts et accompagnement, sur demande." },
+    omra: { icon: "moon", title: "Omra et Hajj", text: "Programmes Omra à dates fixes (vols, visa, hôtels proches du Haram, transferts, encadrement religieux) et Omra combinée avec la Turquie, Dubaï, l'Égypte ou la Malaisie." },
+    visa: { icon: "file", title: "Rendez-vous visa", text: "Visas USA, Royaume-Uni, Canada : rendez-vous, formulaires, traduction, assurance, réservations, suivi du dossier de A à Z." },
     surMesure: { icon: "sparkle", title: "Séjours sur mesure", text: "Un programme construit pour vous, avec devis personnalisé et sans engagement." },
     hotels: { icon: "tent", title: "Hôtels", text: "Réservation d'hôtels, riads et campements au Maroc et à l'étranger." },
     transport: { icon: "car", title: "Transport", text: "Autocar, minibus, véhicule privé avec chauffeur, transferts aéroport." },
@@ -73,7 +74,8 @@ const en: Agency = {
   services: {
     national: { icon: "route", title: "Organised trips in Morocco", text: "Group or private tours and stays, with transport, accommodation and support." },
     international: { icon: "globe", title: "International trips", text: "Stays abroad prepared by the agency according to your dates and budget." },
-    omra: { icon: "moon", title: "Umrah", text: "Organisation of your Umrah: flights, accommodation, transfers and support, on request." },
+    omra: { icon: "moon", title: "Umrah and Hajj", text: "Fixed-date Umrah programmes (flights, visa, hotels near the Haram, transfers, religious guidance) and Umrah combined with Turkey, Dubai, Egypt or Malaysia." },
+    visa: { icon: "file", title: "Visa appointments", text: "US, UK and Canada visas: appointments, forms, translation, insurance, bookings, full file follow-up." },
     surMesure: { icon: "sparkle", title: "Tailor-made stays", text: "A programme built for you, with a personalised, no-obligation quote." },
     hotels: { icon: "tent", title: "Hotels", text: "Hotels, riads and camps in Morocco and abroad." },
     transport: { icon: "car", title: "Transport", text: "Coach, minibus, private vehicle with driver, airport transfers." },
@@ -122,7 +124,8 @@ const ar: Agency = {
   services: {
     national: { icon: "route", title: "رحلات منظمة في المغرب", text: "جولات وإقامات جماعية أو خاصة مع النقل والإقامة والمرافقة." },
     international: { icon: "globe", title: "رحلات دولية", text: "إقامات في الخارج تعدها الوكالة حسب تواريخك وميزانيتك." },
-    omra: { icon: "moon", title: "العمرة", text: "تنظيم عمرتك: الطيران، الإقامة، التنقلات والمرافقة، حسب الطلب." },
+    omra: { icon: "moon", title: "العمرة والحج", text: "برامج عمرة بتواريخ محددة (الطيران، التأشيرة، فنادق قريبة من الحرم، التنقلات، التأطير الديني) وعمرة مع تركيا أو دبي أو مصر أو ماليزيا." },
+    visa: { icon: "file", title: "مواعيد التأشيرة", text: "تأشيرات أمريكا وبريطانيا وكندا: المواعيد، الاستمارات، الترجمة، التأمين، الحجوزات وتتبع الملف." },
     surMesure: { icon: "sparkle", title: "إقامات حسب الطلب", text: "برنامج مصمم لك مع عرض سعر مخصص دون التزام." },
     hotels: { icon: "tent", title: "الفنادق", text: "حجز الفنادق والرياضات والمخيمات في المغرب والخارج." },
     transport: { icon: "car", title: "النقل", text: "حافلة، حافلة صغيرة، سيارة خاصة مع سائق، نقل من وإلى المطار." },
@@ -154,4 +157,4 @@ const ar: Agency = {
 
 const all: Record<Locale, Agency> = { fr, en, ar };
 export const getAgency = (l: Locale) => all[l];
-export const SERVICE_KEYS: ServiceKey[] = ["national", "international", "omra", "surMesure", "hotels", "transport", "billetterie"];
+export const SERVICE_KEYS: ServiceKey[] = ["national", "international", "omra", "surMesure", "visa", "hotels", "transport", "billetterie"];

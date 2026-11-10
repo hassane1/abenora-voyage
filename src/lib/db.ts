@@ -8,8 +8,14 @@ function createClient() {
   return new PrismaClient({ adapter });
 }
 
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+// En développement, le client est conservé entre deux rechargements à chaud. On le rattache à la version
+// du schéma : après une migration (`prisma generate`), un nouveau client est créé sans redémarrer le serveur.
+const SCHEMA_VERSION = "2026-11-10-price-grid";
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient; prismaVersion?: string };
 
-export const db = globalForPrisma.prisma ?? createClient();
+export const db = globalForPrisma.prisma && globalForPrisma.prismaVersion === SCHEMA_VERSION ? globalForPrisma.prisma : createClient();
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = db;
+  globalForPrisma.prismaVersion = SCHEMA_VERSION;
+}

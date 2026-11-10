@@ -10,6 +10,7 @@ import { getBrand } from "@/lib/brand";
 import type { PriceResult } from "@/lib/pricing";
 import { PriceTable } from "@/components/booking/BookingWizard";
 import { Icon } from "@/components/Icon";
+import { priceNote } from "@/components/Price";
 import { requestCancellation, sendBookingMessage } from "@/app/[locale]/dossier-actions";
 import { submitReview } from "@/app/[locale]/espace-client/actions";
 
@@ -65,7 +66,7 @@ export default async function BookingFile({ bookingId, locale, token, flags }: {
         </div>
         {booking.status === "PENDING" && <p className="mt-4 rounded-2xl bg-amber-50 p-4 text-sm text-amber-900">{t.booking.successText}</p>}
         {booking.cancelRequestedAt && ["PENDING", "CONFIRMED"].includes(booking.status) && <p className="mt-4 rounded-2xl bg-sand/15 p-4 text-sm text-night">{v.account.cancelPending}</p>}
-        {booking.pricesAreDemo && <p className="mt-4 text-xs text-terracotta">{t.common.demoPriceLong}</p>}
+        {booking.pricesAreDemo && <p className="mt-4 text-xs text-terracotta">{priceNote(locale, (booking.pricing as { noteKind?: string }).noteKind ?? "DEMO", true)}</p>}
         <dl className="mt-6 grid gap-4 text-sm sm:grid-cols-2">
           <Item k={t.nav.circuits} v={`${tr(booking.circuit.title, locale)} — ${tr(booking.circuit.destination.name, locale)}`} />
           <Item k={t.booking.chooseDate} v={`${formatDate(booking.startDate, locale)} → ${formatDate(booking.endDate, locale)}`} />

@@ -61,7 +61,7 @@ const fr = {
     free: "Inclus",
     demoPrice: "Tarif de démonstration",
     demoPriceLong: "Tarif fictif de démonstration, non contractuel. Le prix définitif vous sera communiqué lors de la confirmation.",
-    demoAvailability: "Disponibilités de démonstration",
+    demoAvailability: "Dates et places indicatives, confirmées par l'agence",
     translationPending: "Traduction à venir : contenu affiché en français.",
     back: "Retour",
     next: "Continuer",
