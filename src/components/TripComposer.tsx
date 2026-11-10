@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { formatMad } from "@/lib/format";
-import { whatsappLink } from "@/lib/site";
+import { useWhatsApp } from "./BrandProvider";
 import type { PriceResult } from "@/lib/pricing";
 import { TRIP_KEY } from "./useLocalList";
 import { Icon } from "./Icon";
@@ -157,6 +157,7 @@ export default function TripComposer({
   luxePrice?: number | null;
 }) {
   const t = T[locale];
+  const whatsappLink = useWhatsApp();
   const d = getDictionary(locale);
   const router = useRouter();
   const resultRef = useRef<HTMLDivElement>(null);

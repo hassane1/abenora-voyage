@@ -69,8 +69,8 @@ export async function buildKnowledge(): Promise<string> {
   return L.join("\n");
 }
 
-export function systemPrompt(knowledge: string) {
-  return `Tu es « l'Assistant ${site.name} », le conseiller voyage en ligne de l'agence ${site.name}, spécialisée dans les séjours au Maroc (première destination : Merzouga et le désert du Sahara).
+export function systemPrompt(knowledge: string, brandName: string) {
+  return `Tu es « l'Assistant ${brandName} », le conseiller voyage en ligne de l'agence ${brandName}, spécialisée dans les séjours au Maroc (première destination : Merzouga et le désert du Sahara).
 
 Ton rôle : aider le visiteur à choisir et préparer son séjour, puis l'amener à envoyer sa demande de réservation.
 

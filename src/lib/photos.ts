@@ -25,6 +25,10 @@ const SLOTS: Record<string, string> = {
   aitPalm: "2021-09-3-5.webp",
   aitGuide: "2021-09-4-5.webp",
   aitAerial: "2021-09-2-6.webp",
+  // destinations (cartes « Destinations incontournables »)
+  "destination:merzouga": "2024-03-Merzouga.png",
+  "destination:ouarzazate": "2024-03-Super-morocco-travels-10.jpg",
+  "destination:vallee-dades": "2021-09-6-4.webp",
   // circuits
   "circuit:escapade-saharienne-2j": "2021-09-5-6.webp",
   "circuit:immersion-desert-3j": "2024-03-Merzouga.png",
@@ -62,9 +66,12 @@ export async function getPhotos(locale: Locale): Promise<PhotoPicker> {
   await connection();
   const media = await db.media.findMany({ where: { rightsConfirmed: true, kind: "IMAGE" } });
   const byFile = new Map(media.map((m) => [m.url.split("/").pop()!, m]));
+  // une photo étiquetée « slot:<clé> » dans Médias remplace l'attribution par défaut (ex. slot:destination:marrakech)
+  const bySlot = new Map<string, (typeof media)[number]>();
+  for (const m of media) for (const t of m.tags.split(",").map((x) => x.trim())) if (t.startsWith("slot:") && !bySlot.has(t.slice(5))) bySlot.set(t.slice(5), m);
   return (key) => {
     const file = SLOTS[key];
-    const m = file ? byFile.get(file) : undefined;
+    const m = bySlot.get(key) ?? (file ? byFile.get(file) : undefined);
     return m ? { src: m.url, alt: tr(m.alt, locale), credit: m.credit } : undefined;
   };
 }

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { addDays, formatDate } from "@/lib/format";
-import { whatsappLink } from "@/lib/site";
+import { useWhatsApp } from "./BrandProvider";
 import Calendar, { type Dep } from "./booking/Calendar";
 import { TRIP_KEY } from "./useLocalList";
 import { Icon } from "./Icon";
@@ -58,6 +58,7 @@ export default function QuickRequest({
   summary: string;
 }) {
   const t = T[locale];
+  const whatsappLink = useWhatsApp();
   const d = getDictionary(locale);
   const [deps, setDeps] = useState<Dep[] | null>(null);
   const [dep, setDep] = useState<Dep | null>(null);

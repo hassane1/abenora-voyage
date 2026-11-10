@@ -7,32 +7,52 @@ import path from "node:path";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { requireAdmin, signIn, signOut } from "@/lib/auth";
+import { getAdmin, requireAdmin, signIn, signOut, verifyMfaStep } from "@/lib/auth";
+import { audit, clientIp, rateLimit, resetRateLimit } from "@/lib/security";
+import { sniffImage, sniffVideo } from "@/lib/files";
 import { BookingError, changeBookingStatus } from "@/lib/bookings";
 import { addDays } from "@/lib/format";
 
 // ---------------------------------------------------------------------------
-// Authentification
+// Authentification (limitation : 5 échecs / 15 min par compte, 20 / 15 min par IP)
 // ---------------------------------------------------------------------------
-const attempts = new Map<string, { n: number; until: number }>();
-
 export async function login(formData: FormData) {
-  const email = String(formData.get("email") ?? "").toLowerCase().trim();
-  const password = String(formData.get("password") ?? "");
-  const a = attempts.get(email);
-  if (a && a.until > Date.now()) redirect("/admin/login?error=1");
-  const ok = await signIn(email, password);
-  if (!ok) {
-    const n = (a?.n ?? 0) + 1;
-    attempts.set(email, { n, until: n >= 5 ? Date.now() + 15 * 60_000 : 0 }); // blocage 15 min après 5 échecs
+  const email = String(formData.get("email") ?? "").toLowerCase().trim().slice(0, 160);
+  const password = String(formData.get("password") ?? "").slice(0, 200);
+  const ip = await clientIp();
+  const [byAccount, byIp] = await Promise.all([rateLimit(`admin-login:acct:${email}`, 5, 900), rateLimit(`admin-login:ip:${ip}`, 20, 900)]);
+  if (!byAccount.ok || !byIp.ok) {
+    await audit(email || "?", "LOGIN_THROTTLED", null, { ip });
+    redirect("/admin/login?error=locked");
+  }
+  const res = await signIn(email, password);
+  if (res === "fail") {
+    await audit(email || "?", "LOGIN_FAIL");
     redirect("/admin/login?error=1");
   }
-  attempts.delete(email);
+  if (res === "mfa") redirect("/admin/login/mfa");
+  await resetRateLimit(`admin-login:acct:${email}`);
+  await audit(email, "LOGIN_OK", null, { mfa: false });
+  redirect("/admin");
+}
+
+export async function loginMfa(formData: FormData) {
+  const ip = await clientIp();
+  const lim = await rateLimit(`admin-mfa:ip:${ip}`, 10, 900);
+  if (!lim.ok) redirect("/admin/login?error=locked");
+  const r = await verifyMfaStep(String(formData.get("code") ?? ""));
+  if (!r.ok) {
+    await audit(r.email ?? "?", "MFA_FAIL");
+    redirect("/admin/login/mfa?error=1");
+  }
+  await audit(r.email!, "LOGIN_OK", null, { mfa: true });
   redirect("/admin");
 }
 
 export async function logout() {
+  const a = await getAdmin();
   await signOut();
+  if (a) await audit(a.email, "LOGOUT");
   redirect("/admin/login");
 }
 
@@ -48,11 +68,12 @@ const lines = (v: string) => v.split("\n").map((s) => s.trim()).filter(Boolean);
 // Réservations
 // ---------------------------------------------------------------------------
 export async function setBookingStatus(formData: FormData) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("bookings.write");
   const id = str(formData, "id");
   const status = z.enum(["CONFIRMED", "REJECTED", "CANCELLED", "PENDING"]).parse(str(formData, "status"));
   try {
     await changeBookingStatus(id, status, admin.email, str(formData, "note") || undefined);
+    await audit(admin.email, "BOOKING_STATUS", id, { status });
   } catch (e) {
     if (e instanceof BookingError && e.code === "SOLD_OUT") redirect(`/admin/reservations/${id}?error=soldout`);
     throw e;
@@ -62,7 +83,7 @@ export async function setBookingStatus(formData: FormData) {
 }
 
 export async function recordPayment(formData: FormData) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("payments.write");
   const id = str(formData, "id");
   const amount = Math.round(Number(str(formData, "amount")));
   const kind = str(formData, "kind") === "REFUND" ? "REFUND" : "PAYMENT";
@@ -72,12 +93,13 @@ export async function recordPayment(formData: FormData) {
   const paid = b.payments.reduce((s, p) => s + (p.kind === "REFUND" ? -p.amountMad : p.amountMad), 0) + (kind === "REFUND" ? -amount : amount);
   const paymentStatus = kind === "REFUND" && paid <= 0 ? "REFUNDED" : paid >= b.totalMad ? "PAID" : paid > 0 ? "DEPOSIT_PAID" : "NONE";
   await db.booking.update({ where: { id }, data: { paymentStatus } });
+  await audit(admin.email, kind === "REFUND" ? "REFUND_RECORDED" : "PAYMENT_RECORDED", id, { amount, method: str(formData, "method") });
   await db.bookingEvent.create({ data: { bookingId: id, type: "PAYMENT_RECORDED", actor: admin.email, note: `${kind === "REFUND" ? "Remboursement" : "Paiement"} de ${amount} MAD enregistré (${str(formData, "method")})` } });
   redirect(`/admin/reservations/${id}?ok=payment`);
 }
 
 export async function addBookingNote(formData: FormData) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("bookings.write");
   const id = str(formData, "id");
   const note = str(formData, "note");
   if (note) await db.bookingEvent.create({ data: { bookingId: id, type: "NOTE", actor: admin.email, note } });
@@ -86,7 +108,7 @@ export async function addBookingNote(formData: FormData) {
 
 /** Modification d'un dossier : coordonnées et/ou changement de date (déplacement atomique des places) */
 export async function updateBooking(formData: FormData) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("bookings.write");
   const id = str(formData, "id");
   const b = await db.booking.findUniqueOrThrow({ where: { id }, include: { circuit: true } });
   const changes: string[] = [];
@@ -132,7 +154,7 @@ export async function updateBooking(formData: FormData) {
 const PRICE_STATUS = z.enum(["DEMO", "VALIDATED", "ON_REQUEST"]);
 
 export async function updateCircuit(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const id = str(formData, "id");
   const c = await db.circuit.findUniqueOrThrow({ where: { id } });
   const loc = (field: string, current: unknown) => {
@@ -163,12 +185,13 @@ export async function updateCircuit(formData: FormData) {
       published: bool(formData, "published"),
     },
   });
+  await audit(admin.email, "CIRCUIT_UPDATE", id, { priceAdultMad: num(formData, "priceAdultMad"), priceStatus: str(formData, "priceStatus"), previousPrice: c.priceAdultMad });
   revalidatePath("/", "layout");
   redirect(`/admin/circuits/${id}?ok=1`);
 }
 
 export async function updateItineraryDay(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const id = str(formData, "id");
   const day = await db.circuitDay.findUniqueOrThrow({ where: { id } });
   const t = (day.title ?? {}) as Record<string, string>;
@@ -186,7 +209,7 @@ export async function updateItineraryDay(formData: FormData) {
 }
 
 export async function generateDepartures(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const circuitId = str(formData, "circuitId");
   const from = new Date(`${str(formData, "from")}T00:00:00Z`);
   const to = new Date(`${str(formData, "to")}T00:00:00Z`);
@@ -207,7 +230,7 @@ export async function generateDepartures(formData: FormData) {
 }
 
 export async function updateDeparture(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const id = str(formData, "id");
   const dep = await db.departure.findUniqueOrThrow({ where: { id } });
   const capacity = Math.max(dep.seatsHeld, num(formData, "capacity") ?? dep.capacity); // jamais sous les places déjà prises
@@ -219,7 +242,7 @@ export async function updateDeparture(formData: FormData) {
 }
 
 export async function bulkDepartures(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const circuitId = str(formData, "circuitId");
   const action = str(formData, "action");
   if (action === "validate") await db.departure.updateMany({ where: { circuitId }, data: { isDemo: false } });
@@ -229,7 +252,7 @@ export async function bulkDepartures(formData: FormData) {
 }
 
 export async function updateOption(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const id = str(formData, "id");
   const o = await db.bookingOption.findUniqueOrThrow({ where: { id } });
   const label = (o.label ?? {}) as Record<string, string>;
@@ -247,7 +270,7 @@ export async function updateOption(formData: FormData) {
 }
 
 export async function updateActivity(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const id = str(formData, "id");
   const a = await db.activity.findUniqueOrThrow({ where: { id } });
   const loc = (field: string, current: unknown) => {
@@ -272,7 +295,7 @@ export async function updateActivity(formData: FormData) {
 }
 
 export async function updateDestination(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const id = str(formData, "id");
   const d = await db.destination.findUniqueOrThrow({ where: { id }, include: { circuits: { where: { published: true } } } });
   const loc = (field: string, current: unknown) => {
@@ -290,7 +313,7 @@ export async function updateDestination(formData: FormData) {
 
 /** Création d'une nouvelle destination (non publiée) avec un circuit vierge à compléter */
 export async function createCircuit(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("catalog.write");
   const destinationId = str(formData, "destinationId");
   const fr = str(formData, "title_fr");
   const slug = `${fr.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-${randomBytes(2).toString("hex")}`;
@@ -312,7 +335,7 @@ export async function createCircuit(formData: FormData) {
 // Commercial : codes promo, demandes, avis
 // ---------------------------------------------------------------------------
 export async function savePromo(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("marketing.write");
   const code = str(formData, "code").toUpperCase().replace(/[^A-Z0-9-]/g, "");
   const percentOff = Math.min(90, Math.max(1, num(formData, "percentOff") ?? 0));
   if (!code) redirect("/admin/promos?error=1");
@@ -325,23 +348,24 @@ export async function savePromo(formData: FormData) {
     active: bool(formData, "active"),
   };
   await db.promoCode.upsert({ where: { code }, update: data, create: { code, ...data } });
+  await audit(admin.email, "PROMO_SAVE", code, { percentOff });
   redirect("/admin/promos?ok=1");
 }
 
 export async function deletePromo(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("marketing.write");
   await db.promoCode.delete({ where: { id: str(formData, "id") } });
   redirect("/admin/promos");
 }
 
 export async function setRequestStatus(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("bookings.write");
   await db.quoteRequest.update({ where: { id: str(formData, "id") }, data: { status: z.enum(["NEW", "IN_PROGRESS", "CLOSED"]).parse(str(formData, "status")) } });
   redirect("/admin/demandes");
 }
 
 export async function moderateReview(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("content.write");
   const id = str(formData, "id");
   if (str(formData, "action") === "delete") await db.review.delete({ where: { id } });
   else await db.review.update({ where: { id }, data: { published: str(formData, "action") === "publish" } });
@@ -350,29 +374,33 @@ export async function moderateReview(formData: FormData) {
 }
 
 export async function saveSettings(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("settings.write");
   for (const key of ["taxRatePercent", "familyDiscountPercent", "groupDiscountPercent", "groupDiscountMinPeople"]) {
     const v = num(formData, key);
     if (v !== null && v >= 0) await db.setting.upsert({ where: { key }, update: { value: String(v) }, create: { key, value: String(v) } });
   }
   const incl = bool(formData, "pricesIncludeTax") ? "true" : "false";
   await db.setting.upsert({ where: { key: "pricesIncludeTax" }, update: { value: incl }, create: { key: "pricesIncludeTax", value: incl } });
+  await audit(admin.email, "SETTINGS_UPDATE", "pricing");
   redirect("/admin/parametres?ok=1");
 }
 
 // ---------------------------------------------------------------------------
 // Médias (stockage local dans public/uploads ; à remplacer par Supabase Storage / S3 en production)
 // ---------------------------------------------------------------------------
-const ALLOWED = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "video/mp4": "mp4" } as Record<string, string>;
-
 export async function uploadMedia(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("content.write");
   const file = formData.get("file");
-  if (!(file instanceof File) || !ALLOWED[file.type] || file.size > 20 * 1024 * 1024) redirect("/admin/medias?error=file");
-  const name = `${Date.now()}-${randomBytes(4).toString("hex")}.${ALLOWED[file.type]}`;
+  if (!(file instanceof File) || file.size > 50 * 1024 * 1024) redirect("/admin/medias?error=file");
+  const buf = Buffer.from(await file.arrayBuffer());
+  // type déterminé par le contenu réel du fichier (SVG / HTML / exécutables refusés)
+  const ext = sniffImage(buf) ?? sniffVideo(buf);
+  if (!ext || (ext !== "mp4" && buf.length > 20 * 1024 * 1024)) redirect("/admin/medias?error=file");
+  const name = `${Date.now()}-${randomBytes(4).toString("hex")}.${ext}`;
   const dir = path.join(process.cwd(), "public", "uploads");
   await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, name), Buffer.from(await file.arrayBuffer()));
+  await writeFile(path.join(dir, name), buf);
+  await audit(admin.email, "MEDIA_UPLOAD", name);
   await db.media.create({
     data: {
       kind: file.type.startsWith("video") ? "VIDEO" : "IMAGE",
@@ -390,7 +418,7 @@ export async function uploadMedia(formData: FormData) {
 }
 
 export async function updateMedia(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin("content.write");
   const id = str(formData, "id");
   if (str(formData, "action") === "delete") {
     const m = await db.media.delete({ where: { id } });

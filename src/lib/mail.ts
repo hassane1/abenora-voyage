@@ -1,6 +1,7 @@
 import "server-only";
 import nodemailer from "nodemailer";
 import { db } from "./db";
+import { getBrand } from "./brand";
 
 /**
  * Envoi d'e-mails.
@@ -37,14 +38,16 @@ export async function sendMail(opts: { to: string; subject: string; html: string
   });
 }
 
-export function emailLayout(title: string, body: string, dir: "ltr" | "rtl" = "ltr") {
-  const brand = process.env.NEXT_PUBLIC_BRAND_NAME ?? "Rimal";
+export async function emailLayout(title: string, body: string, dir: "ltr" | "rtl" = "ltr") {
+  const b = await getBrand();
+  const brand = escapeHtml(b.name);
+  const contact = [b.phone, b.email].filter(Boolean).map(escapeHtml).join(" · ");
   return `<!doctype html><html dir="${dir}"><body style="margin:0;background:#FAF7F1;font-family:Arial,Helvetica,sans-serif;color:#14283F">
   <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 16px">
   <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fff;border-radius:16px;overflow:hidden">
   <tr><td style="background:#14283F;color:#D8A45D;padding:24px 32px;font-size:22px;letter-spacing:2px">${brand.toUpperCase()}</td></tr>
   <tr><td style="padding:32px"><h1 style="font-size:20px;margin:0 0 16px">${title}</h1>${body}</td></tr>
-  <tr><td style="padding:16px 32px;background:#FAF7F1;font-size:12px;color:#6b7280">${brand} — Maroc</td></tr>
+  <tr><td style="padding:16px 32px;background:#FAF7F1;font-size:12px;color:#6b7280">${brand} — Maroc${contact ? `<br/>${contact}` : ""}</td></tr>
   </table></td></tr></table></body></html>`;
 }
 

@@ -21,9 +21,9 @@ const en: Dictionary = {
     compare: "Compare",
   },
   home: {
-    heroTitle: "Morocco as you've never experienced it.",
+    heroTitle: "Explore Morocco differently.",
     heroSubtitle:
-      "From the golden dunes of Merzouga to the Kingdom's most beautiful landscapes, live unique experiences and create unforgettable memories.",
+      "From the majestic dunes of Merzouga to the imperial cities, enjoy authentic experiences and unforgettable journeys.",
     exploreMerzouga: "Explore Merzouga",
     bookAdventure: "Book my adventure",
     searchDestination: "Destination",

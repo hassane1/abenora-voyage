@@ -5,7 +5,8 @@ import { hasLocale, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getCircuit } from "@/lib/queries";
 import { tr, trList } from "@/lib/i18n-content";
-import { site, whatsappLink } from "@/lib/site";
+import { site, waLink } from "@/lib/site";
+import { getBrand } from "@/lib/brand";
 import { formatMad } from "@/lib/format";
 import Visual from "@/components/Visual";
 import { getPhotos } from "@/lib/photos";
@@ -38,7 +39,9 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
   const photo = await getPhotos(locale);
   const title = tr(c.title, locale);
   const warnings = trList(c.warnings, locale);
-  const wa = whatsappLink(
+  const brand = await getBrand();
+  const wa = waLink(
+    brand.whatsapp,
     `${locale === "en" ? "Hello, I'm interested in the tour" : locale === "ar" ? "مرحباً، أنا مهتم بجولة" : "Bonjour, je suis intéressé(e) par le circuit"} « ${title} » (${t.common.daysNights(c.days, c.nights)}${c.priceAdultMad ? `, ${t.common.from.toLowerCase()} ${formatMad(c.priceAdultMad, locale)}` : ""}) — ${site.url}/${locale}/circuits/${c.slug}`,
   );
 
@@ -58,7 +61,7 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
     description: tr(c.summary, locale),
     touristType: "Leisure",
     itinerary: { "@type": "ItemList", itemListElement: c.stops.map((s, i) => ({ "@type": "ListItem", position: i + 1, item: { "@type": "Place", name: s.name } })) },
-    provider: { "@type": "TravelAgency", name: site.name, url: site.url },
+    provider: { "@type": "TravelAgency", name: brand.name, url: site.url },
   };
 
   return (

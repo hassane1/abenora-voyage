@@ -23,9 +23,9 @@ model Destination {
   region      String
   latitude    Float
   longitude   Float
-  sections    Json     // blocs éditoriaux { erg, accommodation, ... } traduits
-  tips        Json     // conseils avant le départ { fr: string[] ... }
-  faq         Json     // [{ q: {fr,en,ar}, a: {fr,en,ar} }]
+  sections    Json // blocs éditoriaux { erg, accommodation, ... } traduits
+  tips        Json // conseils avant le départ { fr: string[] ... }
+  faq         Json // [{ q: {fr,en,ar}, a: {fr,en,ar} }]
   published   Boolean  @default(false)
   sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
@@ -38,57 +38,57 @@ model Destination {
 }
 
 model Media {
-  id              String   @id @default(cuid())
-  kind            String   @default("IMAGE") // IMAGE | VIDEO
+  id              String       @id @default(cuid())
+  kind            String       @default("IMAGE") // IMAGE | VIDEO
   url             String
   alt             Json
   credit          String?
   license         String?
   sourceUrl       String?
-  rightsConfirmed Boolean  @default(false) // n'est affiché publiquement que si true
+  rightsConfirmed Boolean      @default(false) // n'est affiché publiquement que si true
   destinationId   String?
   destination     Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
-  tags            String   @default("") // ex. "hero,erg-chebbi"
-  createdAt       DateTime @default(now())
+  tags            String       @default("") // ex. "hero,erg-chebbi"
+  createdAt       DateTime     @default(now())
 }
 
 model Activity {
-  id               String   @id @default(cuid())
-  slug             String   @unique
-  destinationId    String
-  destination      Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-  category         String   // AVENTURE | CULTURE | EXCEPTION
-  icon             String   @default("sparkle")
-  title            Json
-  summary          Json
-  description      Json
-  duration         Json
-  difficulty       String   // FACILE | MODERE | SPORTIF
-  minAge           Int?
-  restrictions     Json
-  included         Json     // { fr: string[], en: string[], ar: string[] }
-  excluded         Json
-  safety           Json
-  availability     Json
-  priceMad         Int?
-  priceUnit        String   @default("PER_PERSON") // PER_PERSON | PER_GROUP
-  priceStatus      String   @default("DEMO")
+  id                String      @id @default(cuid())
+  slug              String      @unique
+  destinationId     String
+  destination       Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  category          String // AVENTURE | CULTURE | EXCEPTION
+  icon              String      @default("sparkle")
+  title             Json
+  summary           Json
+  description       Json
+  duration          Json
+  difficulty        String // FACILE | MODERE | SPORTIF
+  minAge            Int?
+  restrictions      Json
+  included          Json // { fr: string[], en: string[], ar: string[] }
+  excluded          Json
+  safety            Json
+  availability      Json
+  priceMad          Int?
+  priceUnit         String      @default("PER_PERSON") // PER_PERSON | PER_GROUP
+  priceStatus       String      @default("DEMO")
   bookingOptionCode String? // option de réservation liée (« Ajouter à mon séjour »)
-  published        Boolean  @default(true)
-  sortOrder        Int      @default(0)
-  updatedAt        DateTime @updatedAt
+  published         Boolean     @default(true)
+  sortOrder         Int         @default(0)
+  updatedAt         DateTime    @updatedAt
 }
 
 model Circuit {
-  id                   String   @id @default(cuid())
-  slug                 String   @unique
+  id                   String      @id @default(cuid())
+  slug                 String      @unique
   destinationId        String
   destination          Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
   title                Json
   summary              Json
   days                 Int
   nights               Int
-  desertNights         Int      @default(1) // nuits au bivouac (options d'hébergement désert)
+  desertNights         Int         @default(1) // nuits au bivouac (options d'hébergement désert)
   startPoint           String
   endPoint             String
   transport            Json
@@ -98,19 +98,19 @@ model Circuit {
   excluded             Json
   optionalActivities   Json
   cancellationPolicy   Json
-  warnings             Json     // avertissements (ex. journée de route longue)
-  pricingMode          String   @default("PER_PERSON") // PER_PERSON | PER_GROUP
+  warnings             Json // avertissements (ex. journée de route longue)
+  pricingMode          String      @default("PER_PERSON") // PER_PERSON | PER_GROUP
   priceAdultMad        Int?
-  childPricePercent    Int      @default(50) // % du prix adulte pour les 4-11 ans
-  childFreeUnderAge    Int      @default(4)
-  privateSupplementMad Int      @default(0) // par personne, si voyage privé
-  depositPercent       Int      @default(30)
-  priceStatus          String   @default("DEMO")
-  defaultCapacity      Int      @default(12)
-  published            Boolean  @default(true)
-  sortOrder            Int      @default(0)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  childPricePercent    Int         @default(50) // % du prix adulte pour les 4-11 ans
+  childFreeUnderAge    Int         @default(4)
+  privateSupplementMad Int         @default(0) // par personne, si voyage privé
+  depositPercent       Int         @default(30)
+  priceStatus          String      @default("DEMO")
+  defaultCapacity      Int         @default(12)
+  published            Boolean     @default(true)
+  sortOrder            Int         @default(0)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
 
   itinerary  CircuitDay[]
   stops      CircuitStop[]
@@ -126,7 +126,7 @@ model CircuitDay {
   dayNumber   Int
   title       Json
   description Json
-  items       Json    // { fr: string[], ... }
+  items       Json // { fr: string[], ... }
 
   @@unique([circuitId, dayNumber])
 }
@@ -148,77 +148,84 @@ model CircuitStop {
 }
 
 model Departure {
-  id          String   @id @default(cuid())
-  circuitId   String
-  circuit     Circuit  @relation(fields: [circuitId], references: [id], onDelete: Cascade)
-  date        DateTime // date de départ (00:00 UTC)
-  capacity    Int
-  seatsHeld   Int      @default(0) // places bloquées par les demandes en attente + confirmées
-  status      String   @default("OPEN") // OPEN | CLOSED
-  isDemo      Boolean  @default(true)
-  bookings    Booking[]
+  id        String    @id @default(cuid())
+  circuitId String
+  circuit   Circuit   @relation(fields: [circuitId], references: [id], onDelete: Cascade)
+  date      DateTime // date de départ (00:00 UTC)
+  capacity  Int
+  seatsHeld Int       @default(0) // places bloquées par les demandes en attente + confirmées
+  status    String    @default("OPEN") // OPEN | CLOSED
+  isDemo    Boolean   @default(true)
+  bookings  Booking[]
 
   @@unique([circuitId, date])
 }
 
 model BookingOption {
-  id          String   @id @default(cuid())
-  code        String
-  circuitId   String?  // null = option disponible pour tous les circuits
-  circuit     Circuit? @relation(fields: [circuitId], references: [id], onDelete: Cascade)
-  group       String   // HEBERGEMENT | ACTIVITE | REPAS | TRANSFERT | SERVICE
-  label       Json
-  description Json
-  priceMad    Int
-  unit        String   @default("PER_PERSON") // PER_PERSON | PER_BOOKING | PER_PERSON_NIGHT
+  id             String   @id @default(cuid())
+  code           String
+  circuitId      String? // null = option disponible pour tous les circuits
+  circuit        Circuit? @relation(fields: [circuitId], references: [id], onDelete: Cascade)
+  group          String // HEBERGEMENT | ACTIVITE | REPAS | TRANSFERT | SERVICE
+  label          Json
+  description    Json
+  priceMad       Int
+  unit           String   @default("PER_PERSON") // PER_PERSON | PER_BOOKING | PER_PERSON_NIGHT
   exclusiveGroup String? // options mutuellement exclusives (ex. "camp")
-  isDefault   Boolean  @default(false)
-  priceStatus String   @default("DEMO")
-  published   Boolean  @default(true)
-  sortOrder   Int      @default(0)
+  isDefault      Boolean  @default(false)
+  priceStatus    String   @default("DEMO")
+  published      Boolean  @default(true)
+  sortOrder      Int      @default(0)
 
   @@unique([code, circuitId])
 }
 
 model Booking {
-  id             String    @id @default(cuid())
-  reference      String    @unique
-  accessToken    String    @unique
-  circuitId      String
-  circuit        Circuit   @relation(fields: [circuitId], references: [id])
-  departureId    String
-  departure      Departure @relation(fields: [departureId], references: [id])
-  startDate      DateTime
-  endDate        DateTime
-  adults         Int
-  children       Int       @default(0)
-  childAges      Json
-  privateTour    Boolean   @default(false)
-  options        Json      // instantané des options choisies
-  pricing        Json      // instantané du calcul (lignes, totaux)
-  totalMad       Int
-  depositMad     Int
-  pricesAreDemo  Boolean   // true si au moins un tarif utilisé n'est pas validé
-  promoCode      String?
-  status         String    @default("PENDING") // PENDING | CONFIRMED | REJECTED | CANCELLED
-  paymentStatus  String    @default("NONE")    // NONE | DEPOSIT_PAID | PAID | REFUNDED
-  firstName      String
-  lastName       String
-  email          String
-  phone          String
-  whatsapp       String?
-  country        String
-  departureCity  String?
-  specialNeeds   String?
-  comments       String?
-  locale         String    @default("fr")
-  consentAt      DateTime
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  reference         String    @unique
+  accessToken       String    @unique
+  circuitId         String
+  circuit           Circuit   @relation(fields: [circuitId], references: [id])
+  departureId       String
+  departure         Departure @relation(fields: [departureId], references: [id])
+  startDate         DateTime
+  endDate           DateTime
+  adults            Int
+  children          Int       @default(0)
+  childAges         Json
+  privateTour       Boolean   @default(false)
+  options           Json // instantané des options choisies
+  pricing           Json // instantané du calcul (lignes, totaux)
+  totalMad          Int
+  depositMad        Int
+  pricesAreDemo     Boolean // true si au moins un tarif utilisé n'est pas validé
+  promoCode         String?
+  status            String    @default("PENDING") // PENDING | CONFIRMED | REJECTED | CANCELLED
+  paymentStatus     String    @default("NONE") // NONE | DEPOSIT_PAID | PAID | REFUNDED
+  firstName         String
+  lastName          String
+  email             String
+  phone             String
+  whatsapp          String?
+  country           String
+  departureCity     String?
+  specialNeeds      String?
+  comments          String?
+  locale            String    @default("fr")
+  consentAt         DateTime
+  customerId        String?
+  customer          Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  quoteId           String?   @unique // dossier issu d'un devis sur mesure accepté
+  cancelRequestedAt DateTime? // demande d'annulation du client (à traiter par l'agence)
+  cancelReason      String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  events   BookingEvent[]
-  payments Payment[]
-  review   Review?
+  events    BookingEvent[]
+  payments  Payment[]
+  review    Review?
+  documents BookingDocument[]
+  messages  Message[]
 
   @@index([status])
   @@index([email])
@@ -228,11 +235,11 @@ model BookingEvent {
   id         String   @id @default(cuid())
   bookingId  String
   booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  type       String   // CREATED | STATUS_CHANGED | UPDATED | PAYMENT_RECORDED | NOTE | EMAIL
+  type       String // CREATED | STATUS_CHANGED | UPDATED | PAYMENT_RECORDED | NOTE | EMAIL
   fromStatus String?
   toStatus   String?
   note       String?
-  actor      String   // "client" | email admin | "system"
+  actor      String // "client" | email admin | "system"
   createdAt  DateTime @default(now())
 }
 
@@ -241,7 +248,7 @@ model Payment {
   bookingId  String
   booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   amountMad  Int
-  method     String   // VIREMENT | ESPECES | CARTE | PRESTATAIRE_EN_LIGNE
+  method     String // VIREMENT | ESPECES | CARTE | PRESTATAIRE_EN_LIGNE
   reference  String?
   kind       String   @default("PAYMENT") // PAYMENT | REFUND
   recordedBy String
@@ -254,19 +261,23 @@ model Notification {
   to        String
   subject   String
   body      String
-  status    String   // SENT | LOGGED (SMTP non configuré) | FAILED
+  status    String // SENT | LOGGED (SMTP non configuré) | FAILED
   error     String?
   bookingId String?
   createdAt DateTime @default(now())
 }
 
 model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String    @id @default(cuid())
+  email        String    @unique
   name         String
   passwordHash String
-  role         String   @default("ADMIN")
-  createdAt    DateTime @default(now())
+  role         String    @default("ADMIN") // ADMIN | MANAGER | AGENT | ACCOUNTANT (voir src/lib/rbac.ts)
+  active       Boolean   @default(true)
+  mfaSecret    String? // secret TOTP chiffré (AES-256-GCM)
+  mfaEnabled   Boolean   @default(false)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
 }
 
 model PromoCode {
@@ -294,20 +305,27 @@ model Review {
 }
 
 model QuoteRequest {
-  id          String   @id @default(cuid())
-  kind        String   @default("SUR_MESURE") // SUR_MESURE | CONTACT
-  name        String
-  email       String
-  phone       String?
-  destination String?
-  durationDays Int?
-  budgetMad   Int?
-  travelers   Int?
-  interests   String?
-  message     String
-  status      String   @default("NEW") // NEW | IN_PROGRESS | CLOSED
-  locale      String   @default("fr")
-  createdAt   DateTime @default(now())
+  id            String    @id @default(cuid())
+  kind          String    @default("SUR_MESURE") // SUR_MESURE | CONTACT
+  name          String
+  email         String
+  phone         String?
+  destination   String?
+  durationDays  Int?
+  budgetMad     Int?
+  travelers     Int?
+  interests     String?
+  message       String
+  status        String    @default("NEW") // NEW | IN_PROGRESS | CLOSED
+  reference     String?   @unique // n° de dossier SM-…
+  departureCity String?
+  startDate     DateTime?
+  comfort       String? // STANDARD | CONFORT | LUXE
+  transport     String?
+  consentAt     DateTime?
+  quotes        Quote[]
+  locale        String    @default("fr")
+  createdAt     DateTime  @default(now())
 }
 
 model Post {
@@ -315,7 +333,7 @@ model Post {
   slug          String       @unique
   title         Json
   excerpt       Json
-  body          Json         // { fr: string (markdown simple), en, ar }
+  body          Json // { fr: string (markdown simple), en, ar }
   category      String       @default("CONSEILS")
   destinationId String?
   destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
@@ -327,4 +345,175 @@ model Post {
 model Setting {
   key   String @id
   value String
+}
+
+// ---------------------------------------------------------------------------
+// Comptes voyageurs (espace client)
+// ---------------------------------------------------------------------------
+model Customer {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  passwordHash     String
+  firstName        String
+  lastName         String
+  phone            String?
+  whatsapp         String?
+  country          String?
+  locale           String    @default("fr")
+  emailVerifiedAt  DateTime?
+  favorites        Json      @default("[]") // slugs de circuits / activités
+  marketingConsent Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  bookings Booking[]
+  sessions CustomerSession[]
+  messages Message[]
+  tokens   CustomerToken[]
+}
+
+/// Sessions serveur révocables : le cookie ne contient qu'un jeton aléatoire, on stocke son empreinte SHA-256
+model CustomerSession {
+  id         String   @id @default(cuid())
+  tokenHash  String   @unique
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  userAgent  String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+}
+
+/// Jetons à usage unique : vérification d'e-mail, réinitialisation du mot de passe
+model CustomerToken {
+  id         String    @id @default(cuid())
+  tokenHash  String    @unique
+  kind       String // VERIFY_EMAIL | RESET_PASSWORD
+  customerId String
+  customer   Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+/// Messagerie dossier / devis <-> agence
+model Message {
+  id         String    @id @default(cuid())
+  bookingId  String?
+  booking    Booking?  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  quoteId    String?
+  quote      Quote?    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  fromAgency Boolean   @default(false)
+  author     String
+  body       String
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([bookingId])
+}
+
+/// Documents de voyage déposés par l'agence (bons d'échange, factures, programmes…)
+model BookingDocument {
+  id         String   @id @default(cuid())
+  bookingId  String
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  kind       String // VOUCHER | INVOICE | RECEIPT | PROGRAM | OTHER
+  title      String
+  fileName   String // stocké hors du dossier public (storage/documents), servi après contrôle d'accès
+  mimeType   String
+  size       Int
+  uploadedBy String
+  createdAt  DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Devis sur mesure
+// ---------------------------------------------------------------------------
+model Quote {
+  id             String       @id @default(cuid())
+  number         String       @unique // DV-AAMM-XXXX
+  requestId      String
+  request        QuoteRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  accessToken    String       @unique
+  title          String
+  program        String // programme : une ligne = un élément, « ## » = titre de jour
+  lines          Json // [{ label, qty, unitMad }]
+  totalMad       Int
+  depositPercent Int          @default(30)
+  startDate      DateTime?
+  travelers      Int          @default(1)
+  validUntil     DateTime
+  conditions     String       @default("")
+  status         String       @default("DRAFT") // DRAFT | SENT | ACCEPTED | DECLINED | CONVERTED
+  sentAt         DateTime?
+  respondedAt    DateTime?
+  bookingId      String?
+  createdBy      String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  messages Message[]
+}
+
+// ---------------------------------------------------------------------------
+// Marketing et contenus
+// ---------------------------------------------------------------------------
+model NewsletterSubscriber {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  locale      String    @default("fr")
+  status      String    @default("PENDING") // PENDING (double opt-in) | CONFIRMED | UNSUBSCRIBED
+  tokenHash   String    @unique
+  consentText String
+  consentAt   DateTime
+  confirmedAt DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+/// Pages éditables (mentions légales, CGV, confidentialité, cookies, annulation…)
+model Page {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     Json
+  body      Json // markdown simple { fr, en, ar }
+  validated Boolean  @default(false) // false = modèle à faire valider par un juriste (bandeau affiché)
+  published Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+/// Bannières promotionnelles / offres saisonnières
+model Banner {
+  id        String    @id @default(cuid())
+  text      Json
+  linkUrl   String?
+  linkLabel Json?
+  startsAt  DateTime?
+  endsAt    DateTime?
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Sécurité
+// ---------------------------------------------------------------------------
+/// Journal d'audit des actions critiques
+model AuditLog {
+  id        String   @id @default(cuid())
+  actor     String // e-mail admin, client:<id>, system
+  action    String // ex. BOOKING_STATUS, LOGIN_OK, LOGIN_FAIL, SETTINGS_UPDATE…
+  target    String?
+  details   Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([action])
+}
+
+/// Limitation de débit persistante (remplaçable par Redis en production multi-instances)
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
 }

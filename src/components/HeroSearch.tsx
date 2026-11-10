@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getExtra } from "@/i18n/extra";
+import { getV2 } from "@/i18n/v2";
 import { Icon } from "./Icon";
 
 type Tab = "circuits" | "activities" | "tailor";
@@ -29,6 +30,8 @@ export default function HeroSearch({
   const [date, setDate] = useState("");
   const [travelers, setTravelers] = useState(2);
   const [budget, setBudget] = useState("");
+  const [duration, setDuration] = useState("");
+  const v = getV2(locale);
   const [cat, setCat] = useState("");
   const today = new Date().toISOString().slice(0, 10);
 
@@ -66,9 +69,10 @@ export default function HeroSearch({
               if (date) q.set("date", date);
               q.set("travelers", String(travelers));
               if (budget) q.set("budget", budget);
+              if (duration) q.set("duration", duration);
               router.push(`/${locale}/circuits?${q}`);
             }}
-            className="grid gap-px bg-night/10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_0.8fr_1fr_auto]"
+            className="grid gap-px bg-night/10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_0.7fr_0.9fr_0.9fr_auto]"
           >
             <label className={cell}>
               <span className={lab}>{t.home.searchDestination}</span>
@@ -96,6 +100,17 @@ export default function HeroSearch({
             <label className={cell}>
               <span className={lab}>{t.home.searchTravelers}</span>
               <input type="number" min={1} max={30} value={travelers} onChange={(e) => setTravelers(Number(e.target.value) || 1)} className="bg-transparent py-1 font-semibold outline-none" />
+            </label>
+            <label className={cell}>
+              <span className={lab}>{v.hero.duration}</span>
+              <select value={duration} onChange={(e) => setDuration(e.target.value)} className="bg-transparent py-1 font-semibold outline-none">
+                <option value="">{v.hero.anyDuration}</option>
+                {v.hero.durations.map((d) => (
+                  <option key={d.v} value={d.v}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
             </label>
             <label className={cell}>
               <span className={lab}>{t.home.searchBudget}</span>
@@ -139,7 +154,7 @@ export default function HeroSearch({
         {tab === "tailor" && (
           <div className="flex flex-col items-start justify-between gap-4 p-5 sm:flex-row sm:items-center">
             <p className="font-medium text-night">{x.tailorPitch}</p>
-            <a href="#composer" className="btn btn-primary shrink-0">
+            <a href={`/${locale}/sur-mesure`} className="btn btn-primary shrink-0">
               {x.tailorCta} <Icon name="arrow" className="h-4 w-4 rtl:rotate-180" />
             </a>
           </div>

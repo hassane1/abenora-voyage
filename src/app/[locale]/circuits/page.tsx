@@ -26,7 +26,8 @@ export default async function CircuitsPage({ params, searchParams }: PageProps<"
   const travelers = Math.max(1, Number(one(sp.travelers)) || 1);
   const date = one(sp.date);
 
-  let circuits = await getCircuits({ destination, maxPrice: budget });
+  const dm = /^(\d{1,2})-(\d{1,2})$/.exec(one(sp.duration) ?? "");
+  let circuits = await getCircuits({ destination, maxPrice: budget, ...(dm ? { minDays: Number(dm[1]), maxDays: Number(dm[2]) } : {}) });
   const [photo, nextDeps] = await Promise.all([getPhotos(locale), getNextDepartures()]);
   const heroPhoto = photo("heroAlt");
 

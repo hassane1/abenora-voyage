@@ -19,9 +19,9 @@ const fr = {
     compare: "Comparer",
   },
   home: {
-    heroTitle: "Le Maroc comme vous ne l'avez jamais vécu.",
+    heroTitle: "Explorez le Maroc autrement.",
     heroSubtitle:
-      "Des dunes dorées de Merzouga aux plus beaux paysages du Royaume, vivez des expériences uniques et créez des souvenirs inoubliables.",
+      "Des dunes majestueuses de Merzouga aux villes impériales, vivez des expériences authentiques et des voyages inoubliables.",
     exploreMerzouga: "Explorer Merzouga",
     bookAdventure: "Réserver mon aventure",
     searchDestination: "Destination",

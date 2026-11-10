@@ -35,7 +35,7 @@ export async function submitRequest(_prev: FormState, formData: FormData): Promi
     await sendMail({
       to,
       subject: `${data.kind === "CONTACT" ? "Nouveau message" : "Nouvelle demande sur mesure"} — ${data.name}`,
-      html: emailLayout(
+      html: await emailLayout(
         data.kind === "CONTACT" ? "Nouveau message de contact" : "Demande de voyage sur mesure",
         `<p><strong>${escapeHtml(data.name)}</strong> — ${escapeHtml(data.email)} ${data.phone ? `— ${escapeHtml(data.phone)}` : ""}</p>
          ${data.durationDays ? `<p>Durée : ${data.durationDays} jours · Budget : ${data.budgetMad ?? "—"} MAD/pers. · Voyageurs : ${data.travelers ?? "—"}</p>` : ""}

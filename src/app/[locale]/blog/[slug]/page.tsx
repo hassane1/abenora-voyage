@@ -6,7 +6,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { getPost } from "@/lib/queries";
 import { isFallback, tr } from "@/lib/i18n-content";
 import { formatDate } from "@/lib/format";
-import { site } from "@/lib/site";
+import { getBrand } from "@/lib/brand";
 import { PageHero, hashSeed } from "@/components/Cards";
 import Markdown from "@/components/Markdown";
 
@@ -30,7 +30,7 @@ export default async function PostPage({ params }: PageProps<"/[locale]/blog/[sl
     headline: tr(p.title, locale),
     datePublished: p.publishedAt.toISOString(),
     dateModified: p.updatedAt.toISOString(),
-    publisher: { "@type": "Organization", name: site.name },
+    publisher: { "@type": "Organization", name: (await getBrand()).name },
     inLanguage: locale,
   };
   return (

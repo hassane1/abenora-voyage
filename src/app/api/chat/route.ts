@@ -1,3 +1,4 @@
+import { getBrand } from "@/lib/brand";
 import type { NextRequest } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
           // prompt système stable mis en cache (seule la base de connaissances change quand l'admin modifie le catalogue)
-          system: [{ type: "text", text: systemPrompt(knowledge), cache_control: { type: "ephemeral" } }],
+          system: [{ type: "text", text: systemPrompt(knowledge, (await getBrand()).name), cache_control: { type: "ephemeral" } }],
           messages: msgs.map((m) => ({ role: m.role, content: m.content })),
         });
         stream.on("text", (delta) => controller.enqueue(encoder.encode(delta)));

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { formatDate, formatMad, addDays } from "@/lib/format";
-import { whatsappLink } from "@/lib/site";
+import { useWhatsApp } from "../BrandProvider";
 import type { PriceResult } from "@/lib/pricing";
 import { TRIP_KEY, useLocalList } from "../useLocalList";
 import { Icon } from "../Icon";
@@ -45,6 +45,7 @@ export default function BookingWizard({
   initialDestination?: string;
 }) {
   const t = getDictionary(locale);
+  const whatsappLink = useWhatsApp();
   const trip = useLocalList(TRIP_KEY);
   const preCircuit = circuits.find((c) => c.slug === initialCircuit);
   const [step, setStep] = useState(preCircuit ? 2 : initialDestination ? 1 : 0);

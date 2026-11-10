@@ -1,64 +1,103 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Manrope, Cormorant_Garamond } from "next/font/google";
 import { getAdmin } from "@/lib/auth";
+import { getBrand } from "@/lib/brand";
+import { db } from "@/lib/db";
+import { can, ROLES, type Permission, type Role } from "@/lib/rbac";
 import { logout } from "./actions";
+import AdminShell, { type NavGroup } from "./AdminShell";
 import "../globals.css";
 
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-cormorant" });
 
-export const metadata: Metadata = { title: "Administration — Rimal", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Administration", robots: { index: false, follow: false } };
 
-const nav = [
-  ["/admin", "Tableau de bord"],
-  ["/admin/reservations", "Réservations"],
-  ["/admin/demandes", "Demandes & contacts"],
-  ["/admin/circuits", "Circuits & disponibilités"],
-  ["/admin/options", "Options & suppléments"],
-  ["/admin/activites", "Activités"],
-  ["/admin/destinations", "Destinations"],
-  ["/admin/promos", "Codes promo"],
-  ["/admin/avis", "Avis clients"],
-  ["/admin/medias", "Médias"],
-  ["/admin/notifications", "Notifications"],
-  ["/admin/parametres", "Paramètres"],
+type Item = { href: string; label: string; icon: string; perm?: Permission; badgeKey?: string };
+const NAV: { title: string; items: Item[] }[] = [
+  { title: "Pilotage", items: [{ href: "/admin", label: "Tableau de bord", icon: "chart" }, { href: "/admin/finances", label: "Finances", icon: "shield", perm: "finance.read" }] },
+  {
+    title: "Ventes",
+    items: [
+      { href: "/admin/reservations", label: "Réservations", icon: "calendar", perm: "bookings.read", badgeKey: "pending" },
+      { href: "/admin/calendrier", label: "Calendrier des départs", icon: "clock", perm: "bookings.read" },
+      { href: "/admin/demandes", label: "Demandes & devis", icon: "sparkle", perm: "bookings.read", badgeKey: "requests" },
+      { href: "/admin/messages", label: "Messagerie", icon: "message", perm: "bookings.read", badgeKey: "messages" },
+      { href: "/admin/clients", label: "Clients", icon: "users", perm: "bookings.read" },
+    ],
+  },
+  {
+    title: "Catalogue",
+    items: [
+      { href: "/admin/circuits", label: "Circuits & départs", icon: "route", perm: "catalog.write" },
+      { href: "/admin/activites", label: "Activités", icon: "camel", perm: "catalog.write" },
+      { href: "/admin/options", label: "Options & suppléments", icon: "plus", perm: "catalog.write" },
+      { href: "/admin/destinations", label: "Destinations", icon: "pin", perm: "catalog.write" },
+    ],
+  },
+  {
+    title: "Contenus & marketing",
+    items: [
+      { href: "/admin/contenus", label: "Accueil, FAQ, bannières", icon: "file", perm: "content.write" },
+      { href: "/admin/pages", label: "Pages légales", icon: "file", perm: "content.write" },
+      { href: "/admin/medias", label: "Médias", icon: "camera", perm: "content.write" },
+      { href: "/admin/avis", label: "Avis clients", icon: "star", perm: "content.write", badgeKey: "reviews" },
+      { href: "/admin/promos", label: "Codes promo", icon: "sparkle", perm: "marketing.write" },
+      { href: "/admin/newsletter", label: "Newsletter", icon: "mail", perm: "marketing.write" },
+    ],
+  },
+  {
+    title: "Configuration",
+    items: [
+      { href: "/admin/identite", label: "Identité & coordonnées", icon: "globe", perm: "settings.write" },
+      { href: "/admin/parametres", label: "Tarification & intégrations", icon: "info", perm: "settings.write" },
+      { href: "/admin/utilisateurs", label: "Équipe & rôles", icon: "users", perm: "users.manage" },
+      { href: "/admin/journal", label: "Journal d'audit", icon: "lock", perm: "audit.read" },
+      { href: "/admin/notifications", label: "E-mails envoyés", icon: "mail", perm: "bookings.read" },
+    ],
+  },
 ];
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const admin = await getAdmin();
+  const ready = admin && (admin.mfaPassed || !admin.mfaEnabled);
+  let shell: React.ReactNode = children;
+  if (admin && ready) {
+    const [brand, pending, requests, messages, reviews, cancels] = await Promise.all([
+      getBrand(),
+      db.booking.count({ where: { status: "PENDING" } }),
+      db.quoteRequest.count({ where: { status: "NEW" } }),
+      db.message.count({ where: { fromAgency: false, readAt: null } }),
+      db.review.count({ where: { published: false } }),
+      db.booking.count({ where: { cancelRequestedAt: { not: null }, status: { in: ["PENDING", "CONFIRMED"] } } }),
+    ]);
+    const badges: Record<string, number> = { pending, requests, messages, reviews };
+    const groups: NavGroup[] = NAV.map((g) => ({
+      title: g.title,
+      items: g.items.filter((i) => !i.perm || can(admin.role, i.perm)).map((i) => ({ href: i.href, label: i.label, icon: i.icon, badge: i.badgeKey ? badges[i.badgeKey] : undefined })),
+    })).filter((g) => g.items.length);
+    const alerts = [
+      { label: "Réservations à confirmer", href: "/admin/reservations?status=PENDING", n: pending },
+      { label: "Demandes d'annulation", href: "/admin/reservations?cancel=1", n: cancels },
+      { label: "Nouvelles demandes", href: "/admin/demandes", n: requests },
+      { label: "Messages non lus", href: "/admin/messages", n: messages },
+      { label: "Avis à modérer", href: "/admin/avis", n: reviews },
+    ].filter((a) => (a.href.includes("avis") ? can(admin.role, "content.write") : can(admin.role, "bookings.read")));
+    shell = (
+      <AdminShell
+        brand={brand.name}
+        groups={groups}
+        user={{ name: admin.name, email: admin.email, role: ROLES[admin.role as Role] ? admin.role : admin.role, mfa: admin.mfaEnabled }}
+        alerts={alerts}
+        logoutAction={logout}
+      >
+        {children}
+      </AdminShell>
+    );
+  }
   return (
     <html lang="fr" className={`${manrope.variable} ${cormorant.variable}`}>
-      <body className="min-h-screen bg-[#f4f1ea]">
-        {admin ? (
-          <div className="flex min-h-screen flex-col lg:flex-row">
-            <aside className="bg-night text-white lg:w-64 lg:shrink-0">
-              <div className="flex items-center justify-between px-6 py-5">
-                <Link href="/admin" className="font-display text-2xl tracking-[0.2em] text-sand">
-                  RIMAL
-                </Link>
-                <Link href="/fr" className="text-xs text-white/60 hover:text-sand" target="_blank">
-                  Voir le site ↗
-                </Link>
-              </div>
-              <nav className="flex gap-1 overflow-x-auto px-3 pb-3 text-sm lg:flex-col lg:overflow-visible">
-                {nav.map(([href, label]) => (
-                  <Link key={href} href={href} className="whitespace-nowrap rounded-lg px-3 py-2 text-white/80 hover:bg-white/10 hover:text-white">
-                    {label}
-                  </Link>
-                ))}
-              </nav>
-              <form action={logout} className="hidden px-6 py-4 text-xs text-white/50 lg:block">
-                <p>{admin.email}</p>
-                <button className="mt-1 text-sand hover:underline">Se déconnecter</button>
-              </form>
-            </aside>
-            <main className="min-w-0 flex-1 p-4 sm:p-8">{children}</main>
-          </div>
-        ) : (
-          children
-        )}
-      </body>
+      <body className="min-h-screen bg-[#f7f5f0]">{shell}</body>
     </html>
   );
 }

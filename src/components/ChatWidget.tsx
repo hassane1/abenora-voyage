@@ -10,7 +10,7 @@ type Msg = { role: "user" | "assistant"; content: string };
 const T = {
   fr: {
     open: "Une question ? Discutons",
-    title: "Assistant Rimal",
+    title: "Assistant voyage",
     subtitle: "Conseils voyage · Merzouga & Sahara",
     hello: "Bonjour ! Je peux vous aider à choisir votre circuit, préparer votre séjour à Merzouga ou répondre à vos questions. Que souhaitez-vous savoir ?",
     placeholder: "Écrivez votre question…",
@@ -23,7 +23,7 @@ const T = {
   },
   en: {
     open: "Questions? Let's chat",
-    title: "Rimal Assistant",
+    title: "Travel assistant",
     subtitle: "Travel advice · Merzouga & Sahara",
     hello: "Hello! I can help you choose a tour, plan your stay in Merzouga or answer your questions. What would you like to know?",
     placeholder: "Type your question…",
@@ -36,7 +36,7 @@ const T = {
   },
   ar: {
     open: "سؤال؟ لنتحدث",
-    title: "مساعد ريمال",
+    title: "مساعد السفر",
     subtitle: "نصائح السفر · مرزوكة والصحراء",
     hello: "مرحباً! يمكنني مساعدتك في اختيار جولتك وتحضير إقامتك في مرزوكة أو الإجابة عن أسئلتك. ماذا تريد أن تعرف؟",
     placeholder: "اكتب سؤالك…",

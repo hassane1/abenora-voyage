@@ -3,14 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { site } from "@/lib/site";
+import { getBrand } from "@/lib/brand";
 import { getPhotos } from "@/lib/photos";
 import { PageHero } from "@/components/Cards";
 import { Icon } from "@/components/Icon";
 
 const content = {
   fr: {
-    intro: `${site.name} signifie « sables » en arabe. Notre ambition : faire découvrir le Maroc avec l'exigence des grandes agences internationales et la sincérité d'un accueil local.`,
+    intro: (name: string) => `${name} est une agence spécialisée dans les circuits, excursions et séjours au Maroc. Notre ambition : faire découvrir le Maroc avec l'exigence des grandes agences internationales et la sincérité d'un accueil local.`,
     blocks: [
       ["shield", "Des engagements vérifiables", "Les programmes sont présentés comme des exemples ajustables, les temps de route sont calculés et les tarifs sont clairement identifiés. Aucune réservation n'est annoncée comme confirmée avant validation par notre équipe."],
       ["palm", "Un tourisme respectueux", "Nous privilégions les guides et prestataires de la région, limitons l'impact sur les dunes et refusons toute mise en scène des communautés locales."],
@@ -19,7 +19,7 @@ const content = {
     note: "Présentation de l'équipe, coordonnées légales et licences de l'agence : section à compléter par l'administrateur.",
   },
   en: {
-    intro: `${site.name} means "sands" in Arabic. Our ambition: to reveal Morocco with the standards of leading international agencies and the sincerity of local hospitality.`,
+    intro: (name: string) => `${name} is an agency specialising in tours, excursions and stays in Morocco. Our ambition: to reveal Morocco with the standards of leading international agencies and the sincerity of local hospitality.`,
     blocks: [
       ["shield", "Verifiable commitments", "Programmes are presented as adjustable examples, driving times are computed and prices are clearly labelled. No booking is announced as confirmed before our team validates it."],
       ["palm", "Respectful tourism", "We favour local guides and providers, limit our impact on the dunes and refuse any staging of local communities."],
@@ -28,7 +28,7 @@ const content = {
     note: "Team presentation, legal details and agency licences: section to be completed by the administrator.",
   },
   ar: {
-    intro: `«${site.name}» تعني الرمال بالعربية. طموحنا: تقديم المغرب بمعايير كبريات الوكالات الدولية وبصدق الضيافة المحلية.`,
+    intro: (name: string) => `«${name}» وكالة متخصصة في الجولات والرحلات والإقامات في المغرب. طموحنا: تقديم المغرب بمعايير كبريات الوكالات الدولية وبصدق الضيافة المحلية.`,
     blocks: [
       ["shield", "التزامات قابلة للتحقق", "البرامج أمثلة قابلة للتعديل، وأوقات الطريق محسوبة، والأسعار واضحة. لا يُعلن عن تأكيد أي حجز قبل مصادقة فريقنا."],
       ["palm", "سياحة محترمة", "نفضل المرشدين ومقدمي الخدمات المحليين ونحد من التأثير على الكثبان."],
@@ -50,9 +50,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
   const t = getDictionary(locale);
   const c = content[locale];
   const heroPhoto = (await getPhotos(locale))("aitGuide");
+  const brand = await getBrand();
   return (
     <>
-      <PageHero photo={heroPhoto} eyebrow={site.name} title={t.about.title} text={c.intro} variant="dawn" seed={71} />
+      <PageHero photo={heroPhoto} eyebrow={brand.name} title={t.about.title} text={c.intro(brand.name)} variant="dawn" seed={71} />
       <section className="mx-auto grid max-w-6xl gap-8 px-4 py-20 md:grid-cols-3">
         {c.blocks.map(([icon, title, text]) => (
           <div key={title} className="rounded-3xl bg-white p-8 ring-1 ring-night/5">

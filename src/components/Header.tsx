@@ -5,12 +5,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { localeMeta, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { getV2 } from "@/i18n/v2";
 import { FAVORITES_KEY, TRIP_KEY, useLocalList } from "./useLocalList";
 import { Icon } from "./Icon";
+import { useBrand } from "./BrandProvider";
+import type { ActiveBanner } from "@/lib/content";
 
-export default function Header({ locale }: { locale: Locale }) {
+export default function Header({ locale, banner }: { locale: Locale; banner?: ActiveBanner | null }) {
   const t = getDictionary(locale);
   const pathname = usePathname();
+  const brand = useBrand();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const favs = useLocalList(FAVORITES_KEY);
@@ -46,6 +50,7 @@ export default function Header({ locale }: { locale: Locale }) {
     { href: `/${locale}/avis`, label: t.nav.reviews },
     { href: `/${locale}/a-propos`, label: t.nav.about },
     { href: `/${locale}/comparer`, label: t.nav.compare },
+    { href: `/${locale}/compte`, label: getV2(locale).account.space },
     { href: `/${locale}/espace-client`, label: t.nav.account },
   ];
 
@@ -60,10 +65,20 @@ export default function Header({ locale }: { locale: Locale }) {
         solid ? "bg-ivory/95 text-night shadow-[0_1px_0_rgba(20,40,63,0.08)] backdrop-blur" : "bg-transparent text-white"
       }`}
     >
+      {banner && (
+        <div className="bg-terracotta px-4 py-1.5 text-center text-xs font-medium text-white sm:text-sm">
+          {banner.text}
+          {banner.linkUrl && (
+            <Link href={banner.linkUrl} className="ms-2 font-semibold underline underline-offset-2">
+              {banner.linkLabel || "→"}
+            </Link>
+          )}
+        </div>
+      )}
       <div className="mx-auto flex h-18 max-w-7xl items-center gap-4 px-4 py-3 lg:px-8">
-        <Link href={`/${locale}`} className="flex items-center gap-2" aria-label="Rimal">
-          <Logo className={`h-9 w-9 ${solid ? "text-terracotta" : "text-sand"}`} />
-          <span className="font-display text-2xl font-semibold tracking-[0.2em]">RIMAL</span>
+        <Link href={`/${locale}`} className="flex min-w-0 items-center gap-2" aria-label={brand.name}>
+          <BrandMark logoUrl={brand.logoUrl} className={`h-9 w-9 shrink-0 ${solid ? "text-terracotta" : "text-sand"}`} />
+          <BrandName name={brand.name} />
         </Link>
 
         <nav className="ms-6 hidden flex-1 items-center gap-6 text-sm font-medium xl:flex" aria-label="Navigation principale">
@@ -89,6 +104,9 @@ export default function Header({ locale }: { locale: Locale }) {
               </Link>
             ))}
           </div>
+          <Link href={`/${locale}/compte`} className="hidden rounded-full p-2 hover:bg-black/5 sm:block" aria-label={getV2(locale).account.space} title={getV2(locale).account.space}>
+            <Icon name="user" className="h-5 w-5" />
+          </Link>
           <Link href={`/${locale}/favoris`} className="relative rounded-full p-2 hover:bg-black/5" aria-label={t.nav.favorites}>
             <Icon name="heart" className="h-5 w-5" />
             {favs.list.length + trip.list.length > 0 && (
@@ -128,6 +146,26 @@ export default function Header({ locale }: { locale: Locale }) {
         </div>
       )}
     </header>
+  );
+}
+
+/** Logo téléversé dans l'admin, sinon monogramme par défaut */
+export function BrandMark({ logoUrl, className = "" }: { logoUrl: string | null; className?: string }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  if (logoUrl) return <img src={logoUrl} alt="" className={`${className} object-contain`} />;
+  return <Logo className={className} />;
+}
+
+/** Nom de marque sur deux niveaux : premier mot(s) en capitales espacées, dernier mot en surtitre discret */
+export function BrandName({ name, className = "" }: { name: string; className?: string }) {
+  const words = name.trim().split(/\s+/);
+  const main = words.length > 2 ? words.slice(0, -1).join(" ") : name;
+  const sub = words.length > 2 ? words[words.length - 1] : "";
+  return (
+    <span className={`flex min-w-0 flex-col leading-none ${className}`}>
+      <span className="font-display truncate text-xl font-semibold tracking-[0.12em] uppercase sm:text-2xl">{main}</span>
+      {sub && <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.45em] opacity-70">{sub}</span>}
+    </span>
   );
 }
 

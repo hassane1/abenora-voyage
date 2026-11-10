@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { site, whatsappLink } from "@/lib/site";
+import { site } from "@/lib/site";
+import { useWhatsApp } from "./BrandProvider";
 import { Icon } from "./Icon";
 
 /**
@@ -14,6 +15,7 @@ import { Icon } from "./Icon";
 export default function WhatsAppButton({ locale, message }: { locale: Locale; message?: string }) {
   const t = getDictionary(locale);
   const pathname = usePathname();
+  const whatsappLink = useWhatsApp();
   const text =
     message ??
     (locale === "ar"

@@ -1,0 +1,17 @@
+import { NextResponse } from "next/server";
+import { getAdmin } from "@/lib/auth";
+import { can } from "@/lib/rbac";
+import { db } from "@/lib/db";
+import { audit } from "@/lib/security";
+import { unsubscribeUrl } from "@/lib/newsletter";
+
+export async function GET(req: Request) {
+  const admin = await getAdmin();
+  if (!admin || (admin.mfaEnabled && !admin.mfaPassed) || !can(admin.role, "marketing.write")) return NextResponse.redirect(new URL("/admin/login", req.url));
+  const subs = await db.newsletterSubscriber.findMany({ where: { status: "CONFIRMED" }, orderBy: { confirmedAt: "asc" } });
+  // protection contre l'injection de formules (CSV injection)
+  const cell = (v: string) => `"${(/^[=+\-@]/.test(v) ? `'${v}` : v).replace(/"/g, '""')}"`;
+  const csv = ["email;langue;consentement;confirmation;lien_desinscription", ...subs.map((s) => [s.email, s.locale, s.consentAt.toISOString(), s.confirmedAt?.toISOString() ?? "", unsubscribeUrl(s.id)].map(cell).join(";"))].join("\r\n");
+  await audit(admin.email, "NEWSLETTER_EXPORT", null, { n: subs.length });
+  return new NextResponse("﻿" + csv, { headers: { "content-type": "text/csv; charset=utf-8", "content-disposition": 'attachment; filename="newsletter.csv"' } });
+}

@@ -10,6 +10,7 @@ import { formatDate, formatMad, addDays } from "./format";
 import { hasLocale, localeMeta, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "./site";
+import { getBrand } from "./brand";
 
 export const bookingSchema = z.object({
   circuitId: z.string().min(1),
@@ -40,12 +41,12 @@ export class BookingError extends Error {
   }
 }
 
-function newReference() {
+function newReference(prefix: string) {
   const d = new Date();
   const ymd = `${String(d.getUTCFullYear()).slice(2)}${String(d.getUTCMonth() + 1).padStart(2, "0")}${String(d.getUTCDate()).padStart(2, "0")}`;
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const rnd = Array.from(randomBytes(4), (b) => alphabet[b % alphabet.length]).join("");
-  return `RML-${ymd}-${rnd}`;
+  return `${prefix}-${ymd}-${rnd}`;
 }
 
 export function labelsFor(locale: Locale): PricingLabels {
@@ -119,6 +120,7 @@ export async function createBooking(raw: unknown) {
   const { circuit, options, price, promo } = await quote(input, locale);
   const departure = await db.departure.findFirst({ where: { id: input.departureId, circuitId: circuit.id } });
   if (!departure) throw new BookingError("NOT_FOUND");
+  const prefix = (await getBrand()).bookingPrefix;
 
   const booking = await db.$transaction(async (tx) => {
     // Réservation atomique des places : échoue si la capacité serait dépassée (anti double réservation)
@@ -126,8 +128,8 @@ export async function createBooking(raw: unknown) {
       WHERE "id" = ${departure.id} AND "status" = 'OPEN' AND "seatsHeld" + ${travelers} <= "capacity"`;
     if (updated !== 1) throw new BookingError("SOLD_OUT");
 
-    let reference = newReference();
-    while (await tx.booking.findUnique({ where: { reference } })) reference = newReference();
+    let reference = newReference(prefix);
+    while (await tx.booking.findUnique({ where: { reference } })) reference = newReference(prefix);
 
     return tx.booking.create({
       data: {
@@ -230,7 +232,7 @@ async function notifyBookingCreated(bookingId: string) {
     to: b.email,
     bookingId: b.id,
     subject: `${t.booking.successTitle} — ${b.reference}`,
-    html: emailLayout(
+    html: await emailLayout(
       t.booking.successTitle,
       `<p>${escapeHtml(b.firstName)},</p><p>${t.booking.successText}</p>${bookingSummaryHtml(b, locale)}
        ${b.pricesAreDemo ? `<p style="font-size:12px;color:#B96543">${t.common.demoPriceLong}</p>` : ""}
@@ -245,7 +247,7 @@ async function notifyBookingCreated(bookingId: string) {
       to: adminTo,
       bookingId: b.id,
       subject: `Nouvelle demande de réservation ${b.reference}`,
-      html: emailLayout(
+      html: await emailLayout(
         `Nouvelle demande ${b.reference}`,
         `<p>${escapeHtml(b.firstName)} ${escapeHtml(b.lastName)} — ${escapeHtml(b.email)} — ${escapeHtml(b.phone)}</p>${bookingSummaryHtml(b, "fr")}
          <p><a href="${site.url}/admin/reservations/${b.id}">Ouvrir le dossier dans l'administration</a></p>`,
@@ -263,7 +265,7 @@ async function notifyStatusChanged(bookingId: string, note?: string) {
     to: b.email,
     bookingId: b.id,
     subject: `${b.reference} — ${t.status[b.status]}`,
-    html: emailLayout(
+    html: await emailLayout(
       t.status[b.status],
       `<p>${escapeHtml(b.firstName)},</p>${note ? `<p>${escapeHtml(note)}</p>` : ""}${bookingSummaryHtml(b, locale)}
        <p><a href="${link}">${t.booking.viewFile}</a></p>`,

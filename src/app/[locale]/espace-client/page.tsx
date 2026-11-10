@@ -7,7 +7,8 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { db } from "@/lib/db";
 import { tr } from "@/lib/i18n-content";
 import { formatDate, formatMad } from "@/lib/format";
-import { whatsappLink } from "@/lib/site";
+import { waLink } from "@/lib/site";
+import { getBrand } from "@/lib/brand";
 import type { PriceResult } from "@/lib/pricing";
 import { PriceTable } from "@/components/booking/BookingWizard";
 import { Icon } from "@/components/Icon";
@@ -29,6 +30,7 @@ export default async function ClientSpace({ params, searchParams }: PageProps<"/
   const t = getDictionary(locale);
   const sp = await searchParams;
   await connection();
+  const brand = await getBrand();
   const ref = typeof sp.ref === "string" ? sp.ref : "";
   const token = typeof sp.token === "string" ? sp.token : "";
   const booking =
@@ -56,7 +58,7 @@ export default async function ClientSpace({ params, searchParams }: PageProps<"/
             <input type="hidden" name="locale" value={locale} />
             <label>
               <span className="label">{t.booking.reference}</span>
-              <input name="ref" required className="field uppercase" placeholder="RML-…" />
+              <input name="ref" required className="field uppercase" placeholder="MET-…" />
             </label>
             <label>
               <span className="label">{t.booking.email}</span>
@@ -114,7 +116,7 @@ export default async function ClientSpace({ params, searchParams }: PageProps<"/
           </div>
 
           {(() => {
-            const wa = whatsappLink(`${t.booking.reference} ${booking.reference}`);
+            const wa = waLink(brand.whatsapp, `${t.booking.reference} ${booking.reference}`);
             return (
               wa && (
                 <a href={wa} target="_blank" rel="noopener noreferrer" className="btn bg-[#25D366] text-white">

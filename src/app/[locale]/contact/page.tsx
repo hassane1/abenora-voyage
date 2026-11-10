@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { site, whatsappLink } from "@/lib/site";
+import { waLink } from "@/lib/site";
+import { getBrand } from "@/lib/brand";
 import { getPhotos } from "@/lib/photos";
 import { PageHero } from "@/components/Cards";
 import RequestForm from "@/components/RequestForm";
@@ -18,11 +19,12 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const t = getDictionary(locale);
-  const wa = whatsappLink(t.contact.intro);
+  const brand = await getBrand();
+  const wa = waLink(brand.whatsapp, t.contact.intro);
   const heroPhoto = (await getPhotos(locale))("tea");
   return (
     <>
-      <PageHero photo={heroPhoto} eyebrow={site.name} title={t.contact.title} text={t.contact.intro} variant="night" seed={44} />
+      <PageHero photo={heroPhoto} eyebrow={brand.name} title={t.contact.title} text={t.contact.intro} variant="night" seed={44} />
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 lg:grid-cols-[1fr_320px]">
         <RequestForm locale={locale} kind="CONTACT" />
         <aside className="space-y-4">
