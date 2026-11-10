@@ -87,7 +87,7 @@ mise en production : [docs/DEPLOIEMENT.md](docs/DEPLOIEMENT.md).
 
 `prisma/seed-data/programmes.ts` contient les programmes chargés par `npm run db:programmes` (aussi appelé par le seed) :
 
-- **Publiés** (statut « Tarif publié, à confirmer ») : 12 programmes Omra / Omra combinée / croisière repris des affiches transmises le 10/11/2026, et les 2 offres Instagram de Benani Travel. Prix par personne en **grille hôtel × type de chambre** : le client choisit sa cellule pendant la réservation et le serveur recalcule le prix. ⚠ Plusieurs affiches portent la marque « Almiaraj Voyages » : à confirmer par l'agence.
+- **Publiés** (statut « Tarif publié, à confirmer ») : 12 programmes Omra / Omra combinée / croisière repris des affiches transmises le 10/11/2026, et les 2 offres Instagram de Benani Travel. Prix par personne en **grille hôtel × type de chambre** : le client choisit sa cellule pendant la réservation et le serveur recalcule le prix.
 - **Exemples simulés** (statut « Démonstration », prix et dates fictifs) : 8 programmes au Maroc et 4 à l'étranger.
 
 Les places par départ n'étant pas publiées, elles sont indicatives (45 pour l'Omra). Tout se modifie ensuite dans l'admin.

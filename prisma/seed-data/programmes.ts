@@ -5,8 +5,7 @@
  *    croisière) et des 2 offres Instagram de Benani Travel. Prix, dates, hôtels et prestations recopiés tels
  *    quels ; statut INDICATIVE (« tarif publié, à confirmer »). Le déroulé jour par jour est résumé à partir
  *    des étapes indiquées. Les places par départ ne sont pas publiées : valeur indicative.
- *    ⚠ Les affiches portent la marque « Almiaraj Voyages » (El Jadida, licence ODV-6003) et le numéro 06 66 89 32 62
- *    également utilisé par Benani Travel : à confirmer par l'agence avant publication commerciale.
+ *    Aucune marque ni coordonnée d'une autre agence n'est reprise : seules les informations des programmes.
  * 2) EXEMPLES — programmes SIMULÉS à la demande de l'utilisateur (destinations marocaines et étrangères) :
  *    statut DEMO, prix et dates fictifs, signalés comme tels sur le site.
  */
@@ -129,7 +128,7 @@ const omraDays = (medina: number, mecca: number, extra?: { place: string; nights
 };
 
 // ───────────────────────────── programmes publiés (affiches) ─────────────────────────────
-const SRC_ALMIARAJ = "Affiche transmise le 10/11/2026 (marque Almiaraj Voyages, tél. 06 61 60 69 10 / 06 66 89 32 62) — à confirmer";
+const SRC_AFFICHE = "Affiche transmise par l'agence le 10/11/2026 — à confirmer";
 
 export const published: Programme[] = [
   {
@@ -151,7 +150,7 @@ export const published: Programme[] = [
     meals: l("Repas quotidien assuré par l'agence", "Daily meal provided by the agency"),
     included: ["Billet d'avion sur vol direct", "Visa", "Hébergement dans les hôtels mentionnés", "Transferts en Arabie saoudite", "Accompagnement touristique et guide religieux", "Repas quotidien et assistance de l'agence", "Visite de la Rawdah selon possibilité"],
     excluded: omraExcl, cancellation: omraCancel, itinerary: omraDays(4, 10), stops: omraStops(),
-    departures: { dates: ["2026-10-27", "2026-11-10", "2026-11-24", "2026-12-08", "2026-12-22"] }, capacity: 45, source: SRC_ALMIARAJ,
+    departures: { dates: ["2026-10-27", "2026-11-10", "2026-11-24", "2026-12-08", "2026-12-22"] }, capacity: 45, source: SRC_AFFICHE,
   },
   {
     slug: "omra-janvier-2027-vol-direct", destination: "omra-la-mecque-medine", type: "OMRA", status: "INDICATIVE",
@@ -173,7 +172,7 @@ export const published: Programme[] = [
     included: ["Billet d'avion aller-retour", "Hébergement dans les hôtels mentionnés", "Petit-déjeuner quotidien", "Encadrement religieux et accompagnement de l'agence", "Transferts internes", "Assistance pendant tout le voyage"],
     excluded: omraExcl, cancellation: omraCancel, itinerary: omraDays(4, 8), stops: omraStops(),
     warnings: ["Le programme annonce 4 nuits à Médine et 8 nuits à La Mecque pour des dates de 14 jours : durée exacte à confirmer avec l'agence."],
-    departures: { dates: ["2027-01-03", "2027-01-17"] }, capacity: 45, source: SRC_ALMIARAJ,
+    departures: { dates: ["2027-01-03", "2027-01-17"] }, capacity: 45, source: SRC_AFFICHE,
   },
   {
     slug: "omra-ramadan-2027", destination: "omra-la-mecque-medine", type: "OMRA", status: "INDICATIVE",
@@ -197,7 +196,7 @@ export const published: Programme[] = [
     included: ["Billet d'avion", "Visa", "Hébergement dans les hôtels mentionnés", "Transferts en Arabie saoudite", "Visites à La Mecque et Médine", "Encadrement religieux et technique de l'agence"],
     excluded: omraExcl, cancellation: omraCancel, itinerary: omraDays(4, 10), stops: omraStops(),
     warnings: ["Dates exactes et durée non indiquées sur l'affiche : à confirmer avec l'agence."],
-    departures: {}, capacity: 45, source: SRC_ALMIARAJ,
+    departures: {}, capacity: 45, source: SRC_AFFICHE,
     options: [{ code: "vol-direct-ramadan", label: l("Vol direct depuis Fès ou Casablanca", "Direct flight from Fez or Casablanca"), price: 2000 }],
   },
   {
@@ -217,7 +216,7 @@ export const published: Programme[] = [
     meals: l("Selon programme", "As per programme"),
     included: ["Visa", "Billets d'avion sur vols directs", "Hébergement dans les hôtels mentionnés", "Transferts en Arabie saoudite", "Visites à La Mecque et Médine", "Encadrement religieux et guides de l'agence"],
     excluded: omraExcl, cancellation: omraCancel, itinerary: omraDays(4, 26), stops: omraStops(),
-    departures: { dates: ["2027-01-17"] }, capacity: 45, source: SRC_ALMIARAJ,
+    departures: { dates: ["2027-01-17"] }, capacity: 45, source: SRC_AFFICHE,
   },
   {
     slug: "omra-15-jours-novembre-2026", destination: "omra-la-mecque-medine", type: "OMRA", status: "INDICATIVE",
@@ -302,7 +301,7 @@ export const published: Programme[] = [
     itinerary: [...omraDays(4, 8).slice(0, 3), { title: "Istanbul", description: "Vol vers Istanbul, séjour en hôtel 3* avec petit-déjeuner, découverte de la ville." }, { title: "Retour", description: "Vol retour vers le Maroc." }],
     stops: [stop(CASA, 1, "FLIGHT"), stop(MEDINA, 1, "DRIVE"), stop(MECCA, 5, "FLIGHT"), stop({ name: "Istanbul", lat: 41.0082, lng: 28.9784 }, 13, "FLIGHT"), stop(CASA, 18, null)],
     warnings: ["Prix « à partir de » : détail des hôtels et des types de chambre à demander à l'agence."],
-    departures: { dates: ["2026-12-17"] }, capacity: 45, source: SRC_ALMIARAJ,
+    departures: { dates: ["2026-12-17"] }, capacity: 45, source: SRC_AFFICHE,
   },
   {
     slug: "omra-dubai-decembre-2026", destination: "omra-la-mecque-medine", type: "OMRA", status: "INDICATIVE",
@@ -389,7 +388,7 @@ export const published: Programme[] = [
       { name: "Kuşadası", lat: 37.8579, lng: 27.2611, day: 6, mode: "SEA" },
       { name: "Istanbul", lat: 41.0082, lng: 28.9784, day: 8, mode: null },
     ],
-    departures: { dates: ["2026-11-28"] }, capacity: 40, source: SRC_ALMIARAJ,
+    departures: { dates: ["2026-11-28"] }, capacity: 40, source: SRC_AFFICHE,
   },
   // ─── offres Benani Travel publiées sur Instagram (relevées le 10/11/2026) ───
   {
