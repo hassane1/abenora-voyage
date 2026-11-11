@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Cormorant_Garamond } from "next/font/google";
+import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import { getAdmin } from "@/lib/auth";
 import { getBrand } from "@/lib/brand";
 import { db } from "@/lib/db";
@@ -8,8 +8,8 @@ import { logout } from "./actions";
 import AdminShell, { type NavGroup } from "./AdminShell";
 import "../globals.css";
 
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
-const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-cormorant" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta" });
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 
 export const metadata: Metadata = { title: "Administration", robots: { index: false, follow: false } };
 
@@ -96,8 +96,8 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
     );
   }
   return (
-    <html lang="fr" className={`${manrope.variable} ${cormorant.variable}`}>
-      <body className="min-h-screen bg-[#f7f5f0]">{shell}</body>
+    <html lang="fr" className={`${jakarta.variable} ${fraunces.variable}`}>
+      <body className="min-h-screen bg-ivory">{shell}</body>
     </html>
   );
 }

@@ -192,7 +192,7 @@ export default async function BookingFile({ bookingId, locale, token, flags }: {
       </div>
 
       {wa && (
-        <a href={wa} target="_blank" rel="noopener noreferrer" className="btn bg-[#25D366] text-white">
+        <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
           <Icon name="whatsapp" className="h-4 w-4" /> {t.common.whatsapp}
         </a>
       )}

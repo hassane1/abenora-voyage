@@ -9,7 +9,7 @@ import { useWhatsApp } from "../BrandProvider";
 import type { PriceResult, ResolvedGrid } from "@/lib/pricing";
 import { TRIP_KEY, useLocalList } from "../useLocalList";
 import { Icon } from "../Icon";
-import DuneArt from "../DuneArt";
+import BrandArt from "../BrandArt";
 import ProgramArt from "../ProgramArt";
 import { circuitVariant, hashSeed } from "../Cards";
 import { priceNote } from "../Price";
@@ -218,7 +218,7 @@ export default function BookingWizard({
             {t.booking.viewFile}
           </Link>
           {wa && (
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn bg-[#25D366] text-white">
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
               <Icon name="whatsapp" className="h-4 w-4" /> {t.common.whatsapp}
             </a>
           )}
@@ -302,7 +302,7 @@ export default function BookingWizard({
                       }}
                       className={`flex overflow-hidden rounded-2xl text-start ring-1 transition ${circuitId === c.id ? "ring-2 ring-terracotta" : "ring-night/10 hover:ring-sand"}`}
                     >
-                      {c.programType && c.programType !== "CIRCUIT" ? <ProgramArt type={c.programType} className="hidden w-40 shrink-0 sm:block" /> : <DuneArt variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} className="hidden w-40 shrink-0 sm:block" />}
+                      {c.programType && c.programType !== "CIRCUIT" ? <ProgramArt type={c.programType} className="hidden w-40 shrink-0 sm:block" /> : <BrandArt variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} className="hidden w-40 shrink-0 sm:block" />}
                       <div className="p-4">
                         <p className="eyebrow">{t.common.daysNights(c.days, c.nights)}</p>
                         <p className="font-display text-2xl font-semibold text-night">{c.title}</p>
@@ -537,7 +537,7 @@ export default function BookingWizard({
       {/* Récapitulatif */}
       <aside className="h-fit lg:sticky lg:top-24">
         <div className="overflow-hidden rounded-[2rem] bg-night text-white shadow-xl">
-          {circuit && (circuit.programType && circuit.programType !== "CIRCUIT" ? <ProgramArt type={circuit.programType} className="h-32 w-full" /> : <DuneArt variant={circuitVariant(circuit.slug)} seed={hashSeed(circuit.slug)} caravan className="h-32 w-full" />)}
+          {circuit && (circuit.programType && circuit.programType !== "CIRCUIT" ? <ProgramArt type={circuit.programType} className="h-32 w-full" /> : <BrandArt variant={circuitVariant(circuit.slug)} seed={hashSeed(circuit.slug)} caravan className="h-32 w-full" />)}
           <div className="p-6">
             <p className="eyebrow !text-sand">{t.booking.summary}</p>
             <p className="font-display mt-1 text-2xl font-semibold">{circuit?.title ?? "—"}</p>

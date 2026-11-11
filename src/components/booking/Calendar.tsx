@@ -57,7 +57,7 @@ export default function Calendar({
           <span key={i}>{w}</span>
         ))}
       </div>
-      <div className="mt-2 grid grid-cols-7 gap-1" role="grid">
+      <div className="mt-2 grid grid-cols-7 gap-1" role="group" aria-label="Dates">
         {Array.from({ length: offset }, (_, i) => (
           <span key={`e${i}`} />
         ))}

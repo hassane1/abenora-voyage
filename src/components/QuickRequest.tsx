@@ -140,7 +140,7 @@ export default function QuickRequest({
             {d.booking.viewFile}
           </Link>
           {wa && (
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn bg-[#25D366] text-white">
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
               <Icon name="whatsapp" className="h-4 w-4" /> WhatsApp
             </a>
           )}
@@ -159,7 +159,7 @@ export default function QuickRequest({
   );
 
   return (
-    <div id="demande-express" className="scroll-mt-28 rounded-[1.75rem] bg-white p-6 shadow-[0_20px_60px_-30px_rgba(20,40,63,0.4)] ring-2 ring-terracotta/30 sm:p-8">
+    <div id="demande-express" className="scroll-mt-28 rounded-[1.75rem] bg-white p-6 shadow-lift ring-2 ring-gold/40 sm:p-8">
       <h3 className="font-display text-3xl font-semibold text-night">{t.title}</h3>
       <p className="mt-2 max-w-3xl text-muted">{t.intro}</p>
       <div className="mt-6 grid gap-8 lg:grid-cols-2">

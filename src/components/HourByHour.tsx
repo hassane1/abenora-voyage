@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { getExtra } from "@/i18n/extra";
-import DuneArt from "./DuneArt";
+import BrandArt from "./BrandArt";
 import { Icon } from "./Icon";
 
 /**
@@ -20,7 +20,7 @@ export default function HourByHour({ locale }: { locale: Locale }) {
     <div className="relative isolate overflow-hidden rounded-[2rem] text-white">
       {x.hours.map((h, k) => (
         <div key={h.h} className={`absolute inset-0 -z-10 transition-opacity duration-1000 ${k === i ? "opacity-100" : "opacity-0"}`} aria-hidden={k !== i}>
-          <DuneArt variant={h.variant} seed={11} caravan={h.variant === "sunset"} className="h-full w-full" />
+          <BrandArt variant={h.variant} seed={11} caravan={h.variant === "sunset"} className="h-full w-full" />
         </div>
       ))}
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/80 via-night/10 to-transparent" />

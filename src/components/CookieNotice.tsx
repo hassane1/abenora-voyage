@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
-import { getV2 } from "@/i18n/v2";
+import { getSignature } from "@/i18n/signature";
 
 const KEY = "cookie-notice-v1";
 
@@ -12,9 +12,12 @@ const KEY = "cookie-notice-v1";
  * favoris locaux) : pas de consentement à recueillir, mais une information claire.
  * Si un outil de mesure ou publicitaire est ajouté un jour, il faudra le remplacer par un vrai
  * recueil du consentement (accepter / refuser) AVANT tout dépôt.
+ *
+ * Pastille compacte en bas à gauche (à droite en arabe), d'une seule ligne : sur mobile elle se place au-dessus
+ * de la barre de navigation et laisse libre la colonne des boutons flottants ; elle ne masque jamais les CTA.
  */
 export default function CookieNotice({ locale }: { locale: Locale }) {
-  const v = getV2(locale);
+  const c = getSignature(locale).cookie;
   const [show, setShow] = useState(false);
   useEffect(() => {
     try {
@@ -25,25 +28,27 @@ export default function CookieNotice({ locale }: { locale: Locale }) {
     }
   }, []);
   if (!show) return null;
+  const close = () => {
+    try {
+      localStorage.setItem(KEY, "1");
+    } catch {}
+    setShow(false);
+  };
   return (
-    <div role="region" aria-label="Cookies" className="no-print fixed inset-x-3 bottom-20 z-40 mx-auto max-w-2xl rounded-2xl bg-night p-4 text-sm text-white shadow-2xl lg:bottom-5">
-      <p className="text-white/85">{v.cookie.text}</p>
-      <div className="mt-3 flex flex-wrap items-center gap-3">
-        <button
-          className="btn btn-sand !py-1.5 text-sm"
-          onClick={() => {
-            try {
-              localStorage.setItem(KEY, "1");
-            } catch {}
-            setShow(false);
-          }}
-        >
-          {v.cookie.ok}
-        </button>
-        <Link href={`/${locale}/legal/cookies`} className="text-sand underline-offset-2 hover:underline">
-          {v.cookie.more}
+    <div
+      role="region"
+      aria-label="Cookies"
+      className="no-print fixed start-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 flex max-w-[calc(100vw-6rem)] items-center gap-2 rounded-pill bg-white py-1.5 ps-3 pe-1.5 text-xs text-ink shadow-lift ring-1 ring-line lg:bottom-4 lg:max-w-md"
+    >
+      <p className="leading-tight text-muted">
+        {c.text}{" "}
+        <Link href={`/${locale}/legal/cookies`} className="font-semibold whitespace-nowrap text-gold-deep underline underline-offset-2">
+          {c.more}
         </Link>
-      </div>
+      </p>
+      <button type="button" className="btn btn-dark !min-h-8 shrink-0 !px-3 !py-1 text-xs" onClick={close}>
+        {c.ok}
+      </button>
     </div>
   );
 }

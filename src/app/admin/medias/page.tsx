@@ -8,10 +8,28 @@ export default async function MediaAdmin({ searchParams }: PageProps<"/admin/med
   await requireAdmin();
   const sp = await searchParams;
   const [media, destinations] = await Promise.all([db.media.findMany({ orderBy: { createdAt: "desc" }, include: { destination: true } }), db.destination.findMany({ orderBy: { sortOrder: "asc" } })]);
+  // emplacements d'affichage : hero de l'accueil et photo principale de chaque destination
+  const slots = [
+    { v: "", label: "Aucun (galerie)" },
+    { v: "hero", label: "Accueil : hero (1re image)" },
+    { v: "heroAlt", label: "Accueil : hero (2e image)" },
+    ...destinations.map((d) => ({ v: `destination:${d.slug}`, label: `Destination : ${tr(d.name, "fr")}` })),
+  ];
+  const slotOf = (tags: string) => tags.split(",").map((t) => t.trim()).find((t) => t.startsWith("slot:"))?.slice(5) ?? "";
+  const SlotSelect = ({ value }: { value: string }) => (
+    <select name="slot" defaultValue={value} className="field !py-2 text-sm">
+      {slots.map((o) => (
+        <option key={o.v} value={o.v}>
+          {o.label}
+        </option>
+      ))}
+    </select>
+  );
   return (
     <div>
       <PageTitle title="Médias & droits d'utilisation" />
       <Flash sp={sp} />
+      {sp.error === "alt" && <p className="mb-4 rounded-xl bg-rose-50 p-3 text-sm text-rose-900">Le texte alternatif (FR) est obligatoire : décrivez ce que montre l&apos;image (8 caractères minimum).</p>}
       <Card title="Ajouter une photo ou une vidéo">
         <form action={uploadMedia} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <label className="block">
@@ -29,7 +47,11 @@ export default async function MediaAdmin({ searchParams }: PageProps<"/admin/med
               ))}
             </select>
           </label>
-          <Input label="Texte alternatif FR (lieu exact)" name="alt_fr" required placeholder="Dunes de l'Erg Chebbi au lever du soleil" />
+          <label className="block">
+            <span className="label">Emplacement d&apos;affichage</span>
+            <SlotSelect value="" />
+          </label>
+          <Input label="Texte alternatif FR, obligatoire (ce que montre l'image, lieu exact)" name="alt_fr" required minLength={8} maxLength={180} placeholder="Médina de Chefchaouen, ruelle bleue au matin" />
           <Input label="Texte alternatif EN" name="alt_en" />
           <Input label="Crédit / auteur" name="credit" required />
           <Input label="Licence / autorisation" name="license" required placeholder="Cession de droits, CC BY-SA 4.0…" />
@@ -57,10 +79,19 @@ export default async function MediaAdmin({ searchParams }: PageProps<"/admin/med
               <p className="text-muted">
                 © {m.credit} · {m.license} {m.destination && `· ${tr(m.destination.name, "fr")}`}
               </p>
+              {m.kind === "IMAGE" && (
+                <form action={updateMedia} className="flex items-center gap-2 pt-1">
+                  <input type="hidden" name="id" value={m.id} />
+                  <SlotSelect value={slotOf(m.tags)} />
+                  <button name="action" value="slot" className="shrink-0 text-gold-deep hover:underline">
+                    Placer
+                  </button>
+                </form>
+              )}
               <form action={updateMedia} className="flex gap-2 pt-1">
                 <input type="hidden" name="id" value={m.id} />
                 <input type="hidden" name="rightsConfirmed" value={m.rightsConfirmed ? "false" : "true"} />
-                <button name="action" value="toggle" className="text-terracotta hover:underline">
+                <button name="action" value="toggle" className="text-gold-deep hover:underline">
                   {m.rightsConfirmed ? "Rendre privé" : "Publier"}
                 </button>
                 <button name="action" value="delete" className="text-rose-700 hover:underline">

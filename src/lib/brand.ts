@@ -21,7 +21,7 @@ export type Brand = {
   city: string;
   hours: string;
   socials: { instagram: string; facebook: string; tiktok: string; youtube: string };
-  legal: { companyName: string; legalForm: string; rc: string; ice: string; ifNumber: string; patente: string; license: string; capital: string };
+  legal: { companyName: string; legalForm: string; rc: string; ice: string; ifNumber: string; patente: string; license: string; capital: string; cndp: string; host: string };
   bookingPrefix: string;
   /** taux de conversion INFORMATIFS saisis par l'agence (1 EUR = x MAD) */
   rates: { eur: number | null; usd: number | null; date: string };
@@ -30,7 +30,7 @@ export type Brand = {
 export const BRAND_KEYS = [
   "name", "tagline.fr", "tagline.en", "tagline.ar", "logoUrl", "email", "phone", "whatsapp", "address", "city", "hours",
   "social.instagram", "social.facebook", "social.tiktok", "social.youtube",
-  "legal.companyName", "legal.legalForm", "legal.rc", "legal.ice", "legal.if", "legal.patente", "legal.license", "legal.capital",
+  "legal.companyName", "legal.legalForm", "legal.rc", "legal.ice", "legal.if", "legal.patente", "legal.license", "legal.capital", "legal.cndp", "legal.host",
   "bookingPrefix", "rate.eur", "rate.usd", "rate.date",
 ] as const;
 
@@ -61,6 +61,8 @@ export const getBrand = cache(async (): Promise<Brand> => {
       patente: s["legal.patente"] || "",
       license: s["legal.license"] || "",
       capital: s["legal.capital"] || "",
+      cndp: s["legal.cndp"] || "",
+      host: s["legal.host"] || "",
     },
     bookingPrefix: (s.bookingPrefix || "MET").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 5) || "MET",
     rates: { eur: num(s["rate.eur"]), usd: num(s["rate.usd"]), date: s["rate.date"] || "" },

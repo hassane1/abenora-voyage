@@ -3,6 +3,7 @@ import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getV2 } from "@/i18n/v2";
 import { getAgency } from "@/i18n/agency";
+import { getSignature } from "@/i18n/signature";
 import { getBrand } from "@/lib/brand";
 import { LEGAL_SLUGS } from "@/lib/content";
 import { BrandMark } from "./Header";
@@ -50,23 +51,35 @@ export default async function Footer({ locale }: { locale: Locale }) {
     ] as const
   ).filter(([, url]) => /^https:\/\//.test(url));
   const hasContact = brand.phone || brand.email || brand.address || brand.whatsapp;
-  const legalIds = [
-    brand.legal.companyName && `${brand.legal.companyName}${brand.legal.legalForm ? ` (${brand.legal.legalForm})` : ""}`,
-    brand.legal.rc && `RC ${brand.legal.rc}`,
-    brand.legal.ice && `ICE ${brand.legal.ice}`,
-    brand.legal.license && `${v.footer.licence} : ${brand.legal.license}`,
-  ].filter(Boolean);
+  // mentions légales : chaque champ est éditable dans Administration → Identité
+  const lf = getSignature(locale).footer;
+  const L = brand.legal;
+  const legalRows = (
+    [
+      [lf.company, [L.companyName, L.legalForm].filter(Boolean).join(", ")],
+      [lf.capital, L.capital],
+      [lf.address, [brand.address, brand.city].filter(Boolean).join(", ")],
+      [lf.rc, L.rc],
+      [lf.ice, L.ice],
+      [lf.ifNumber, L.ifNumber],
+      [lf.patente, L.patente],
+      [lf.license, L.license],
+      [lf.cndp, L.cndp],
+      [lf.host, L.host],
+    ] as const
+  ).filter(([, val]) => !!val);
 
   return (
     <footer className="bg-night text-white/80">
+      <div aria-hidden className="band-star" />
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:grid-cols-2 lg:grid-cols-5 lg:px-8">
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 text-white">
-            <BrandMark logoUrl={brand.logoUrl} className="h-10 w-10 text-sand" />
-            <span className="font-display text-2xl tracking-[0.12em] uppercase">{brand.name}</span>
+            <BrandMark logoUrl={brand.logoUrl} className="h-10 w-10 text-gold" />
+            <span className="font-display text-2xl">{brand.name}</span>
           </div>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{tagline}</p>
-          <p className="font-display mt-8 text-lg text-sand">{v.footer.contact}</p>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/75">{tagline}</p>
+          <p className="mt-8 text-sm font-semibold tracking-wide text-gold-light uppercase">{v.footer.contact}</p>
           {hasContact ? (
             <ul className="mt-3 space-y-2 text-sm">
               {/* plusieurs numéros possibles, séparés par « / » */}
@@ -76,21 +89,21 @@ export default async function Footer({ locale }: { locale: Locale }) {
                 .filter(Boolean)
                 .map((p) => (
                   <li key={p}>
-                    <a href={`tel:${p.replace(/[^\d+]/g, "")}`} className="inline-flex items-center gap-2 hover:text-sand" dir="ltr">
+                    <a href={`tel:${p.replace(/[^\d+]/g, "")}`} className="inline-flex items-center gap-2 hover:text-gold-light" dir="ltr">
                       <Icon name="phone" className="h-4 w-4" /> {p}
                     </a>
                   </li>
                 ))}
               {brand.whatsapp && (
                 <li>
-                  <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-sand" dir="ltr">
+                  <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-gold-light" dir="ltr">
                     <Icon name="whatsapp" className="h-4 w-4" /> +{brand.whatsapp}
                   </a>
                 </li>
               )}
               {brand.email && (
                 <li>
-                  <a href={`mailto:${brand.email}`} className="inline-flex items-center gap-2 hover:text-sand">
+                  <a href={`mailto:${brand.email}`} className="inline-flex items-center gap-2 hover:text-gold-light">
                     <Icon name="mail" className="h-4 w-4" /> {brand.email}
                   </a>
                 </li>
@@ -107,12 +120,12 @@ export default async function Footer({ locale }: { locale: Locale }) {
               )}
             </ul>
           ) : (
-            <p className="mt-3 text-sm text-white/40">{v.footer.notConfigured}</p>
+            <p className="mt-3 text-sm text-white/70">{v.footer.notConfigured}</p>
           )}
           {socials.length > 0 && (
             <div className="mt-6 flex gap-2" aria-label={v.footer.follow}>
               {socials.map(([icon, url, label]) => (
-                <a key={icon} href={url} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-sand hover:text-night">
+                <a key={icon} href={url} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-gold hover:text-night">
                   <Icon name={icon} className="h-5 w-5" />
                 </a>
               ))}
@@ -121,11 +134,11 @@ export default async function Footer({ locale }: { locale: Locale }) {
         </div>
         {cols.map((c) => (
           <div key={c.title}>
-            <p className="font-display text-lg text-sand">{c.title}</p>
+            <p className="text-sm font-semibold tracking-wide text-gold-light uppercase">{c.title}</p>
             <ul className="mt-4 space-y-2 text-sm">
               {c.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-sand">
+                  <Link href={l.href} className="hover:text-gold-light">
                     {l.label}
                   </Link>
                 </li>
@@ -135,13 +148,27 @@ export default async function Footer({ locale }: { locale: Locale }) {
         ))}
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-white/50 md:flex-row md:flex-wrap md:justify-between lg:px-8">
-          <p>
-            © {new Date().getFullYear()} {brand.name}. {t.footer.rights}
-          </p>
-          {legalIds.length > 0 && <p>{legalIds.join(" · ")}</p>}
-          <p>{t.footer.legal}</p>
-          <p>{t.footer.osm}</p>
+        <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
+          <p className="text-sm font-semibold tracking-wide text-gold-light uppercase">{lf.legalTitle}</p>
+          {legalRows.length > 0 ? (
+            <dl className="mt-4 grid gap-x-8 gap-y-2 text-xs sm:grid-cols-2 lg:grid-cols-3">
+              {legalRows.map(([k, val]) => (
+                <div key={k} className="flex gap-2">
+                  <dt className="shrink-0 text-white/70">{k} :</dt>
+                  <dd className="text-white/90">{val}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <p className="mt-3 text-xs text-white/70">{lf.pending}</p>
+          )}
+          <div className="mt-6 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/70 md:flex-row md:flex-wrap md:justify-between">
+            <p>
+              © {new Date().getFullYear()} {brand.name}. {t.footer.rights}
+            </p>
+            <p>{t.footer.legal}</p>
+            <p>{t.footer.osm}</p>
+          </div>
         </div>
       </div>
     </footer>

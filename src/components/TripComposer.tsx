@@ -274,7 +274,7 @@ export default function TripComposer({
     <div>
     <div className="grid gap-8 lg:grid-cols-[minmax(0,560px)_1fr] lg:items-start">
       {/* Formulaire */}
-      <div className="overflow-hidden rounded-[1.75rem] bg-white shadow-[0_30px_80px_-40px_rgba(20,40,63,0.55)] ring-1 ring-night/10">
+      <div className="overflow-hidden rounded-[1.75rem] bg-white shadow-float ring-1 ring-night/10">
         {/* En-tête : destination */}
         <div className="relative isolate overflow-hidden bg-night px-6 py-6 text-white sm:px-7">
           <div aria-hidden className="absolute -end-10 -top-10 -z-10 h-40 w-40 rounded-full bg-sand/20 blur-2xl" />
@@ -429,7 +429,7 @@ export default function TripComposer({
             type="button"
             onClick={create}
             disabled={loading}
-            className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-terracotta py-4 text-lg font-semibold text-white shadow-[0_12px_30px_-12px_rgba(185,101,67,0.8)] transition hover:bg-terracotta-dark disabled:opacity-60"
+            className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-terracotta py-4 text-lg font-semibold text-white shadow-lift transition hover:bg-terracotta-dark disabled:opacity-60"
           >
             <Icon name="sparkle" className="h-5 w-5" />
             {loading ? d.common.loading : t.create}
@@ -513,7 +513,7 @@ export default function TripComposer({
                 {t.sendNow} <Icon name="arrow" className="h-4 w-4 rotate-90" />
               </a>
               {wa && (
-                <a href={wa} target="_blank" rel="noopener noreferrer" className="btn bg-[#25D366] text-white">
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
                   <Icon name="whatsapp" className="h-4 w-4" /> WhatsApp
                 </a>
               )}

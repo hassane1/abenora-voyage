@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Cormorant_Garamond, Manrope, Tajawal } from "next/font/google";
+import { Fraunces, Noto_Kufi_Arabic, Plus_Jakarta_Sans } from "next/font/google";
 import { hasLocale, localeMeta, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import BottomNav from "@/components/BottomNav";
-import ChatWidget from "@/components/ChatWidget";
+import LazyChat from "@/components/LazyChat";
 import CookieNotice from "@/components/CookieNotice";
 import { BrandProvider } from "@/components/BrandProvider";
 import { getBrand, publicBrand } from "@/lib/brand";
@@ -15,9 +15,10 @@ import { getActiveBanner } from "@/lib/content";
 import { site } from "@/lib/site";
 import "../globals.css";
 
-const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-cormorant" });
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
-const tajawal = Tajawal({ subsets: ["arabic"], weight: ["400", "500", "700"], variable: "--font-tajawal" });
+// polices auto-hébergées par next/font (fichiers servis depuis le site, aucun appel à Google côté visiteur)
+const fraunces = Fraunces({ subsets: ["latin"], axes: ["opsz"], variable: "--font-fraunces", display: "swap" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
+const kufi = Noto_Kufi_Arabic({ subsets: ["arabic"], variable: "--font-kufi", display: "swap", preload: false });
 
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
@@ -46,8 +47,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const [brand, banner] = await Promise.all([getBrand(), getActiveBanner(l)]);
 
   return (
-    <html lang={l} dir={localeMeta[l].dir} className={`${cormorant.variable} ${manrope.variable} ${tajawal.variable}`}>
-      <body className="flex min-h-screen flex-col pb-16 lg:pb-0">
+    <html lang={l} dir={localeMeta[l].dir} className={`${fraunces.variable} ${jakarta.variable} ${kufi.variable}`}>
+      <body className="flex min-h-screen flex-col pb-24 lg:pb-0">
         <BrandProvider brand={publicBrand(brand, l)}>
           <a href="#contenu" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2">
             {l === "ar" ? "انتقل إلى المحتوى" : l === "en" ? "Skip to content" : "Aller au contenu"}
@@ -59,7 +60,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           <Footer locale={l} />
           <WhatsAppButton locale={l} />
           <BottomNav locale={l} />
-          <ChatWidget locale={l} />
+          <LazyChat locale={l} />
           <CookieNotice locale={l} />
         </BrandProvider>
       </body>

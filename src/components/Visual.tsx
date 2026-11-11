@@ -1,18 +1,19 @@
-import DuneArt from "./DuneArt";
+import Image from "next/image";
+import BrandArt from "./BrandArt";
 import type { Photo } from "@/lib/photos";
 
 type Variant = "sunset" | "dawn" | "night" | "noon" | "dusk";
 
-/** Photo autorisée si disponible, sinon illustration vectorielle — même cadrage */
+/** Photo autorisée (next/image : AVIF/WebP, tailles adaptées) si disponible, sinon visuel de marque — même cadrage */
 export default function Visual({
   photo,
   variant = "sunset",
   seed = 1,
-  caravan = false,
   className = "",
   imgClassName = "",
   priority = false,
   showCredit = false,
+  sizes = "(max-width: 768px) 100vw, 50vw",
   title,
 }: {
   photo?: Photo;
@@ -23,22 +24,15 @@ export default function Visual({
   imgClassName?: string;
   priority?: boolean;
   showCredit?: boolean;
+  sizes?: string;
   title?: string;
 }) {
-  if (!photo) return <DuneArt variant={variant} seed={seed} caravan={caravan} className={className} title={title} />;
+  if (!photo) return <BrandArt variant={variant} seed={seed} className={className} title={title} />;
   return (
-    <span className={`${/\b(absolute|fixed)\b/.test(className) ? "" : "relative"} block overflow-hidden ${className}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={photo.src}
-        alt={photo.alt || title || ""}
-        loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
-        decoding="async"
-        className={`h-full w-full object-cover ${imgClassName}`}
-      />
+    <span className={`${/(absolute|fixed)/.test(className) ? "" : "relative"} block overflow-hidden ${className}`}>
+      <Image src={photo.src} alt={photo.alt || title || ""} fill sizes={sizes} priority={priority} className={`object-cover ${imgClassName}`} />
       {showCredit && photo.credit && (
-        <span className="absolute bottom-1.5 end-2 rounded bg-black/35 px-1.5 py-0.5 text-[10px] text-white/85 backdrop-blur-sm">© {photo.credit}</span>
+        <span className="absolute bottom-1.5 end-2 rounded bg-night/50 px-1.5 py-0.5 text-[10px] text-white/90">© {photo.credit}</span>
       )}
     </span>
   );

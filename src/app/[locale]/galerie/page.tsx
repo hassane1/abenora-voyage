@@ -6,7 +6,7 @@ import { getPublicMedia } from "@/lib/queries";
 import { tr } from "@/lib/i18n-content";
 import { getPhotos } from "@/lib/photos";
 import { PageHero } from "@/components/Cards";
-import DuneArt from "@/components/DuneArt";
+import BrandArt from "@/components/BrandArt";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/galerie">): Promise<Metadata> {
   const { locale } = await params;
@@ -46,7 +46,7 @@ export default async function GalleryPage({ params }: PageProps<"/[locale]/galer
             <div className="grid auto-rows-[220px] grid-cols-2 gap-4 md:grid-cols-4">
               {(["sunset", "night", "dawn", "dusk", "noon", "sunset", "night", "dawn"] as const).map((v, i) => (
                 <div key={i} className={`overflow-hidden rounded-2xl ${i % 5 === 0 ? "col-span-2 row-span-2" : ""}`}>
-                  <DuneArt variant={v} seed={i * 23 + 7} caravan={i % 3 === 0} className="h-full w-full" />
+                  <BrandArt variant={v} seed={i * 23 + 7} caravan={i % 3 === 0} className="h-full w-full" />
                 </div>
               ))}
             </div>

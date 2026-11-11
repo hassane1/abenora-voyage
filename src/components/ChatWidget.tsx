@@ -200,7 +200,7 @@ export default function ChatWidget({ locale }: { locale: Locale }) {
         <section
           role="dialog"
           aria-label={t.title}
-          className="no-print fixed inset-x-2 bottom-20 z-50 flex max-h-[78svh] flex-col overflow-hidden rounded-3xl bg-white shadow-[0_30px_80px_-20px_rgba(20,40,63,0.55)] ring-1 ring-night/10 sm:inset-x-auto sm:end-5 sm:w-[400px] lg:bottom-5"
+          className="no-print fixed inset-x-2 bottom-20 z-50 flex max-h-[78svh] flex-col overflow-hidden rounded-3xl bg-white shadow-float ring-1 ring-night/10 sm:inset-x-auto sm:end-5 sm:w-[400px] lg:bottom-5"
         >
           <header className="flex items-center gap-3 bg-night px-4 py-3 text-white">
             <span className="grid h-10 w-10 place-items-center rounded-full bg-sand text-night">

@@ -22,7 +22,7 @@ export async function getDestination(slug: string) {
     include: {
       circuits: { where: { published: true }, orderBy: { sortOrder: "asc" }, include: { stops: { orderBy: { order: "asc" } } } },
       activities: { where: { published: true }, orderBy: { sortOrder: "asc" } },
-      media: { where: { rightsConfirmed: true } },
+      media: { where: { rightsConfirmed: true, NOT: { credit: { contains: "Super Morocco" } } } },
     },
   }));
 }
@@ -133,5 +133,6 @@ export async function getPost(slug: string) {
 
 export async function getPublicMedia() {
   await connection();
-  return db.media.findMany({ where: { rightsConfirmed: true }, orderBy: { createdAt: "desc" }, include: { destination: true } });
+  // photos d'une autre agence exclues de l'affichage public
+  return db.media.findMany({ where: { rightsConfirmed: true, NOT: { credit: { contains: "Super Morocco" } } }, orderBy: { createdAt: "desc" }, include: { destination: true } });
 }

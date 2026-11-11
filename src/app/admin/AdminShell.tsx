@@ -100,7 +100,7 @@ export default function AdminShell({
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-night/8 bg-[#f7f5f0]/90 px-4 py-3 backdrop-blur sm:px-8">
+        <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-night/8 bg-ivory/90 px-4 py-3 backdrop-blur sm:px-8">
           <button className="rounded-lg p-2 hover:bg-night/5 lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Ouvrir le menu">
             <Icon name="menu" className="h-5 w-5" />
           </button>

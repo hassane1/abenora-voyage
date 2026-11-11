@@ -7,7 +7,7 @@ import { getDestination, getNextDepartures, getPublishedReviews, getUpcomingDepa
 import { formatDate } from "@/lib/format";
 import { isFallback, tr, trList } from "@/lib/i18n-content";
 import { site } from "@/lib/site";
-import DuneArt from "@/components/DuneArt";
+import BrandArt from "@/components/BrandArt";
 import Visual from "@/components/Visual";
 import { getPhotos } from "@/lib/photos";
 import Reveal from "@/components/Reveal";
@@ -92,15 +92,15 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
 
       {/* HERO */}
       <section className="relative isolate flex min-h-[88svh] items-end overflow-hidden pb-20 pt-32 text-white">
-        <div className="absolute inset-0 -z-10 animate-slow-pan">
+        <div className="absolute inset-0 -z-10">
           <Visual photo={heroPhoto} variant="sunset" seed={11} caravan={d.slug === "merzouga"} className="h-full w-full" priority title={tr(d.name, locale)} />
         </div>
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/20 to-night/30" />
         <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
-          <p className="eyebrow animate-fade-up !text-sand">
+          <p className="eyebrow eyebrow-light">
             {d.region} · {t.nav.destinations}
           </p>
-          <h1 className="font-display mt-4 max-w-4xl animate-fade-up text-5xl font-semibold leading-[1.05] md:text-7xl">{tr(d.tagline, locale)}</h1>
+          <h1 className="font-display mt-4 max-w-4xl text-4xl leading-[1.08] md:text-6xl">{tr(d.tagline, locale)}</h1>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#circuits" className="btn btn-sand">
               {t.merzouga.circuits}
@@ -300,7 +300,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
               ))
             : (["sunset", "night", "dawn", "dusk", "noon", "sunset"] as const).map((v, i) => (
                 <div key={i} className={`overflow-hidden rounded-2xl ${i === 0 ? "col-span-2 row-span-2" : ""}`}>
-                  <DuneArt variant={v} seed={i * 17 + 4} caravan={i % 2 === 0} className="h-full w-full" />
+                  <BrandArt variant={v} seed={i * 17 + 4} caravan={i % 2 === 0} className="h-full w-full" />
                 </div>
               ))}
         </div>

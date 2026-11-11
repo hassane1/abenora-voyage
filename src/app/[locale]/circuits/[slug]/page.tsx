@@ -110,12 +110,11 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
           {/* Infos clés */}
           <dl className="grid gap-4 sm:grid-cols-2">
             {facts.map(([icon, label, value]) => (
-              <div key={label} className="flex gap-3 rounded-2xl bg-white p-4 ring-1 ring-night/5">
-                <Icon name={icon} className="h-5 w-5 shrink-0 text-terracotta" />
-                <div>
-                  <dt className="text-sm font-semibold text-night">{label}</dt>
-                  {value && <dd className="text-sm text-muted">{value}</dd>}
-                </div>
+              <div key={label} className="rounded-card bg-white p-4 ring-1 ring-line">
+                <dt className="flex items-center gap-3 text-sm font-semibold text-night">
+                  <Icon name={icon} className="h-5 w-5 shrink-0 text-gold-deep" /> {label}
+                </dt>
+                {value && <dd className="ps-8 text-sm text-muted">{value}</dd>}
               </div>
             ))}
           </dl>

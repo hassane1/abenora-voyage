@@ -29,7 +29,7 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
         <RequestForm locale={locale} kind="CONTACT" />
         <aside className="space-y-4">
           {wa && (
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-3xl bg-[#25D366] p-6 text-white">
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-3xl bg-whatsapp p-6 text-white">
               <Icon name="whatsapp" className="h-7 w-7" /> {t.common.whatsapp}
             </a>
           )}

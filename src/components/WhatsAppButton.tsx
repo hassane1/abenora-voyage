@@ -25,7 +25,7 @@ export default function WhatsAppButton({ locale, message }: { locale: Locale; me
         : `Bonjour, je souhaite des informations (${site.url}${pathname})`);
   const href = whatsappLink(text);
   const cls =
-    "no-print fixed bottom-24 end-4 z-30 lg:bottom-5 lg:end-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl transition hover:scale-105";
+    "no-print fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] end-4 z-30 lg:bottom-5 lg:end-5 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-white shadow-lift transition hover:scale-105";
   if (!href)
     return (
       <Link href={`/${locale}/contact`} className={cls} aria-label={t.common.whatsapp} title={t.common.whatsapp}>

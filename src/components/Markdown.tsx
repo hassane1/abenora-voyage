@@ -2,7 +2,7 @@
 export default function Markdown({ text }: { text: string }) {
   const blocks = text.split(/\n{2,}/);
   return (
-    <div className="prose-rimal">
+    <div className="prose-agency">
       {blocks.map((b, i) => {
         const lines = b.split("\n");
         if (lines[0].startsWith("## ")) {

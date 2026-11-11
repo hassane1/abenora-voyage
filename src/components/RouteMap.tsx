@@ -19,7 +19,9 @@ export type MapStop = {
 
 type Leg = { from: string; to: string; mode: string; distanceKm?: number; durationMin?: number };
 
-const COLORS = { DRIVE: "#8C6420", WALK: "#0B1A2E", CAMEL: "#0B1A2E" } as Record<string, string>;
+/** couleurs du système de design, lues à l'exécution (Leaflet écrit les couleurs en attributs SVG) */
+const cssVar = (name: string) => (typeof document === "undefined" ? "" : getComputedStyle(document.documentElement).getPropertyValue(name).trim());
+const routeColor = (mode: string) => cssVar(mode === "DRIVE" ? "--color-gold-deep" : "--color-night");
 
 /**
  * Carte interactive d'un circuit (Leaflet + tuiles OpenStreetMap).
@@ -61,10 +63,10 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
       for (const group of seen.values()) {
         n++;
         const s = group[0];
-        const color = s.kind === "NIGHT" ? "#0B1A2E" : s.kind === "POI" ? "#D4A845" : "#8C6420";
+        const color = s.kind === "NIGHT" ? "var(--color-night)" : s.kind === "POI" ? "var(--color-emerald)" : "var(--color-gold-deep)";
         const icon = L.divIcon({
           className: "",
-          html: `<div style="background:${color};color:#fff;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font:600 12px sans-serif;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)">${n}</div>`,
+          html: `<div style="background:${color};color:white;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font:600 12px var(--font-sans);border:2px solid white;box-shadow:var(--shadow-lift)">${n}</div>`,
           iconSize: [30, 30],
           iconAnchor: [15, 15],
         });
@@ -72,7 +74,7 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
         const desc = group.map((g) => esc(g.description)).filter(Boolean).join("<br/>");
         L.marker([s.latitude, s.longitude], { icon, title: s.name })
           .addTo(map)
-          .bindPopup(`<strong style="font-size:14px">${esc(s.name)}</strong><br/><span style="color:#8C6420;font-size:11px">${days}</span><p style="margin:6px 0 0">${desc}</p>`);
+          .bindPopup(`<strong style="font-size:14px">${esc(s.name)}</strong><br/><span style="color:var(--color-gold-deep);font-size:11px">${days}</span><p style="margin:6px 0 0">${desc}</p>`);
       }
       map.fitBounds(L.latLngBounds(stops.map((s) => [s.latitude, s.longitude])), { padding: [40, 40] });
 
@@ -85,7 +87,7 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
         const mode = a.modeToNext ?? "DRIVE";
         if (a.latitude === b.latitude && a.longitude === b.longitude) continue;
         if (mode !== "DRIVE") {
-          L.polyline([[a.latitude, a.longitude], [b.latitude, b.longitude]], { color: COLORS[mode], weight: 3, dashArray: "6 8", opacity: 0.8 }).addTo(map);
+          L.polyline([[a.latitude, a.longitude], [b.latitude, b.longitude]], { color: routeColor(mode), weight: 3, dashArray: "6 8", opacity: 0.8 }).addTo(map);
           results.push({ from: a.name, to: b.name, mode });
           continue;
         }
@@ -97,7 +99,7 @@ export default function RouteMap({ stops, locale, height = 460 }: { stops: MapSt
           const route = data.routes?.[0];
           if (!route) throw new Error("no route");
           if (cancelled) return;
-          L.geoJSON(route.geometry, { style: { color: COLORS.DRIVE, weight: 4, opacity: 0.9 } }).addTo(map);
+          L.geoJSON(route.geometry, { style: { color: routeColor("DRIVE"), weight: 4, opacity: 0.9 } }).addTo(map);
           results.push({ from: a.name, to: b.name, mode, distanceKm: route.distance / 1000, durationMin: route.duration / 60 });
         } catch {
           failed = true;

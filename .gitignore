@@ -52,3 +52,7 @@ next-env.d.ts
 /storage/
 *.db.bak-*
 /.next-prod/
+
+# builds de test et captures avant/après
+/.next-*/
+/captures/

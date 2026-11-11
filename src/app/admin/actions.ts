@@ -407,10 +407,17 @@ export async function saveSettings(formData: FormData) {
 // ---------------------------------------------------------------------------
 // Médias (stockage local dans public/uploads ; à remplacer par Supabase Storage / S3 en production)
 // ---------------------------------------------------------------------------
+/** étiquette d'emplacement « slot:<clé> » : clés limitées à hero, heroAlt, destination:<slug>, circuit:<slug> */
+function mediaSlotTag(slot: string) {
+  return /^(hero|heroAlt|(destination|circuit):[a-z0-9-]{1,80})$/.test(slot) ? `slot:${slot}` : "";
+}
+
 export async function uploadMedia(formData: FormData) {
   const admin = await requireAdmin("content.write");
   const file = formData.get("file");
   if (!(file instanceof File) || file.size > 50 * 1024 * 1024) redirect("/admin/medias?error=file");
+  // texte alternatif descriptif obligatoire (accessibilité, référencement)
+  if (str(formData, "alt_fr").trim().length < 8) redirect("/admin/medias?error=alt");
   const raw = Buffer.from(await file.arrayBuffer());
   // type déterminé par le contenu réel du fichier (SVG / HTML / exécutables refusés)
   const ext = sniffImage(raw) ?? sniffVideo(raw);
@@ -431,6 +438,7 @@ export async function uploadMedia(formData: FormData) {
       sourceUrl: str(formData, "sourceUrl") || null,
       rightsConfirmed: bool(formData, "rightsConfirmed"),
       destinationId: str(formData, "destinationId") || null,
+      tags: mediaSlotTag(str(formData, "slot")),
     },
   });
   revalidatePath("/", "layout");
@@ -443,6 +451,9 @@ export async function updateMedia(formData: FormData) {
   if (str(formData, "action") === "delete") {
     const m = await db.media.delete({ where: { id } });
     if (m.url.startsWith("/uploads/")) await unlink(path.join(process.cwd(), "public", m.url)).catch(() => {});
+  } else if (str(formData, "action") === "slot") {
+    // emplacement d'affichage (photo principale d'une destination, hero…)
+    await db.media.update({ where: { id }, data: { tags: mediaSlotTag(str(formData, "slot")) } });
   } else {
     await db.media.update({ where: { id }, data: { rightsConfirmed: bool(formData, "rightsConfirmed") } });
   }

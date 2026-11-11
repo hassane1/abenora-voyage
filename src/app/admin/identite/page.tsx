@@ -72,6 +72,8 @@ export default async function BrandPage({ searchParams }: PageProps<"/admin/iden
             <Input label="Identifiant fiscal (IF)" name="legal.if" defaultValue={b.legal.ifNumber} />
             <Input label="Patente" name="legal.patente" defaultValue={b.legal.patente} />
             <Input label="N° de licence d'agence de voyages" name="legal.license" defaultValue={b.legal.license} />
+            <Input label="N° de déclaration ou d'autorisation CNDP" name="legal.cndp" defaultValue={b.legal.cndp} placeholder="D-W-xxx/2026" />
+            <Input label="Hébergeur du site (nom et adresse)" name="legal.host" defaultValue={b.legal.host} />
           </div>
           <p className="mt-3 text-xs text-muted">Ces informations ne sont affichées que si elles sont renseignées. Elles doivent correspondre aux documents officiels de l&apos;agence.</p>
         </Card>
