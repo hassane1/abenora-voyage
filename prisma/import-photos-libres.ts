@@ -21,6 +21,9 @@ type Entry = {
   page: string;
   thumb1600?: string;
   localSvg?: string; // illustration originale versionnée dans le dépôt (rendue en WebP)
+  localFile?: string; // image déjà préparée et versionnée dans le dépôt (ex. montage), réencodée en WebP
+  file?: string; // nom du fichier dans public/uploads/libres (par défaut : dérivé de l'emplacement)
+  credit?: string; // crédit affiché (par défaut : « auteur / Wikimedia Commons »)
   author: string;
   license: string;
   licenseUrl: string;
@@ -41,6 +44,8 @@ async function download(url: string): Promise<Buffer> {
   throw new Error(`téléchargement impossible : ${url}`);
 }
 
+const fileName = (e: Entry) => e.file ?? `${e.slot.replace(/[^a-zA-Z0-9-]+/g, "-")}.webp`;
+
 async function main() {
   const entries: Entry[] = JSON.parse(await readFile(path.join(process.cwd(), "prisma", "photos-libres.json"), "utf8"));
   const dir = path.join(process.cwd(), "public", "uploads", "libres");
@@ -48,25 +53,27 @@ async function main() {
   const destinations = new Map((await db.destination.findMany({ select: { id: true, slug: true } })).map((d) => [d.slug, d.id]));
   let total = 0;
   for (const e of entries) {
-    const name = `${e.slot.replace(/[^a-zA-Z0-9-]+/g, "-")}.webp`;
+    const name = fileName(e);
     const target = path.join(dir, name);
     const url = `/uploads/libres/${name}`;
     try {
       await access(target);
     } catch {
-      const raw = e.localSvg ? await readFile(path.join(process.cwd(), e.localSvg)) : await download(e.thumb1600!);
+      const local = e.localSvg ?? e.localFile;
+      const raw = local ? await readFile(path.join(process.cwd(), local)) : await download(e.thumb1600!);
       // largeur max 1600 px ; sharp ne recopie aucune métadonnée (EXIF, GPS, XMP) sans demande explicite
       const out = await sharp(raw, e.localSvg ? { density: 72 } : {}).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 74, effort: 5 }).toBuffer();
       await writeFile(target, out);
-      if (!e.localSvg) await sleep(800);
+      if (!local) await sleep(800);
     }
-    const tag = `slot:${e.slot}`;
+    // emplacement vide : le média reste disponible dans Médias sans être affiché d'office
+    const tag = e.slot ? `slot:${e.slot}` : "";
     const destSlug = e.slot.startsWith("destination:") ? e.slot.slice(12) : null;
     const data = {
       kind: "IMAGE",
       url,
       alt: e.alt,
-      credit: e.localSvg ? e.author : `${e.author} / Wikimedia Commons`,
+      credit: e.credit ?? (e.localSvg ? e.author : `${e.author} / Wikimedia Commons`),
       license: e.license,
       sourceUrl: e.page || null,
       rightsConfirmed: true,
@@ -77,11 +84,11 @@ async function main() {
     if (existing) await db.media.update({ where: { id: existing.id }, data });
     else await db.media.create({ data });
     total++;
-    console.log(`✔ ${e.slot} ← ${e.title}`);
+    console.log(`✔ ${e.slot || "(sans emplacement)"} ← ${e.title}`);
   }
 
   // registre des crédits (versionné) : fichier, lieu, auteur, source, licence
-  const rows = entries.map((e) => `| \`public/uploads/libres/${e.slot.replace(/[^a-zA-Z0-9-]+/g, "-")}.webp\` | \`${e.slot}\` | ${e.place} | ${e.author.replace(/\|/g, "/")} | ${e.localSvg ? `\`${e.localSvg}\`` : `[${e.title.replace(/^File:/, "").replace(/\|/g, "/")}](${e.page})`} | ${e.localSvg ? e.license : `[${e.license}](${e.licenseUrl || e.page})`} |`);
+  const rows = entries.map((e) => `| \`public/uploads/libres/${fileName(e)}\` | ${e.slot ? `\`${e.slot}\`` : "—"} | ${e.place} | ${e.author.replace(/\|/g, "/")} | ${e.localSvg ? `\`${e.localSvg}\`` : `[${e.title.replace(/^File:/, "").replace(/\|/g, "/")}](${e.page})`} | ${e.localSvg ? e.license : `[${e.license}](${e.licenseUrl || e.page})`} |`);
   const md = `# Crédits photos
 
 Photos utilisées sur le site : issues de **Wikimedia Commons** sous une licence qui autorise l'usage commercial

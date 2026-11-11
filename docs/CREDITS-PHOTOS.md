@@ -60,6 +60,7 @@ Photos utilisées sur le site : issues de **Wikimedia Commons** sous une licence
 | `public/uploads/libres/activity-diner-etoiles.webp` | `activity:diner-etoiles` | Erg Chebbi, Merzouga | Mohamed Rharnati | [Merzouga Desert.jpg](https://commons.wikimedia.org/wiki/File:Merzouga_Desert.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | `public/uploads/libres/activity-randonnee-guidee.webp` | `activity:randonnee-guidee` | Erg Chebbi, Merzouga | Rubén Bagüés rubavi78 | [Where? follow me- (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Where%3F_follow_me-_(Unsplash).jpg) | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | `public/uploads/libres/activity-degustation.webp` | `activity:degustation` | Maroc | Khammal92 | [Moroccan tagine.jpg](https://commons.wikimedia.org/wiki/File:Moroccan_tagine.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| `public/uploads/libres/about.webp` | `about` | Agence (illustration) | Illustration originale créée pour Benani Travel | `prisma/illustrations/agence-benani.svg` | Propriété de Benani Travel |
+| `public/uploads/libres/about.webp` | — | Agence (illustration) | Illustration originale créée pour Benani Travel | `prisma/illustrations/agence-benani.svg` | Propriété de Benani Travel |
+| `public/uploads/libres/about-photo.webp` | `about` | Bureau (photo d'illustration) | Carl Heyerdahl (photo d'origine, Unsplash) | [Montage : bureau de l'agence avec le site Benani Travel à l'écran](https://commons.wikimedia.org/wiki/File:Desktop_Workspace_%28Unsplash%29.jpg) | [CC0 ; modifiée : ajout du site et du logo Benani Travel à l'écran, logo Apple retiré, image retournée](https://creativecommons.org/publicdomain/zero/1.0/) |
 
-46 photos.
+47 photos.

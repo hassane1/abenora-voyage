@@ -675,7 +675,7 @@
     }
   },
   {
-    "slot": "about",
+    "slot": "",
     "title": "Illustration : intérieur d'agence Benani Travel",
     "page": "",
     "localSvg": "prisma/illustrations/agence-benani.svg",
@@ -687,6 +687,24 @@
       "fr": "Illustration de l'agence Benani Travel : comptoir d'accueil en zellige, arche ouverte sur les dunes, globe, billets et valise",
       "en": "Illustration of the Benani Travel agency: zellige reception desk, arch opening onto the dunes, globe, tickets and suitcase",
       "ar": "رسم توضيحي لوكالة بناني ترافل: مكتب استقبال بالزليج، قوس يطل على الكثبان، كرة أرضية وتذاكر وحقيبة سفر"
+    },
+    "file": "about.webp"
+  },
+  {
+    "slot": "about",
+    "file": "about-photo.webp",
+    "title": "Montage : bureau de l'agence avec le site Benani Travel à l'écran",
+    "page": "https://commons.wikimedia.org/wiki/File:Desktop_Workspace_%28Unsplash%29.jpg",
+    "localFile": "prisma/illustrations/about-photo-montage.webp",
+    "author": "Carl Heyerdahl (photo d'origine, Unsplash)",
+    "credit": "Carl Heyerdahl / Unsplash (CC0), montage Benani Travel",
+    "license": "CC0 ; modifiée : ajout du site et du logo Benani Travel à l'écran, logo Apple retiré, image retournée",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "place": "Bureau (photo d'illustration)",
+    "alt": {
+      "fr": "Bureau en bois avec un ordinateur affichant le site Benani Travel, plantes et étagères",
+      "en": "Wooden desk with a computer showing the Benani Travel website, plants and shelves",
+      "ar": "مكتب خشبي عليه حاسوب يعرض موقع بناني ترافل، مع نباتات ورفوف"
     }
   }
 ]
