@@ -19,7 +19,8 @@ type Entry = {
   slot: string;
   title: string; // « File:… » sur Wikimedia Commons
   page: string;
-  thumb1600: string;
+  thumb1600?: string;
+  localSvg?: string; // illustration originale versionnée dans le dépôt (rendue en WebP)
   author: string;
   license: string;
   licenseUrl: string;
@@ -53,11 +54,11 @@ async function main() {
     try {
       await access(target);
     } catch {
-      const raw = await download(e.thumb1600);
+      const raw = e.localSvg ? await readFile(path.join(process.cwd(), e.localSvg)) : await download(e.thumb1600!);
       // largeur max 1600 px ; sharp ne recopie aucune métadonnée (EXIF, GPS, XMP) sans demande explicite
-      const out = await sharp(raw).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 74, effort: 5 }).toBuffer();
+      const out = await sharp(raw, e.localSvg ? { density: 72 } : {}).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 74, effort: 5 }).toBuffer();
       await writeFile(target, out);
-      await sleep(800);
+      if (!e.localSvg) await sleep(800);
     }
     const tag = `slot:${e.slot}`;
     const destSlug = e.slot.startsWith("destination:") ? e.slot.slice(12) : null;
@@ -65,9 +66,9 @@ async function main() {
       kind: "IMAGE",
       url,
       alt: e.alt,
-      credit: `${e.author} / Wikimedia Commons`,
+      credit: e.localSvg ? e.author : `${e.author} / Wikimedia Commons`,
       license: e.license,
-      sourceUrl: e.page,
+      sourceUrl: e.page || null,
       rightsConfirmed: true,
       tags: tag,
       destinationId: destSlug ? destinations.get(destSlug) ?? null : null,
@@ -80,11 +81,12 @@ async function main() {
   }
 
   // registre des crédits (versionné) : fichier, lieu, auteur, source, licence
-  const rows = entries.map((e) => `| \`public/uploads/libres/${e.slot.replace(/[^a-zA-Z0-9-]+/g, "-")}.webp\` | \`${e.slot}\` | ${e.place} | ${e.author.replace(/\|/g, "/")} | [${e.title.replace(/^File:/, "").replace(/\|/g, "/")}](${e.page}) | [${e.license}](${e.licenseUrl || e.page}) |`);
+  const rows = entries.map((e) => `| \`public/uploads/libres/${e.slot.replace(/[^a-zA-Z0-9-]+/g, "-")}.webp\` | \`${e.slot}\` | ${e.place} | ${e.author.replace(/\|/g, "/")} | ${e.localSvg ? `\`${e.localSvg}\`` : `[${e.title.replace(/^File:/, "").replace(/\|/g, "/")}](${e.page})`} | ${e.localSvg ? e.license : `[${e.license}](${e.licenseUrl || e.page})`} |`);
   const md = `# Crédits photos
 
-Photos utilisées sur le site, toutes issues de **Wikimedia Commons** sous une licence qui autorise l'usage commercial
-(CC0, domaine public, CC BY, CC BY-SA). Aucune ne provient d'une autre agence, d'Instagram ou de Google Images.
+Photos utilisées sur le site : issues de **Wikimedia Commons** sous une licence qui autorise l'usage commercial
+(CC0, domaine public, CC BY, CC BY-SA), ou illustrations originales créées pour Benani Travel (fichier SVG source dans
+\`prisma/illustrations/\`). Aucune ne provient d'une autre agence, d'Instagram ou de Google Images.
 
 - Import : \`npx tsx prisma/import-photos-libres.ts\` (liste : \`prisma/photos-libres.json\`).
 - Fichiers : redimensionnés à 1600 px de large au maximum, WebP, métadonnées (EXIF, GPS) retirées.

@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <!-- Illustration originale créée pour Benani Travel : intérieur d'agence stylisé (aucune personne, aucune marque tierce).
+       Couleurs de la marque : nuit #0e1420 / #1a2233, or #c9a24b / #e8d3a0 / #7a5a14, émeraude #0f5c4d / #0a4237, ivoire #fbf8f2.
+       Zone gauche volontairement sombre et calme pour le titre et le texte de la bannière. -->
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0e1420"/>
+      <stop offset="0.45" stop-color="#121a29"/>
+      <stop offset="1" stop-color="#1a2233"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.72" cy="0.38" r="0.55">
+      <stop offset="0" stop-color="#e8d3a0" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#e8d3a0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2233"/>
+      <stop offset="0.55" stop-color="#7a5a14"/>
+      <stop offset="1" stop-color="#e8d3a0"/>
+    </linearGradient>
+    <linearGradient id="dune1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9a24b"/>
+      <stop offset="1" stop-color="#7a5a14"/>
+    </linearGradient>
+    <linearGradient id="dune2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8d3a0"/>
+      <stop offset="1" stop-color="#c9a24b"/>
+    </linearGradient>
+    <linearGradient id="counterTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8d3a0"/>
+      <stop offset="1" stop-color="#c9a24b"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a4237"/>
+      <stop offset="1" stop-color="#0e1420"/>
+    </linearGradient>
+    <linearGradient id="fadeLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0e1420" stop-opacity="1"/>
+      <stop offset="0.38" stop-color="#0e1420" stop-opacity="0.92"/>
+      <stop offset="0.52" stop-color="#0e1420" stop-opacity="0"/>
+    </linearGradient>
+    <!-- zellige : étoiles à huit branches -->
+    <pattern id="zellige" width="56" height="56" patternUnits="userSpaceOnUse">
+      <rect width="56" height="56" fill="#0a4237"/>
+      <g transform="translate(28 28)">
+        <rect x="-13" y="-13" width="26" height="26" fill="#0f5c4d"/>
+        <rect x="-13" y="-13" width="26" height="26" fill="#0f5c4d" transform="rotate(45)"/>
+        <rect x="-6" y="-6" width="12" height="12" fill="#c9a24b" transform="rotate(45)"/>
+      </g>
+      <g fill="#c9a24b" opacity="0.55">
+        <circle cx="0" cy="0" r="3"/><circle cx="56" cy="0" r="3"/><circle cx="0" cy="56" r="3"/><circle cx="56" cy="56" r="3"/>
+      </g>
+    </pattern>
+    <pattern id="wallMotif" width="90" height="90" patternUnits="userSpaceOnUse">
+      <path d="M45 8 L53 37 L82 45 L53 53 L45 82 L37 53 L8 45 L37 37 Z" fill="none" stroke="#c9a24b" stroke-opacity="0.07" stroke-width="1.5"/>
+    </pattern>
+    <clipPath id="archClip">
+      <path d="M1000 640 L1000 330 Q1000 200 1150 175 Q1300 200 1300 330 L1300 640 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- mur -->
+  <rect width="1600" height="900" fill="url(#wall)"/>
+  <rect x="640" width="960" height="900" fill="url(#wallMotif)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+
+  <!-- suspensions -->
+  <g stroke="#c9a24b" stroke-width="2">
+    <line x1="880" y1="0" x2="880" y2="92"/>
+    <line x1="1420" y1="0" x2="1420" y2="72"/>
+  </g>
+  <g fill="#c9a24b">
+    <path d="M858 92 h44 l-8 34 h-28 z"/>
+    <path d="M1398 72 h44 l-8 34 h-28 z"/>
+  </g>
+  <ellipse cx="880" cy="140" rx="70" ry="22" fill="#e8d3a0" opacity="0.08"/>
+  <ellipse cx="1420" cy="120" rx="70" ry="22" fill="#e8d3a0" opacity="0.08"/>
+
+  <!-- enseigne -->
+  <g>
+    <rect x="990" y="92" width="320" height="56" rx="28" fill="#0e1420" stroke="#c9a24b" stroke-width="2"/>
+    <path d="M1010 120 l7 -7 l7 7 l-7 7 z" fill="#c9a24b"/>
+    <path d="M1276 120 l7 -7 l7 7 l-7 7 z" fill="#c9a24b"/>
+    <text x="1150" y="129" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="26" fill="#e8d3a0" letter-spacing="1">Benani Travel</text>
+  </g>
+
+  <!-- grande arche : fenêtre sur les dunes au crépuscule -->
+  <path d="M988 646 L988 326 Q988 186 1150 160 Q1312 186 1312 326 L1312 646 Z" fill="#7a5a14"/>
+  <g clip-path="url(#archClip)">
+    <rect x="1000" y="170" width="300" height="480" fill="url(#sky)"/>
+    <circle cx="1205" cy="430" r="34" fill="#fbf8f2" opacity="0.9"/>
+    <g fill="#fbf8f2" opacity="0.7">
+      <circle cx="1060" cy="250" r="2"/><circle cx="1110" cy="225" r="1.5"/><circle cx="1240" cy="260" r="2"/><circle cx="1180" cy="300" r="1.5"/><circle cx="1270" cy="330" r="1.5"/>
+    </g>
+    <path d="M1000 520 Q1080 440 1170 500 Q1240 545 1300 480 L1300 650 L1000 650 Z" fill="url(#dune1)"/>
+    <path d="M1000 580 Q1120 520 1220 575 Q1265 600 1300 585 L1300 650 L1000 650 Z" fill="url(#dune2)"/>
+    <!-- petite caravane -->
+    <g fill="#0e1420" opacity="0.85" transform="translate(1078 508)">
+      <path d="M0 10 q6 -9 12 -2 q4 -8 9 0 l3 0 l0 -6 l4 -2 l1 4 l-3 4 l0 12 h-2 v-8 h-14 v8 h-2 v-8 q-6 0 -8 -2 z"/>
+      <path transform="translate(34 6) scale(0.8)" d="M0 10 q6 -9 12 -2 q4 -8 9 0 l3 0 l0 -6 l4 -2 l1 4 l-3 4 l0 12 h-2 v-8 h-14 v8 h-2 v-8 q-6 0 -8 -2 z"/>
+    </g>
+  </g>
+  <path d="M988 646 L988 326 Q988 186 1150 160 Q1312 186 1312 326 L1312 646" fill="none" stroke="#c9a24b" stroke-width="5"/>
+
+  <!-- tableau : silhouette discrète de la Kaaba -->
+  <g>
+    <rect x="780" y="270" width="160" height="200" rx="6" fill="#0f5c4d" stroke="#c9a24b" stroke-width="5"/>
+    <rect x="796" y="286" width="128" height="168" fill="#0a4237"/>
+    <path d="M800 454 Q860 420 920 454 Z" fill="#0f5c4d" opacity="0.7"/>
+    <rect x="832" y="356" width="56" height="58" fill="#0e1420"/>
+    <rect x="832" y="368" width="56" height="7" fill="#c9a24b"/>
+    <path d="M800 440 L800 330 M920 440 L920 330" stroke="#c9a24b" stroke-opacity="0.5" stroke-width="2"/>
+    <circle cx="800" cy="324" r="4" fill="#c9a24b" opacity="0.6"/><circle cx="920" cy="324" r="4" fill="#c9a24b" opacity="0.6"/>
+  </g>
+
+  <!-- tableau : planisphère stylisé avec trajet d'avion -->
+  <g>
+    <rect x="1360" y="250" width="200" height="150" rx="6" fill="#fbf8f2" stroke="#c9a24b" stroke-width="5"/>
+    <g fill="#e8d3a0">
+      <path d="M1380 290 q20 -12 46 -4 q8 10 -4 22 q-10 12 -6 26 q-14 4 -22 -12 q-18 -10 -14 -32 z"/>
+      <path d="M1414 336 q10 -2 14 10 q-2 18 -10 30 q-8 -8 -6 -22 z"/>
+      <path d="M1452 284 q18 -8 30 0 q-4 10 -14 10 q8 14 4 34 q-12 6 -16 -10 q-10 -14 -4 -34 z"/>
+      <path d="M1488 282 q30 -8 52 6 q2 14 -16 18 q-14 12 -28 4 q-12 -10 -8 -28 z"/>
+      <path d="M1518 344 q14 -4 20 6 q-6 10 -18 6 z"/>
+    </g>
+    <path d="M1392 336 Q1450 268 1530 300" fill="none" stroke="#0f5c4d" stroke-width="2.5" stroke-dasharray="6 6"/>
+    <circle cx="1460" cy="306" r="5" fill="#7a5a14"/>
+    <path d="M1522 296 l14 2 l-12 6 z" fill="#0e1420"/>
+  </g>
+
+  <!-- comptoir d'accueil -->
+  <rect x="740" y="640" width="860" height="22" rx="4" fill="url(#counterTop)"/>
+  <rect x="756" y="662" width="844" height="168" fill="url(#zellige)"/>
+  <rect x="756" y="662" width="844" height="168" fill="#0e1420" opacity="0.18"/>
+  <line x1="756" y1="668" x2="1600" y2="668" stroke="#c9a24b" stroke-width="3"/>
+
+  <!-- globe -->
+  <g transform="translate(890 560)">
+    <path d="M-30 80 h60 l-8 -10 h-44 z" fill="#c9a24b"/>
+    <rect x="-3" y="58" width="6" height="14" fill="#c9a24b"/>
+    <circle r="56" fill="#0f5c4d" stroke="#c9a24b" stroke-width="3"/>
+    <ellipse rx="56" ry="20" fill="none" stroke="#e8d3a0" stroke-opacity="0.45" stroke-width="2"/>
+    <ellipse rx="22" ry="56" fill="none" stroke="#e8d3a0" stroke-opacity="0.45" stroke-width="2"/>
+    <line x1="-56" y1="0" x2="56" y2="0" stroke="#e8d3a0" stroke-opacity="0.45" stroke-width="2"/>
+    <path d="M-30 -30 q14 -8 26 2 q-4 14 -18 14 q-10 8 -14 -4 z M8 -6 q14 -2 22 10 q-6 18 -20 22 q-6 -14 -2 -32 z" fill="#e8d3a0" opacity="0.8"/>
+    <path d="M-62 4 A62 62 0 0 1 4 -62" fill="none" stroke="#c9a24b" stroke-width="4"/>
+  </g>
+
+  <!-- billets d'avion et passeport sur le comptoir -->
+  <g transform="translate(1110 610) rotate(-8)">
+    <rect width="120" height="44" rx="5" fill="#fbf8f2"/>
+    <rect x="86" width="34" height="44" fill="#e8d3a0"/>
+    <line x1="86" y1="4" x2="86" y2="40" stroke="#7a5a14" stroke-dasharray="3 3"/>
+    <path d="M24 22 l26 -4 l4 4 l-26 4 z M34 16 l6 0 l6 10 l-6 0 z" fill="#0e1420"/>
+    <rect x="62" y="14" width="16" height="4" fill="#7a5a14"/><rect x="62" y="24" width="12" height="4" fill="#7a5a14"/>
+  </g>
+  <g transform="translate(1160 600) rotate(6)">
+    <rect width="120" height="44" rx="5" fill="#fbf8f2" stroke="#e8d3a0"/>
+    <rect x="86" width="34" height="44" fill="#c9a24b"/>
+    <path d="M24 22 l26 -4 l4 4 l-26 4 z M34 16 l6 0 l6 10 l-6 0 z" fill="#0f5c4d"/>
+  </g>
+  <rect x="1300" y="604" width="52" height="38" rx="4" fill="#0f5c4d" transform="rotate(-4 1326 623)"/>
+  <circle cx="1326" cy="622" r="9" fill="none" stroke="#c9a24b" stroke-width="2.5" transform="rotate(-4 1326 623)"/>
+
+  <!-- valise devant le comptoir -->
+  <g transform="translate(1440 700)">
+    <rect x="22" y="-26" width="40" height="30" rx="8" fill="none" stroke="#c9a24b" stroke-width="7"/>
+    <rect x="0" y="0" width="86" height="130" rx="12" fill="#7a5a14"/>
+    <rect x="0" y="0" width="86" height="130" rx="12" fill="none" stroke="#c9a24b" stroke-width="3"/>
+    <line x1="28" y1="8" x2="28" y2="122" stroke="#c9a24b" stroke-width="3"/>
+    <line x1="58" y1="8" x2="58" y2="122" stroke="#c9a24b" stroke-width="3"/>
+    <circle cx="16" cy="140" r="7" fill="#0e1420"/><circle cx="70" cy="140" r="7" fill="#0e1420"/>
+  </g>
+
+  <!-- plante en pot (palmier nain) -->
+  <g transform="translate(700 720)">
+    <path d="M-28 30 h56 l-8 80 h-40 z" fill="#c9a24b"/>
+    <path d="M-28 44 h56" stroke="#7a5a14" stroke-width="4"/>
+    <g fill="none" stroke="#0f5c4d" stroke-width="10" stroke-linecap="round">
+      <path d="M0 30 Q-10 -30 -60 -60"/><path d="M0 30 Q10 -40 50 -80"/><path d="M0 30 Q-4 -50 -10 -100"/><path d="M0 30 Q20 -10 70 -20"/>
+    </g>
+  </g>
+
+  <!-- sol -->
+  <rect y="830" width="1600" height="70" fill="url(#floor)"/>
+  <line x1="0" y1="830" x2="1600" y2="830" stroke="#c9a24b" stroke-opacity="0.35" stroke-width="2"/>
+
+  <!-- zone de lecture à gauche -->
+  <rect width="1600" height="900" fill="url(#fadeLeft)"/>
+</svg>

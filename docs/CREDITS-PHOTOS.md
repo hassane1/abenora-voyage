@@ -1,7 +1,8 @@
 # Crédits photos
 
-Photos utilisées sur le site, toutes issues de **Wikimedia Commons** sous une licence qui autorise l'usage commercial
-(CC0, domaine public, CC BY, CC BY-SA). Aucune ne provient d'une autre agence, d'Instagram ou de Google Images.
+Photos utilisées sur le site : issues de **Wikimedia Commons** sous une licence qui autorise l'usage commercial
+(CC0, domaine public, CC BY, CC BY-SA), ou illustrations originales créées pour Benani Travel (fichier SVG source dans
+`prisma/illustrations/`). Aucune ne provient d'une autre agence, d'Instagram ou de Google Images.
 
 - Import : `npx tsx prisma/import-photos-libres.ts` (liste : `prisma/photos-libres.json`).
 - Fichiers : redimensionnés à 1600 px de large au maximum, WebP, métadonnées (EXIF, GPS) retirées.
@@ -59,5 +60,6 @@ Photos utilisées sur le site, toutes issues de **Wikimedia Commons** sous une l
 | `public/uploads/libres/activity-diner-etoiles.webp` | `activity:diner-etoiles` | Erg Chebbi, Merzouga | Mohamed Rharnati | [Merzouga Desert.jpg](https://commons.wikimedia.org/wiki/File:Merzouga_Desert.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | `public/uploads/libres/activity-randonnee-guidee.webp` | `activity:randonnee-guidee` | Erg Chebbi, Merzouga | Rubén Bagüés rubavi78 | [Where? follow me- (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Where%3F_follow_me-_(Unsplash).jpg) | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | `public/uploads/libres/activity-degustation.webp` | `activity:degustation` | Maroc | Khammal92 | [Moroccan tagine.jpg](https://commons.wikimedia.org/wiki/File:Moroccan_tagine.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| `public/uploads/libres/about.webp` | `about` | Agence (illustration) | Illustration originale créée pour Benani Travel | `prisma/illustrations/agence-benani.svg` | Propriété de Benani Travel |
 
-45 photos.
+46 photos.

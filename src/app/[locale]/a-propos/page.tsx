@@ -10,7 +10,7 @@ import { Icon } from "@/components/Icon";
 
 const content = {
   fr: {
-    intro: (name: string) => `${name} est une agence spécialisée dans les circuits, excursions et séjours au Maroc. Notre ambition : faire découvrir le Maroc avec l'exigence des grandes agences internationales et la sincérité d'un accueil local.`,
+    intro: (name: string) => `${name} est une agence de voyage marocaine et familiale. Nous organisons vos voyages au Maroc et vos séjours à l'étranger, l'Omra et le Hajj, les voyages sur mesure, ainsi que vos visas, billets d'avion et réservations d'hôtels. Une équipe joignable par téléphone ou WhatsApp vous conseille et vous accompagne, du premier appel jusqu'au retour.`,
     blocks: [
       ["shield", "Des engagements vérifiables", "Les programmes sont présentés comme des exemples ajustables, les temps de route sont calculés et les tarifs sont clairement identifiés. Aucune réservation n'est annoncée comme confirmée avant validation par notre équipe."],
       ["palm", "Un tourisme respectueux", "Nous privilégions les guides et prestataires de la région, limitons l'impact sur les dunes et refusons toute mise en scène des communautés locales."],
@@ -19,7 +19,7 @@ const content = {
     note: "Présentation de l'équipe, coordonnées légales et licences de l'agence : section à compléter par l'administrateur.",
   },
   en: {
-    intro: (name: string) => `${name} is an agency specialising in tours, excursions and stays in Morocco. Our ambition: to reveal Morocco with the standards of leading international agencies and the sincerity of local hospitality.`,
+    intro: (name: string) => `${name} is a Moroccan, family-run travel agency. We organise trips across Morocco and stays abroad, Umrah and Hajj, tailor-made journeys, as well as visas, flights and hotel bookings. A team you can reach by phone or WhatsApp advises and supports you, from the first call until you are back home.`,
     blocks: [
       ["shield", "Verifiable commitments", "Programmes are presented as adjustable examples, driving times are computed and prices are clearly labelled. No booking is announced as confirmed before our team validates it."],
       ["palm", "Respectful tourism", "We favour local guides and providers, limit our impact on the dunes and refuse any staging of local communities."],
@@ -28,7 +28,7 @@ const content = {
     note: "Team presentation, legal details and agency licences: section to be completed by the administrator.",
   },
   ar: {
-    intro: (name: string) => `«${name}» وكالة متخصصة في الجولات والرحلات والإقامات في المغرب. طموحنا: تقديم المغرب بمعايير كبريات الوكالات الدولية وبصدق الضيافة المحلية.`,
+    intro: (name: string) => `«${name}» وكالة أسفار مغربية عائلية. ننظم رحلاتكم داخل المغرب وإقاماتكم في الخارج، والعمرة والحج، والرحلات حسب الطلب، إلى جانب التأشيرات وتذاكر الطيران وحجوزات الفنادق. فريق متاح عبر الهاتف وواتساب ينصحكم ويرافقكم من أول اتصال حتى العودة.`,
     blocks: [
       ["shield", "التزامات قابلة للتحقق", "البرامج أمثلة قابلة للتعديل، وأوقات الطريق محسوبة، والأسعار واضحة. لا يُعلن عن تأكيد أي حجز قبل مصادقة فريقنا."],
       ["palm", "سياحة محترمة", "نفضل المرشدين ومقدمي الخدمات المحليين ونحد من التأثير على الكثبان."],
@@ -49,7 +49,8 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
   if (!hasLocale(locale)) notFound();
   const t = getDictionary(locale);
   const c = content[locale];
-  const heroPhoto = (await getPhotos(locale))("aitGuide");
+  // bannière : emplacement « about » dans Médias (illustration de l'agence), à défaut l'ancienne photo « aitGuide »
+  const heroPhoto = (await getPhotos(locale))("about", "aitGuide");
   const brand = await getBrand();
   return (
     <>

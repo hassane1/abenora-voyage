@@ -18,7 +18,8 @@ export const MEDIA_SLOTS = [
   { key: "valley", label: "Vallée du Sud (services, comparateur)" },
   { key: "palm", label: "Palmeraie (page Conseils)" },
   { key: "aitbenhaddou", label: "Aït-Ben-Haddou (page Voyages Maroc)" },
-  { key: "aitGuide", label: "Page À propos : bannière" },
+  { key: "about", label: "Page À propos : bannière" },
+  { key: "aitGuide", label: "Page À propos : bannière de secours (si « about » est vide)" },
   { key: "aitPalm", label: "Page Avis : bannière" },
 ] as const;
 

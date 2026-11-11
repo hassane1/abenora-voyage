@@ -673,5 +673,20 @@
       "en": "Vegetable couscous served in an earthenware dish",
       "ar": "كسكس بالخضر في طبق فخاري"
     }
+  },
+  {
+    "slot": "about",
+    "title": "Illustration : intérieur d'agence Benani Travel",
+    "page": "",
+    "localSvg": "prisma/illustrations/agence-benani.svg",
+    "author": "Illustration originale créée pour Benani Travel",
+    "license": "Propriété de Benani Travel",
+    "licenseUrl": "",
+    "place": "Agence (illustration)",
+    "alt": {
+      "fr": "Illustration de l'agence Benani Travel : comptoir d'accueil en zellige, arche ouverte sur les dunes, globe, billets et valise",
+      "en": "Illustration of the Benani Travel agency: zellige reception desk, arch opening onto the dunes, globe, tickets and suitcase",
+      "ar": "رسم توضيحي لوكالة بناني ترافل: مكتب استقبال بالزليج، قوس يطل على الكثبان، كرة أرضية وتذاكر وحقيبة سفر"
+    }
   }
 ]
