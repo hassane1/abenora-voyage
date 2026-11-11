@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useActionState, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { formatMad } from "@/lib/format";
-import { arCount, buildProgram, lengthLabel, onSiteKey, startCities, travelFrom, tripLength, type ComposerPrice, type ProgramDay } from "@/lib/composer-engine";
+import { arCount, buildProgram, lengthLabel, lodgingName, TIER_KEYS, onSiteKey, startCities, travelFrom, tripLength, type ComposerPrice, type ProgramDay } from "@/lib/composer-engine";
 import type { ComposerDestination, ComposerDestinationData } from "@/lib/composer-data";
 import { submitRequest, type FormState } from "@/app/[locale]/forms-actions";
 import { useWhatsApp } from "./BrandProvider";
@@ -222,7 +222,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
       price = null;
     }
     const cityLabel = city === onSiteKey ? t.onSite(data.name) : (starts.find((c) => c.key === city)?.name[locale] ?? city);
-    const summary = `${data.name} · ${cityLabel} · ${lengthLabel(locale, len.days, len.nights, len.travelDay)} · ${t.persons(travelers)} · ${lodgingObj.label[locale]}${
+    const summary = `${data.name} · ${cityLabel} · ${lengthLabel(locale, len.days, len.nights, len.travelDay)} · ${t.persons(travelers)} · ${lodgingName(data.cities, lodgingObj, locale)}${
       options.length ? ` · ${options.map((o) => cfg.options.find((x) => x.code === o)?.label[locale]).filter(Boolean).join(", ")}` : ""
     }`;
     setResult({ program, price, summary });
@@ -354,7 +354,14 @@ export default function TripComposer({ locale, destinations, initial }: { locale
                   return (
                     <label key={o.key} className={`relative cursor-pointer rounded-2xl p-4 text-start transition ${on ? "bg-gold/15 ring-2 ring-gold" : "bg-white ring-1 ring-night/10 hover:ring-gold/60"}`}>
                       <input type="radio" name="composer-lodging" className="sr-only" checked={on} onChange={() => setLodging(o.key)} />
-                      <span className="block font-semibold leading-tight text-night">{o.label[locale]}</span>
+                      {/* gamme (titre) : 1 à 3 pastilles ; type d'hébergement de la destination en sous-titre */}
+                      <span aria-hidden className="flex gap-1">
+                        {[0, 1, 2].map((i) => (
+                          <span key={i} className={`h-1.5 w-4 rounded-full ${i <= TIER_KEYS.indexOf(o.key) ? "bg-gold" : "bg-night/10"}`} />
+                        ))}
+                      </span>
+                      <span className="font-display mt-2 block text-lg font-semibold leading-tight text-night">{data.cities.tiers[o.key][locale]}</span>
+                      <span className="mt-1 block text-[13px] font-semibold leading-snug text-night/80">{o.label[locale]}</span>
                       <span className="mt-0.5 block text-xs text-muted">{o.hint[locale]}</span>
                       <span className="mt-2 block text-xs font-bold text-night">
                         {formatMad(o.nightMad, locale)} <span className="font-normal text-muted">{t.perNight}</span>

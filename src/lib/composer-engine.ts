@@ -19,6 +19,11 @@ export const citySchema = z.object({
   lon: z.number().min(-180).max(180),
   airport: z.boolean().default(false),
 });
+/** trois gammes d'hébergement communes à toutes les destinations */
+export const TIER_KEYS = ["essentiel", "confort", "luxe"] as const;
+export type TierKey = (typeof TIER_KEYS)[number];
+const DEFAULT_TIERS = { essentiel: { fr: "Essentiel", en: "Essential", ar: "أساسي" }, confort: { fr: "Confort", en: "Comfort", ar: "مريح" }, luxe: { fr: "Luxe", en: "Luxury", ar: "فاخر" } };
+
 export const citiesConfigSchema = z.object({
   cities: z.array(citySchema).min(1).max(80),
   roadKmh: z.number().min(30).max(120).default(65), // vitesse moyenne sur route (temps de trajet approximatif)
@@ -26,6 +31,7 @@ export const citiesConfigSchema = z.object({
   longTripH: z.number().min(1).max(24).default(7), // trajet routier au-delà duquel une journée de trajet s'ajoute (sans nuit d'hôtel)
   transportBaseMad: z.number().min(0).max(100000).default(150), // DÉMO : forfait transport aller-retour par personne
   transportPerKmMad: z.number().min(0).max(100).default(0.6), // DÉMO : par km (aller simple) et par personne
+  tiers: z.object({ essentiel: L, confort: L, luxe: L }).default(DEFAULT_TIERS), // libellés des gammes, modifiables dans l'admin
 });
 export type City = z.infer<typeof citySchema>;
 export type CitiesConfig = z.infer<typeof citiesConfigSchema>;
@@ -37,7 +43,8 @@ export const destConfigSchema = z.object({
   // durées exprimées en NUITS D'HÔTEL (les jours sont calculés : nuits + 1, + 1 journée de trajet si trajet long)
   durations: z.object({ min: z.number().int().min(1).max(14), max: z.number().int().min(1).max(14), default: z.number().int().min(1).max(14) }),
   flight: z.object({ hours: z.number().min(0.5).max(20), baseMad: z.number().min(0).max(100000), extraNonCasaMad: z.number().min(0).max(100000), airports: z.array(z.string()).max(20), note: L, travelDay: z.boolean().default(false) }).optional(),
-  lodging: z.array(z.object({ key: z.string().max(30), label: L, hint: L, nightMad: z.number().min(0).max(100000) })).min(1).max(4),
+  // une entrée par gamme : label = type d'hébergement propre à la destination, hint = description
+  lodging: z.array(z.object({ key: z.enum(TIER_KEYS), label: L, hint: L, nightMad: z.number().min(0).max(100000) })).min(1).max(3),
   days: z.array(daySchema).min(1).max(12),
   free: daySchema,
   options: z.array(z.object({ code: z.string().regex(/^[a-z0-9-]{2,40}$/), label: L, priceMad: z.number().min(0).max(100000), duration: L, level: z.enum(["FACILE", "MODERE", "SPORTIF"]), audience: L })).max(10),
@@ -223,10 +230,12 @@ export function buildProgram(cfg: CitiesConfig, dest: DestConfig, destPos: { lat
 export type ComposerPrice = { isDemo: true; perPerson: number; total: number; lines: { key: string; label: string; amount: number }[] };
 
 const P = {
-  fr: { lodging: (l: string, n: number) => `Hébergement « ${l} » (${n} nuit${n > 1 ? "s" : ""}) et services de base`, transport: "Transport aller-retour (estimation)", flight: "Vol aller-retour (estimation)", option: (l: string) => l },
-  en: { lodging: (l: string, n: number) => `“${l}” accommodation (${n} night${n > 1 ? "s" : ""}) and core services`, transport: "Return transport (estimate)", flight: "Return flight (estimate)", option: (l: string) => l },
-  ar: { lodging: (l: string, n: number) => `الإقامة «${l}» (${n} ليالٍ) والخدمات الأساسية`, transport: "النقل ذهاباً وإياباً (تقدير)", flight: "الطيران ذهاباً وإياباً (تقدير)", option: (l: string) => l },
+  fr: { lodging: (l: string, n: number) => `Hébergement ${l} (${n} nuit${n > 1 ? "s" : ""} d'hôtel) et services de base`, transport: "Transport aller-retour (estimation)", flight: "Vol aller-retour (estimation)", option: (l: string) => l },
+  en: { lodging: (l: string, n: number) => `${l} accommodation (${n} hotel night${n > 1 ? "s" : ""}) and core services`, transport: "Return transport (estimate)", flight: "Return flight (estimate)", option: (l: string) => l },
+  ar: { lodging: (l: string, n: number) => `الإقامة ${l} (${arNights(n)}) والخدمات الأساسية`, transport: "النقل ذهاباً وإياباً (تقدير)", flight: "الطيران ذهاباً وإياباً (تقدير)", option: (l: string) => l },
 };
+/** « Confort — Campement confort » : gamme puis type d'hébergement */
+export const lodgingName = (cfg: CitiesConfig, l: { key: TierKey; label: Text }, lang: Lang) => `« ${cfg.tiers[l.key][lang]} — ${l.label[lang]} »`;
 const round50 = (x: number) => Math.round(x / 50) * 50;
 
 /** estimation DÉMO par personne puis pour le groupe ; renvoie null si un choix est invalide */
@@ -239,7 +248,7 @@ export function computePrice(cfg: CitiesConfig, dest: DestConfig, destPos: { lat
   if (travel.kind !== "NONE" && "city" in travel && travel.city && !startCities(cfg, dest).some((x) => x.key === travel.city!.key)) return null;
   const p = P[lang];
   const nights = c.nights;
-  const lines: ComposerPrice["lines"] = [{ key: "lodging", label: p.lodging(lodging.label[lang], nights), amount: round50(lodging.nightMad * nights) }];
+  const lines: ComposerPrice["lines"] = [{ key: "lodging", label: p.lodging(lodgingName(cfg, lodging, lang), nights), amount: round50(lodging.nightMad * nights) }];
   if (travel.kind === "ROAD") lines.push({ key: "transport", label: p.transport, amount: round50(cfg.transportBaseMad + travel.km * 2 * cfg.transportPerKmMad) });
   if (travel.kind === "FLIGHT" && dest.flight) lines.push({ key: "flight", label: p.flight, amount: round50(dest.flight.baseMad + (travel.city?.key === "casablanca" ? 0 : dest.flight.extraNonCasaMad)) });
   for (const code of new Set(c.options)) {

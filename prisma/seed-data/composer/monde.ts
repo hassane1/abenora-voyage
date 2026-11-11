@@ -23,7 +23,7 @@ export const monde = [
       lodging: [
         { key: "essentiel", label: t("Hôtel avec navette", "Hotel with shuttle", "فندق مع حافلة نقل"), hint: t("Quelques minutes du Haram en navette", "A few minutes from the Haram by shuttle", "على بعد دقائق من الحرم بالحافلة"), nightMad: 900 },
         { key: "confort", label: t("Hôtel proche du Haram", "Hotel near the Haram", "فندق قريب من الحرم"), hint: t("Accès à pied au Haram", "Walking distance to the Haram", "على مسافة مشي من الحرم"), nightMad: 1500 },
-        { key: "prestige", label: t("Hôtel face au Haram", "Hotel facing the Haram", "فندق مقابل الحرم"), hint: t("Au plus près des mosquées", "As close as possible to the mosques", "أقرب ما يكون إلى المسجدين"), nightMad: 2800 },
+        { key: "luxe", label: t("Hôtel face au Haram", "Hotel facing the Haram", "فندق مقابل الحرم"), hint: t("Au plus près des mosquées", "As close as possible to the mosques", "أقرب ما يكون إلى المسجدين"), nightMad: 2800 },
       ],
       days: [
         day(t("Médine, la ville du Prophète ﷺ", "Medina, the Prophet's ﷺ city", "المدينة المنورة، مدينة النبي ﷺ"), tl(["Prières à la mosquée du Prophète", "Visite de la mosquée de Quba", "Temps de recueillement"], ["Prayers at the Prophet's Mosque", "Visit to Quba Mosque", "Time for reflection"], ["الصلاة في المسجد النبوي", "زيارة مسجد قباء", "وقت للتأمل"]), "omra"),

@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { audit } from "@/lib/security";
-import { citiesConfigSchema, destConfigSchema } from "@/lib/composer-engine";
+import { citiesConfigSchema, destConfigSchema, TIER_KEYS } from "@/lib/composer-engine";
 
 const back = (q: string) => redirect(`/admin/configurateur?${q}`);
 const num = (fd: FormData, k: string) => {
@@ -58,4 +58,21 @@ export async function saveComposerJson(formData: FormData) {
   await audit(admin.email, "COMPOSER_JSON", slug);
   revalidatePath("/", "layout");
   back(`ok=1&d=${slug}`);
+}
+
+/** libellés des trois gammes d'hébergement (communs à toutes les destinations) */
+export async function saveComposerTiers(formData: FormData) {
+  const admin = await requireAdmin("catalog.write");
+  const row = await db.setting.findUnique({ where: { key: "composer:cities" } });
+  const cur = row ? citiesConfigSchema.safeParse(JSON.parse(row.value)) : null;
+  if (!cur?.success) back("error=1");
+  const cfg = cur!.data!;
+  for (const k of TIER_KEYS) for (const l of ["fr", "en", "ar"] as const) {
+    const v = String(formData.get(`${k}:${l}`) ?? "").trim().slice(0, 40);
+    if (v) cfg.tiers[k][l] = v;
+  }
+  await db.setting.update({ where: { key: "composer:cities" }, data: { value: JSON.stringify(citiesConfigSchema.parse(cfg)) } });
+  await audit(admin.email, "COMPOSER_TIERS", "composer:cities");
+  revalidatePath("/", "layout");
+  back("ok=1");
 }

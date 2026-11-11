@@ -13,6 +13,7 @@ const cities: CitiesConfig = {
   longTripH: 7,
   transportBaseMad: 150,
   transportPerKmMad: 0.6,
+  tiers: { essentiel: L("Essentiel"), confort: L("Confort"), luxe: L("Luxe") },
 };
 const base = (mode: "ROAD" | "FLIGHT"): DestConfig => ({
   mode,

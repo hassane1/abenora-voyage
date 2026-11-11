@@ -35,7 +35,7 @@ const HEAD: Record<string, string> = {
   "reference du voyage": "ref", "hotel ou formule": "hotel", "ville et distance au haram (ou detail)": "detail", "double (mad/pers.)": "d2", "triple (mad/pers.)": "t3", "quadruple (mad/pers.)": "q4", "quintuple (mad/pers.)": "q5", "sextuple (mad/pers.)": "s6",
   "n° du jour": "day", "titre du jour fr": "title_fr", "description fr": "desc_fr", "etapes / visites fr (separees par ;)": "items_fr", "repas du jour": "meals", "nuit a (lieu, type d'hebergement)": "night",
   "date de depart": "date", places: "seats", statut: "status", "reference du voyage (ou tous)": "ref", "code court": "code", groupe: "group", "libelle fr": "label_fr", "libelle en": "label_en", "libelle ar": "label_ar", "prix (mad)": "price", unite: "unit",
-  "nuits min": "min", "nuits max": "max", "nuits proposees": "def", "essentiel (mad/nuit/pers.)": "ess", "confort (mad/nuit/pers.)": "conf", "prestige (mad/nuit/pers.)": "prest", "vol a/r depuis casablanca (mad/pers.)": "flight", "supplement autres aeroports (mad/pers.)": "flightExtra", remarques: "note",
+  "nuits min": "min", "nuits max": "max", "nuits proposees": "def", ...Object.fromEntries(["essentiel", "confort", "luxe"].flatMap((k) => [[`${k} – type d'hebergement`, `${k}_type`], [`${k} – description`, `${k}_desc`], [`${k} – prix (mad/nuit/pers.)`, `${k}_price`]])), "vol a/r depuis casablanca (mad/pers.)": "flight", "supplement autres aeroports (mad/pers.)": "flightExtra", remarques: "note",
 };
 const norm = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").replace(/\*/g, "").replace(/\s+/g, " ").trim().toLowerCase();
 const cellValue = (v: ExcelJS.CellValue): unknown => {
@@ -216,7 +216,7 @@ async function main() {
     const [mn, mx, df] = [int(s.min), int(s.max), int(s.def)];
     if ([mn, mx, df].some((x) => x !== null && (Number.isNaN(x) || x < 1 || x > 14))) err("Sur mesure – tarifs", s._line, "nuits : entiers de 1 à 14.");
     else if (mn && mx && df && !(mn <= df && df <= mx)) err("Sur mesure – tarifs", s._line, "nuits : il faut min ≤ proposées ≤ max.");
-    for (const k of ["ess", "conf", "prest", "flight", "flightExtra"]) if (Number.isNaN(int(s[k]))) err("Sur mesure – tarifs", s._line, `prix « ${k} » invalide.`);
+    for (const k of ["essentiel_price", "confort_price", "luxe_price", "flight", "flightExtra"]) if (Number.isNaN(int(s[k]))) err("Sur mesure – tarifs", s._line, `prix « ${k} » invalide.`);
     smPlans.push({ slug: dest.slug, r: s });
   }
 
@@ -289,13 +289,14 @@ async function main() {
       continue;
     }
     const cfg = cur.data;
-    const set = (k: string, v: number | null) => {
+    // trois gammes : type d'hébergement, description et prix (le texte FR remplace le FR ; EN/AR conservés)
+    for (const k of ["essentiel", "confort", "luxe"] as const) {
       const l = cfg.lodging.find((x) => x.key === k);
-      if (l && v !== null) l.nightMad = v;
-    };
-    set("essentiel", int(r.ess));
-    set("confort", int(r.conf));
-    set("prestige", int(r.prest));
+      if (!l) continue;
+      if (int(r[`${k}_price`]) !== null) l.nightMad = int(r[`${k}_price`])!;
+      if (str(r[`${k}_type`])) l.label = { ...l.label, fr: str(r[`${k}_type`]) };
+      if (str(r[`${k}_desc`])) l.hint = { ...l.hint, fr: str(r[`${k}_desc`]) };
+    }
     if (cfg.flight && int(r.flight) !== null) cfg.flight.baseMad = int(r.flight)!;
     if (cfg.flight && int(r.flightExtra) !== null) cfg.flight.extraNonCasaMad = int(r.flightExtra)!;
     if (int(r.min) && int(r.max) && int(r.def)) cfg.durations = { min: int(r.min)!, max: int(r.max)!, default: int(r.def)! };

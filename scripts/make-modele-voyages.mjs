@@ -120,7 +120,7 @@ guideSheet(wb, "Benani Travel — modèle de saisie des voyages", [
   { h: "Omra et Hajj" },
   "Onglet « Omra & Hajj » : une ligne par programme (compagnie, vol, nuits à Médine et à La Mecque…). Les prix par hôtel et par type de chambre (double, triple, quadruple, quintuple, sextuple) se saisissent dans « Grille hôtels × chambres » : une ligne par hôtel (ou formule), avec la distance au Haram. Le prix « à partir de » est calculé automatiquement à partir de la grille si vous le laissez vide.",
   { h: "Configurateur « sur mesure »" },
-  "Onglet « Sur mesure – tarifs » : une ligne par destination, avec les nuits d'hôtel minimum / maximum / proposées par défaut, le prix par nuit et par personne des trois niveaux d'hébergement (Essentiel, Confort, Prestige) et, pour l'international, le prix du vol. Les valeurs pré-remplies sont les tarifs DÉMO actuels.",
+  "Onglet « Sur mesure – tarifs » : une ligne par destination, avec les nuits d'hôtel minimum / maximum / proposées par défaut et, pour chacune des trois gammes (Essentiel, Confort, Luxe), le type d'hébergement, sa description et le prix par nuit et par personne ; pour l'international, le prix du vol. Les valeurs pré-remplies sont les tarifs DÉMO actuels.",
   { h: "Renvoyer le fichier" },
   "Enregistrez le fichier (sans changer le nom des onglets ni des colonnes) et envoyez-le dans la conversation du projet. Un import d'essai (« dry-run ») est d'abord lancé : vous recevez la liste des erreurs éventuelles, ligne par ligne, avant toute modification du site. Une sauvegarde de la base est faite automatiquement avant l'import réel.",
   { p: "Données personnelles : ce fichier ne contient aucune donnée client.", fill: BRAND.ivory },
@@ -222,17 +222,20 @@ const smRows = destinations.map((d) => {
   const v = db.prepare("select value from Setting where key=?").get(`composer:${d.slug}`);
   if (!v) return null;
   const c = JSON.parse(v.value);
-  const lp = (k) => c.lodging.find((l) => l.key === k)?.nightMad ?? null;
-  return { dest: d.fr, min: c.durations.min, max: c.durations.max, def: c.durations.default, ess: lp("essentiel"), conf: lp("confort"), prest: lp("prestige"), flight: c.flight?.baseMad ?? null, flightExtra: c.flight?.extraNonCasaMad ?? null, status: "Démo", note: "" };
+  const lo = (k) => c.lodging.find((l) => l.key === k);
+  const tierCols = Object.fromEntries(["essentiel", "confort", "luxe"].flatMap((k) => [[`${k}_type`, lo(k)?.label.fr ?? ""], [`${k}_desc`, lo(k)?.hint.fr ?? ""], [`${k}_price`, lo(k)?.nightMad ?? null]]));
+  return { dest: d.fr, min: c.durations.min, max: c.durations.max, def: c.durations.default, ...tierCols, flight: c.flight?.baseMad ?? null, flightExtra: c.flight?.extraNonCasaMad ?? null, status: "Démo", note: "" };
 }).filter(Boolean);
 dataSheet(wb, "Sur mesure – tarifs", [
   { key: "dest", header: "Destination", required: true, list: "L_DestTous", width: 24 },
   { key: "min", header: "Nuits min", int: [1, 14], width: 8 },
   { key: "max", header: "Nuits max", int: [1, 14], width: 8 },
   { key: "def", header: "Nuits proposées", int: [1, 14], width: 9 },
-  { key: "ess", header: "Essentiel (MAD/nuit/pers.)", numFmt: mad, int: [0, 100000], width: 14 },
-  { key: "conf", header: "Confort (MAD/nuit/pers.)", numFmt: mad, int: [0, 100000], width: 14 },
-  { key: "prest", header: "Prestige (MAD/nuit/pers.)", numFmt: mad, int: [0, 100000], width: 14 },
+  ...[["essentiel", "Essentiel"], ["confort", "Confort"], ["luxe", "Luxe"]].flatMap(([k, n]) => [
+    { key: `${k}_type`, header: `${n} – type d'hébergement`, width: 24, note: `Gamme « ${n} » : type d'hébergement propre à la destination (ex. « Bivouac traditionnel », « Riad ou hôtel 3★ »).` },
+    { key: `${k}_desc`, header: `${n} – description`, width: 30, wrap: true },
+    { key: `${k}_price`, header: `${n} – prix (MAD/nuit/pers.)`, numFmt: mad, int: [0, 100000], width: 14 },
+  ]),
   { key: "flight", header: "Vol A/R depuis Casablanca (MAD/pers.)", numFmt: mad, int: [0, 1000000], width: 16, note: "International uniquement." },
   { key: "flightExtra", header: "Supplément autres aéroports (MAD/pers.)", numFmt: mad, int: [0, 1000000], width: 16 },
   { key: "status", header: "Statut", list: "L_StatutPrix", width: 11, note: "Tant que « Démo », le badge « Tarifs démo » reste affiché." },
@@ -240,6 +243,6 @@ dataSheet(wb, "Sur mesure – tarifs", [
 ], { rows: smRows, maxRows: 60 });
 
 listsSheet(wb, LISTS);
-const out = path.join(ROOT, "docs", "MODELE-VOYAGES-BENANI.xlsx");
+const out = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "docs", "MODELE-VOYAGES-BENANI.xlsx");
 await wb.xlsx.writeFile(out);
 console.log("✔", out, "—", ex.nat.length + ex.int.length + ex.omr.length, "voyages d'exemple,", dayRows.length, "jours,", gridRows.length, "lignes de grille,", smRows.length, "destinations sur mesure");

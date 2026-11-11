@@ -1,8 +1,8 @@
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { tr } from "@/lib/i18n-content";
-import { citiesConfigSchema, destConfigSchema } from "@/lib/composer-engine";
-import { saveComposerJson, saveComposerPrices } from "../composer-actions";
+import { citiesConfigSchema, destConfigSchema, TIER_KEYS } from "@/lib/composer-engine";
+import { saveComposerJson, saveComposerPrices, saveComposerTiers } from "../composer-actions";
 import { Card, Flash, PageTitle } from "../ui";
 
 /** Configurateur « Créez votre voyage sur mesure » : tarifs DÉMO, durées et programmes de chaque destination */
@@ -32,6 +32,25 @@ export default async function ComposerAdmin({ searchParams }: PageProps<"/admin/
           <li>Le prix affiché au client est toujours recalculé par le serveur à partir de ces données ; la demande crée un dossier « SM-… » dans Demandes &amp; devis.</li>
         </ul>
       </Card>
+
+      {cities?.success && (
+        <Card title="Gammes d&apos;hébergement (toutes les destinations)" className="mt-6">
+          <form action={saveComposerTiers} className="space-y-3 text-sm">
+            <p className="text-muted">Les trois gammes s&apos;affichent en titre des cartes « Hébergement » du configurateur ; le type d&apos;hébergement propre à chaque destination apparaît en sous-titre.</p>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {TIER_KEYS.map((k, i) => (
+                <fieldset key={k} className="space-y-2 rounded-xl bg-ivory p-3">
+                  <legend className="text-xs font-semibold text-muted">Gamme {i + 1}</legend>
+                  {(["fr", "en", "ar"] as const).map((l) => (
+                    <input key={l} name={`${k}:${l}`} defaultValue={cities.data.tiers[k][l]} required maxLength={40} dir={l === "ar" ? "rtl" : "ltr"} aria-label={`Gamme ${i + 1} (${l.toUpperCase()})`} className="field !py-1.5" />
+                  ))}
+                </fieldset>
+              ))}
+            </div>
+            <button className="btn btn-primary !py-2 text-sm">Enregistrer les gammes</button>
+          </form>
+        </Card>
+      )}
 
       {cities?.success && (
         <details open={open === "cities"} className="mt-6 rounded-2xl bg-white ring-1 ring-night/5">
@@ -67,7 +86,7 @@ export default async function ComposerAdmin({ searchParams }: PageProps<"/admin/
                     <div className="grid gap-3 sm:grid-cols-3">
                       {cfg.data.lodging.map((l) => (
                         <label key={l.key} className="block">
-                          <span className="label text-xs">{l.label.fr} · par nuit et par pers.</span>
+                          <span className="label text-xs">{cities?.success ? cities.data.tiers[l.key].fr : l.key} — {l.label.fr} · par nuit et par pers.</span>
                           <input name={`lodging:${l.key}`} type="number" min={0} defaultValue={l.nightMad} className="field !py-1.5" />
                         </label>
                       ))}

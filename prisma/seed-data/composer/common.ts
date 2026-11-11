@@ -10,6 +10,13 @@ export const tl = (fr: string[], en: string[], ar: string[]): L3 => ({ fr, en, a
 export const day = (title: T3, items: L3, photo?: string) => ({ title, items, ...(photo ? { photo } : {}) });
 export const opt = (code: string, label: T3, priceMad: number, duration: T3, level: "FACILE" | "MODERE" | "SPORTIF", audience: T3) => ({ code, label, priceMad, duration, level, audience });
 
+// ── trois gammes standard pour toutes les destinations (libellés modifiables dans l'admin : composer:cities → tiers)
+export const tiers = {
+  essentiel: t("Essentiel", "Essential", "أساسي"),
+  confort: t("Confort", "Comfort", "مريح"),
+  luxe: t("Luxe", "Luxury", "فاخر"),
+};
+
 // ── villes de départ (coordonnées approximatives du centre-ville ; airport = aéroport international principal)
 const city = (key: string, fr: string, en: string, ar: string, lat: number, lon: number, airport = false) => ({ key, name: t(fr, en, ar), lat, lon, airport });
 export const cities = {
@@ -44,38 +51,39 @@ export const cities = {
   longTripH: 7, // au-delà de ~7 h de route : 1 journée de trajet en plus (sans nuit d'hôtel)
   transportBaseMad: 150,
   transportPerKmMad: 0.6,
+  tiers,
 };
 
 /** aéroports marocains proposés pour les destinations internationales */
 export const airports = ["casablanca", "marrakech", "rabat", "tanger", "fes", "agadir", "nador", "oujda"];
 
-// ── hébergements types (aucun nom d'établissement réel) — prix DÉMO par nuit et par personne
+// ── hébergements types par gamme : label = type d'hébergement, hint = description (aucun nom d'établissement réel) — prix DÉMO par nuit et par personne
 const lod = (key: string, label: T3, hint: T3, nightMad: number) => ({ key, label, hint, nightMad });
 export const lodging = {
   city: [
-    lod("essentiel", t("Essentiel", "Essential", "أساسي"), t("Riad ou hôtel 3★, petit-déjeuner", "Riad or 3★ hotel, breakfast", "رياض أو فندق 3 نجوم مع الفطور"), 450),
-    lod("confort", t("Confort", "Comfort", "مريح"), t("Riad de charme ou hôtel 4★", "Boutique riad or 4★ hotel", "رياض أنيق أو فندق 4 نجوم"), 750),
-    lod("prestige", t("Prestige", "Prestige", "فاخر"), t("Hôtel ou riad haut de gamme 5★", "Upscale 5★ hotel or riad", "فندق أو رياض فاخر 5 نجوم"), 1400),
+    lod("essentiel", t("Riad ou hôtel 3★", "Riad or 3★ hotel", "رياض أو فندق 3 نجوم"), t("Bien situé, petit-déjeuner", "Well located, breakfast", "موقع جيد مع الفطور"), 450),
+    lod("confort", t("Riad de charme ou hôtel 4★", "Boutique riad or 4★ hotel", "رياض أنيق أو فندق 4 نجوم"), t("Cadre soigné, petit-déjeuner", "Stylish setting, breakfast", "إطار أنيق مع الفطور"), 750),
+    lod("luxe", t("Hôtel ou riad 5★", "5★ hotel or riad", "فندق أو رياض 5 نجوم"), t("Haut de gamme, services et spa selon l'établissement", "Upscale, services and spa depending on the property", "راقٍ، خدمات وسبا حسب المؤسسة"), 1400),
   ],
   desert: [
     lod("essentiel", t("Bivouac traditionnel", "Traditional camp", "مخيم تقليدي"), t("Tentes nomades, dîner et petit-déjeuner", "Nomad tents, dinner and breakfast", "خيام بدوية مع العشاء والفطور"), 450),
     lod("confort", t("Campement confort", "Comfort camp", "مخيم مريح"), t("Tente privée avec lit et sanitaires", "Private tent with bed and bathroom", "خيمة خاصة بسرير ومرافق"), 800),
-    lod("prestige", t("Campement de luxe", "Luxury camp", "مخيم فاخر"), t("Grande tente décorée, salle de bain privée", "Large decorated tent, private bathroom", "خيمة كبيرة مزينة بحمام خاص"), 1300),
+    lod("luxe", t("Campement de luxe", "Luxury camp", "مخيم فاخر"), t("Grande tente décorée, salle de bain privée", "Large decorated tent, private bathroom", "خيمة كبيرة مزينة بحمام خاص"), 1300),
   ],
   nature: [
     lod("essentiel", t("Gîte ou auberge", "Guesthouse or inn", "نزل أو مأوى"), t("Chambre simple et petit-déjeuner", "Simple room and breakfast", "غرفة بسيطة مع الفطور"), 350),
     lod("confort", t("Maison d'hôtes", "Guest house", "دار ضيافة"), t("Chambre confortable, demi-pension", "Comfortable room, half board", "غرفة مريحة بنصف إقامة"), 600),
-    lod("prestige", t("Lodge de charme", "Boutique lodge", "نزل فاخر"), t("Vue sur la nature, demi-pension", "Nature views, half board", "إطلالة على الطبيعة بنصف إقامة"), 1100),
+    lod("luxe", t("Lodge de charme", "Boutique lodge", "نزل فاخر"), t("Vue sur la nature, demi-pension", "Nature views, half board", "إطلالة على الطبيعة بنصف إقامة"), 1100),
   ],
   beach: [
     lod("essentiel", t("Hôtel 3★", "3★ hotel", "فندق 3 نجوم"), t("Proche de la plage, petit-déjeuner", "Near the beach, breakfast", "قرب الشاطئ مع الفطور"), 500),
     lod("confort", t("Hôtel 4★", "4★ hotel", "فندق 4 نجوم"), t("Piscine, demi-pension", "Pool, half board", "مسبح ونصف إقامة"), 850),
-    lod("prestige", t("Hôtel ou resort 5★", "5★ hotel or resort", "فندق أو منتجع 5 نجوم"), t("Front de mer, demi-pension", "Seafront, half board", "على الواجهة البحرية بنصف إقامة"), 1500),
+    lod("luxe", t("Hôtel ou resort 5★", "5★ hotel or resort", "فندق أو منتجع 5 نجوم"), t("Front de mer, demi-pension", "Seafront, half board", "على الواجهة البحرية بنصف إقامة"), 1500),
   ],
   abroad: [
     lod("essentiel", t("Hôtel 3★", "3★ hotel", "فندق 3 نجوم"), t("Bien situé, petit-déjeuner", "Well located, breakfast", "موقع جيد مع الفطور"), 700),
     lod("confort", t("Hôtel 4★", "4★ hotel", "فندق 4 نجوم"), t("Central, petit-déjeuner", "Central, breakfast", "في المركز مع الفطور"), 1100),
-    lod("prestige", t("Hôtel 5★", "5★ hotel", "فندق 5 نجوم"), t("Haut de gamme, petit-déjeuner", "Upscale, breakfast", "فاخر مع الفطور"), 2000),
+    lod("luxe", t("Hôtel 5★", "5★ hotel", "فندق 5 نجوم"), t("Haut de gamme, petit-déjeuner", "Upscale, breakfast", "فاخر مع الفطور"), 2000),
   ],
 };
 

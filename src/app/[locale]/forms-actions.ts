@@ -10,7 +10,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { clientIp, rateLimit } from "@/lib/security";
 import { site } from "@/lib/site";
 import { getComposerDestination } from "@/lib/composer-data";
-import { buildProgram, choiceSchema, computePrice, lengthLabel, onSiteKey, tripLength } from "@/lib/composer-engine";
+import { buildProgram, choiceSchema, computePrice, lengthLabel, lodgingName, onSiteKey, tripLength } from "@/lib/composer-engine";
 
 const optInt = (min: number, max: number) => z.coerce.number().int().min(min).max(max).optional().or(z.literal("").transform(() => undefined));
 const optStr = (max: number) => z.string().trim().max(max).optional().or(z.literal(""));
@@ -91,7 +91,8 @@ export async function submitRequest(_prev: FormState, formData: FormData): Promi
     const len = tripLength(dest.cities, dest.config, dest.pos, choice.data.city, choice.data.nights);
     data.durationDays = len.days;
     data.travelers = choice.data.travelers;
-    const lodging = dest.config.lodging.find((l) => l.key === choice.data.lodging)?.label.fr ?? choice.data.lodging;
+    const lo = dest.config.lodging.find((l) => l.key === choice.data.lodging);
+    const lodging = lo ? lodgingName(dest.cities, lo, "fr") : choice.data.lodging;
     message += [
       "",
       "",
