@@ -19,7 +19,9 @@
     "test:booking": "node scripts/test-booking-flow.mjs",
     "test:agence": "node scripts/test-agence.mjs",
     "test:load": "node scripts/load-test.mjs",
-    "test:security": "node scripts/test-security.mjs"
+    "test:security": "node scripts/test-security.mjs",
+    "db:purge": "tsx prisma/purge.ts",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.7.0",
@@ -55,7 +57,8 @@
     "prisma": "^7.10.1",
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.12"
   },
   "allowScripts": {
     "better-sqlite3@12.11.1": true,

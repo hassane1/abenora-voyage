@@ -122,7 +122,10 @@ export async function createBooking(raw: unknown, opts: { customerId?: string | 
   const { circuit, options, price, promo } = await quote(input, locale);
   // programme à grille : le choix hébergement / chambre est obligatoire et doit exister dans la grille
   if (circuit.priceGrid && price.onRequest) throw new BookingError("INVALID");
-  const departure = await db.departure.findFirst({ where: { id: input.departureId, circuitId: circuit.id } });
+  // départs passés refusés (même borne que /api/departures : aujourd'hui à 00:00 UTC)
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const departure = await db.departure.findFirst({ where: { id: input.departureId, circuitId: circuit.id, date: { gte: today } } });
   if (!departure) throw new BookingError("NOT_FOUND");
   const prefix = (await getBrand()).bookingPrefix;
 
@@ -187,6 +190,9 @@ export async function changeBookingStatus(bookingId: string, toStatus: "CONFIRME
   const travelers = booking.adults + booking.children;
 
   const updated = await db.$transaction(async (tx) => {
+    // Garde anti-concurrence : le statut ne change que s'il est toujours celui lu plus haut
+    const g = await tx.booking.updateMany({ where: { id: bookingId, status: booking.status }, data: { status: toStatus } });
+    if (g.count !== 1) return null;
     const wasHolding = HOLDS_SEATS.has(booking.status);
     const willHold = HOLDS_SEATS.has(toStatus);
     if (wasHolding && !willHold) {
@@ -196,10 +202,12 @@ export async function changeBookingStatus(bookingId: string, toStatus: "CONFIRME
         WHERE "id" = ${booking.departureId} AND "seatsHeld" + ${travelers} <= "capacity"`;
       if (n !== 1) throw new BookingError("SOLD_OUT");
     }
-    const b = await tx.booking.update({ where: { id: bookingId }, data: { status: toStatus } });
     await tx.bookingEvent.create({ data: { bookingId, type: "STATUS_CHANGED", fromStatus: booking.status, toStatus, actor, note: note || null } });
-    return b;
+    return tx.booking.findUniqueOrThrow({ where: { id: bookingId } });
   });
+
+  // statut modifié entre-temps par une autre requête : rien n'a été fait, pas de notification
+  if (!updated) return db.booking.findUniqueOrThrow({ where: { id: bookingId } });
 
   if (toStatus !== "PENDING") await notifyStatusChanged(updated.id, note);
   return updated;
