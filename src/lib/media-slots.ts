@@ -4,8 +4,10 @@
  * Une carte de circuit sans photo propre reprend celle de sa destination.
  */
 export const MEDIA_SLOTS = [
-  { key: "hero", label: "Accueil : hero (1re image)" },
-  { key: "heroAlt", label: "Accueil : hero (2e image) et page Circuits" },
+  { key: "homeHero", label: "Accueil : hero (1re image ; vide = visuel de marque)" },
+  { key: "homeHeroAlt", label: "Accueil : hero (2e image du diaporama)" },
+  { key: "hero", label: "Pages destination : photo de présentation" },
+  { key: "heroAlt", label: "Page Circuits : bannière ; bas des pages destination" },
   { key: "omra", label: "Accueil : fond du bloc Omra & Hajj" },
   { key: "dunes", label: "Dunes (Merzouga, galerie, conseils)" },
   { key: "merzouga", label: "Page Destinations : bannière" },

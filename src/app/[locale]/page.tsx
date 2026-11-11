@@ -48,8 +48,9 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
     getBrand(),
   ]);
 
-  // hero : diaporama lent des photos avec droits confirmés, sinon visuels de marque
-  const heroPhotos = [photo("hero"), photo("heroAlt"), photo("destination:marrakech"), photo("destination:omra-la-mecque-medine")].filter((p) => !!p);
+  // hero : diaporama lent des photos placées sur « homeHero » / « homeHeroAlt » dans Médias, sinon visuel de marque
+  // (emplacements propres à l'accueil : les photos des destinations et des autres pages n'y apparaissent pas)
+  const heroPhotos = [photo("homeHero"), photo("homeHeroAlt")].filter((p) => !!p);
   const heroSlides = heroPhotos.length ? heroPhotos : [undefined];
 
   // circuits mis en avant : un mélange Maroc / international / Omra
