@@ -34,7 +34,7 @@ export default async function ComposerAdmin({ searchParams }: PageProps<"/admin/
       </Card>
 
       {cities?.success && (
-        <Card title="Gammes d&apos;hébergement (toutes les destinations)" className="mt-6">
+        <Card title="Gammes d&apos;hébergement et pack complet (toutes les destinations)" className="mt-6">
           <form action={saveComposerTiers} className="space-y-3 text-sm">
             <p className="text-muted">Les trois gammes s&apos;affichent en titre des cartes « Hébergement » du configurateur ; le type d&apos;hébergement propre à chaque destination apparaît en sous-titre.</p>
             <div className="grid gap-3 sm:grid-cols-3">
@@ -47,7 +47,11 @@ export default async function ComposerAdmin({ searchParams }: PageProps<"/admin/
                 </fieldset>
               ))}
             </div>
-            <button className="btn btn-primary !py-2 text-sm">Enregistrer les gammes</button>
+            <label className="block max-w-xs">
+              <span className="label text-xs">Pack complet (toutes les activités) : réduction en %</span>
+              <input name="packDiscountPercent" type="number" min={0} max={50} step={1} defaultValue={cities.data.packDiscountPercent} className="field !py-1.5" />
+            </label>
+            <button className="btn btn-primary !py-2 text-sm">Enregistrer les gammes et le pack</button>
           </form>
         </Card>
       )}

@@ -100,7 +100,9 @@ export async function submitRequest(_prev: FormState, formData: FormData): Promi
       `Durée : ${lengthLabel("fr", len.days, len.nights, len.travelDay)}`,
       `Hébergement : ${lodging}`,
       ...program.map((p) => `J${p.day} · ${p.title} : ${p.items.map((i) => i.text).join(" ; ")}`),
-      ...price.lines.map((l) => `${l.label} : ${l.amount} MAD/pers.`),
+      ...price.lines.filter((l) => l.key !== "pack").map((l) => `${l.label} : ${l.amount} MAD/pers.`),
+      ...(price.activities.subtotal > 0 ? [`Sous-total activités : ${price.activities.subtotal} MAD/pers.`] : []),
+      ...price.lines.filter((l) => l.key === "pack").map((l) => `${l.label} : ${l.amount} MAD/pers.`),
       `Estimation DÉMO : ${price.perPerson} MAD/pers. · ${price.total} MAD pour ${choice.data.travelers} pers.`,
     ].join("\n");
   }

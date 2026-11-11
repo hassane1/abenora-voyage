@@ -52,6 +52,7 @@ export const cities = {
   transportBaseMad: 150,
   transportPerKmMad: 0.6,
   tiers,
+  packDiscountPercent: 15, // DÉMO : réduction du « pack complet » sur les activités
 };
 
 /** aéroports marocains proposés pour les destinations internationales */

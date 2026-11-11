@@ -71,6 +71,8 @@ export async function saveComposerTiers(formData: FormData) {
     const v = String(formData.get(`${k}:${l}`) ?? "").trim().slice(0, 40);
     if (v) cfg.tiers[k][l] = v;
   }
+  const pack = num(formData, "packDiscountPercent");
+  if (pack !== null && pack >= 0 && pack <= 50) cfg.packDiscountPercent = Math.round(pack);
   await db.setting.update({ where: { key: "composer:cities" }, data: { value: JSON.stringify(citiesConfigSchema.parse(cfg)) } });
   await audit(admin.email, "COMPOSER_TIERS", "composer:cities");
   revalidatePath("/", "layout");

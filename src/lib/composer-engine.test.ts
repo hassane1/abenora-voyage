@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildProgram, computePrice, lengthLabel, onSiteKey, tripLength, type CitiesConfig, type DestConfig } from "./composer-engine";
+import { buildProgram, computePrice, isFullPack, lengthLabel, onSiteKey, packDiscount, tripLength, type CitiesConfig, type DestConfig } from "./composer-engine";
 
 const L = (s: string) => ({ fr: s, en: s, ar: s });
 const LL = (a: string[]) => ({ fr: a, en: a, ar: a });
@@ -14,6 +14,7 @@ const cities: CitiesConfig = {
   transportBaseMad: 150,
   transportPerKmMad: 0.6,
   tiers: { essentiel: L("Essentiel"), confort: L("Confort"), luxe: L("Luxe") },
+  packDiscountPercent: 15,
 };
 const base = (mode: "ROAD" | "FLIGHT"): DestConfig => ({
   mode,
@@ -67,5 +68,34 @@ describe("règle de durée : jours = nuits d'hôtel + 1 (+ 1 journée de trajet 
     expect(p.total).toBe(2800);
     expect(computePrice(cities, base("ROAD"), marrakech, { ...c, nights: 9 }, "fr")).toBeNull();
     expect(computePrice(cities, base("ROAD"), marrakech, { ...c, options: ["inconnue"] }, "fr")).toBeNull();
+  });
+});
+
+describe("pack complet des activités", () => {
+  const dest = { ...base("ROAD"), options: [
+    { code: "quad", label: L("Quad"), priceMad: 400, duration: L("1 h"), level: "MODERE" as const, audience: L("") },
+    { code: "diner", label: L("Dîner"), priceMad: 250, duration: L("2 h"), level: "FACILE" as const, audience: L("") },
+  ] };
+  const c = { destination: "x", city: onSiteKey, nights: 2, travelers: 2, lodging: "confort", options: ["quad", "diner"] };
+  it("réduction de 15 % sur le sous-total des activités, arrondie à 10 MAD", () => {
+    expect(packDiscount(650, 15)).toBe(100); // 97,5 → 100
+    expect(packDiscount(0, 15)).toBe(0);
+    expect(packDiscount(100, 100)).toBe(100);
+  });
+  it("pack coché avec toutes les activités : ligne de réduction et total recalculé", () => {
+    const p = computePrice(cities, dest, marrakech, { ...c, pack: true }, "fr")!;
+    expect(p.activities).toEqual({ subtotal: 650, packDiscount: 100, packPercent: 15 });
+    expect(p.lines.find((l) => l.key === "pack")!.amount).toBe(-100);
+    expect(p.perPerson).toBe(1000 + 650 - 100);
+    expect(p.total).toBe(p.perPerson * 2);
+  });
+  it("sans pack : aucune réduction", () => {
+    const p = computePrice(cities, dest, marrakech, c, "fr")!;
+    expect(p.activities.packDiscount).toBe(0);
+    expect(p.lines.some((l) => l.key === "pack")).toBe(false);
+  });
+  it("pack demandé sans toutes les activités : refusé par le serveur", () => {
+    expect(isFullPack(dest, ["quad"])).toBe(false);
+    expect(computePrice(cities, dest, marrakech, { ...c, options: ["quad"], pack: true }, "fr")).toBeNull();
   });
 });

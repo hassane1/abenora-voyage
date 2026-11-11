@@ -32,6 +32,9 @@ const T = {
     lodging: "Hébergement",
     perNight: "/ nuit / pers.",
     options: "Activités en option",
+    pack: "Pack complet – toutes les activités",
+    packHint: (p: number) => `-${p} % sur les activités`,
+    activitiesSubtotal: "Sous-total activités",
     create: "Créer mon programme",
     noCommitment: "Gratuit et sans engagement · aucun paiement en ligne",
     previewTitle: "Votre voyage sur mesure, en un clic",
@@ -78,6 +81,9 @@ const T = {
     lodging: "Accommodation",
     perNight: "/ night / pers.",
     options: "Optional activities",
+    pack: "Full pack – all activities",
+    packHint: (p: number) => `-${p}% on activities`,
+    activitiesSubtotal: "Activities subtotal",
     create: "Create my programme",
     noCommitment: "Free, no obligation · no online payment",
     previewTitle: "Your tailor-made trip, in one click",
@@ -124,6 +130,9 @@ const T = {
     lodging: "الإقامة",
     perNight: "/ ليلة / للفرد",
     options: "أنشطة اختيارية",
+    pack: "الباقة الكاملة – جميع الأنشطة",
+    packHint: (p: number) => `-${p}٪ على الأنشطة`,
+    activitiesSubtotal: "المجموع الفرعي للأنشطة",
     create: "أنشئ برنامجي",
     noCommitment: "مجاني ودون التزام · لا دفع عبر الإنترنت",
     previewTitle: "رحلتك حسب الطلب بنقرة واحدة",
@@ -175,6 +184,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
   const [travelers, setTravelers] = useState(2);
   const [lodging, setLodging] = useState(initial?.config.lodging[1]?.key ?? initial?.config.lodging[0]?.key ?? "");
   const [options, setOptions] = useState<string[]>([]);
+  const [pack, setPack] = useState(false);
   const [result, setResult] = useState<null | { program: ProgramDay[]; price: ComposerPrice | null; summary: string }>(null);
   const [loading, setLoading] = useState(false);
   const [state, action, pending] = useActionState<FormState, FormData>(submitRequest, null);
@@ -193,6 +203,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
         setData(j);
         setResult(null);
         setOptions([]);
+        setPack(false);
         setNights(j.config.durations.default);
         setLodging(j.config.lodging[1]?.key ?? j.config.lodging[0]?.key ?? "");
         const starts = startCities(j.cities, j.config);
@@ -212,7 +223,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
 
   const create = async () => {
     setLoading(true);
-    const choice = { destination: data.slug, city, nights, travelers, lodging: lodgingObj.key, options };
+    const choice = { destination: data.slug, city, nights, travelers, lodging: lodgingObj.key, options, pack };
     const program = buildProgram(data.cities, cfg, data.pos, choice, locale);
     let price: ComposerPrice | null = null;
     try {
@@ -230,7 +241,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
     requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
-  const choiceJson = JSON.stringify({ destination: data.slug, city, nights, travelers, lodging: lodgingObj.key, options });
+  const choiceJson = JSON.stringify({ destination: data.slug, city, nights, travelers, lodging: lodgingObj.key, options, pack });
   const wa = result && whatsappLink(`${t.yourProgram} — ${result.summary}`);
   const national = destinations.filter((x) => x.scope === "NATIONAL");
   const international = destinations.filter((x) => x.scope === "INTERNATIONAL");
@@ -383,6 +394,25 @@ export default function TripComposer({ locale, destinations, initial }: { locale
                 <legend className="flex items-center gap-2 text-sm font-bold text-night">
                   <StepNum n={4} /> {t.options}
                 </legend>
+                {cfg.options.length > 1 && (
+                  <label className={`mt-3 flex cursor-pointer items-center gap-3 rounded-2xl p-3 text-sm transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-gold ${pack ? "bg-emerald text-white shadow-md" : "bg-emerald/5 text-night ring-1 ring-emerald/30 hover:ring-emerald"}`}>
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={pack}
+                      onChange={() => {
+                        // pack : toutes les activités cochées ; le retirer garde les activités mais supprime la réduction
+                        if (!pack) setOptions(cfg.options.map((o) => o.code));
+                        setPack(!pack);
+                      }}
+                    />
+                    <span aria-hidden className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${pack ? "bg-gold text-night" : "bg-white text-emerald"}`}>
+                      <Icon name={pack ? "check" : "sparkle"} className="h-4 w-4" />
+                    </span>
+                    <span className="flex-1 font-semibold">{t.pack}</span>
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${pack ? "bg-white/15 text-gold-light" : "bg-gold/20 text-gold-deep"}`}>{t.packHint(data.cities.packDiscountPercent)}</span>
+                  </label>
+                )}
                 <div className="mt-3 flex flex-wrap gap-2">
                   {cfg.options.map((o) => {
                     const on = options.includes(o.code);
@@ -392,7 +422,10 @@ export default function TripComposer({ locale, destinations, initial }: { locale
                         title={`${o.duration[locale]} · ${t.level[o.level]} · ${o.audience[locale]}`}
                         className={`flex cursor-pointer items-center gap-2 rounded-full py-2 pe-4 ps-2 text-sm font-medium transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-gold ${on ? "bg-night text-white shadow-md" : "bg-white text-night ring-1 ring-night/15 hover:ring-gold"}`}
                       >
-                        <input type="checkbox" className="sr-only" checked={on} onChange={() => setOptions(on ? options.filter((x) => x !== o.code) : [...options, o.code])} />
+                        <input type="checkbox" className="sr-only" checked={on} onChange={() => {
+                            setOptions(on ? options.filter((x) => x !== o.code) : [...options, o.code]);
+                            if (on) setPack(false); // une activité décochée : le pack et sa réduction sont retirés
+                          }} />
                         <span aria-hidden className={`grid h-7 w-7 place-items-center rounded-full ${on ? "bg-gold text-night" : "bg-ivory text-gold-deep"}`}>
                           <Icon name={on ? "check" : "plus"} className="h-4 w-4" />
                         </span>
@@ -504,12 +537,28 @@ export default function TripComposer({ locale, destinations, initial }: { locale
                 {result.price && (
                   <div className="mt-6 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
                     <ul className="space-y-1 text-sm text-white/75">
-                      {result.price.lines.map((l) => (
-                        <li key={l.key} className="flex justify-between gap-4">
-                          <span>{l.label}</span>
-                          <span className="shrink-0 tabular-nums">{formatMad(l.amount, locale)}</span>
+                      {result.price.lines
+                        .filter((l) => l.key !== "pack")
+                        .map((l) => (
+                          <li key={l.key} className="flex justify-between gap-4">
+                            <span>{l.label}</span>
+                            <span className="shrink-0 tabular-nums">{formatMad(l.amount, locale)}</span>
+                          </li>
+                        ))}
+                      {result.price.activities.subtotal > 0 && (
+                        <li className="flex justify-between gap-4 border-t border-white/10 pt-1 font-semibold text-white/85">
+                          <span>{t.activitiesSubtotal}</span>
+                          <span className="shrink-0 tabular-nums">{formatMad(result.price.activities.subtotal, locale)}</span>
                         </li>
-                      ))}
+                      )}
+                      {result.price.lines
+                        .filter((l) => l.key === "pack")
+                        .map((l) => (
+                          <li key={l.key} className="flex justify-between gap-4 font-semibold text-emerald-300">
+                            <span>{l.label}</span>
+                            <span className="shrink-0 tabular-nums">−{formatMad(-l.amount, locale)}</span>
+                          </li>
+                        ))}
                     </ul>
                     <div className="mt-3 flex items-baseline justify-between gap-4 border-t border-white/10 pt-3">
                       <span className="text-sm text-white/70">

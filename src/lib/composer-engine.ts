@@ -32,6 +32,7 @@ export const citiesConfigSchema = z.object({
   transportBaseMad: z.number().min(0).max(100000).default(150), // DÉMO : forfait transport aller-retour par personne
   transportPerKmMad: z.number().min(0).max(100).default(0.6), // DÉMO : par km (aller simple) et par personne
   tiers: z.object({ essentiel: L, confort: L, luxe: L }).default(DEFAULT_TIERS), // libellés des gammes, modifiables dans l'admin
+  packDiscountPercent: z.number().min(0).max(50).default(15), // DÉMO : réduction « pack complet » sur le total des activités
 });
 export type City = z.infer<typeof citySchema>;
 export type CitiesConfig = z.infer<typeof citiesConfigSchema>;
@@ -54,7 +55,7 @@ export const destConfigSchema = z.object({
 });
 export type DestConfig = z.infer<typeof destConfigSchema>;
 
-export type ComposerChoice = { destination: string; city: string; nights: number; travelers: number; lodging: string; options: string[] };
+export type ComposerChoice = { destination: string; city: string; nights: number; travelers: number; lodging: string; options: string[]; pack?: boolean };
 export const choiceSchema = z.object({
   destination: z.string().regex(/^[a-z0-9-]{2,80}$/),
   city: z.string().regex(/^[a-z0-9-]{2,40}$/),
@@ -62,6 +63,7 @@ export const choiceSchema = z.object({
   travelers: z.number().int().min(1).max(30),
   lodging: z.string().max(30),
   options: z.array(z.string().max(40)).max(10),
+  pack: z.boolean().optional(), // « pack complet » : toutes les activités, avec réduction
 });
 
 const ONSITE = "sur-place";
@@ -227,12 +229,24 @@ export function buildProgram(cfg: CitiesConfig, dest: DestConfig, destPos: { lat
   return out;
 }
 
-export type ComposerPrice = { isDemo: true; perPerson: number; total: number; lines: { key: string; label: string; amount: number }[] };
+export type ComposerPrice = {
+  isDemo: true;
+  perPerson: number;
+  total: number;
+  lines: { key: string; label: string; amount: number }[];
+  /** activités (par personne) : sous-total avant réduction, réduction du pack (0 si pas de pack), taux appliqué */
+  activities: { subtotal: number; packDiscount: number; packPercent: number };
+};
+
+/** le pack n'est valable que si TOUTES les activités de la destination sont choisies */
+export const isFullPack = (dest: DestConfig, options: string[]) => dest.options.length > 0 && dest.options.every((o) => options.includes(o.code));
+/** réduction du pack, arrondie à 10 MAD (jamais négative, jamais supérieure au sous-total) */
+export const packDiscount = (subtotal: number, percent: number) => Math.min(subtotal, Math.max(0, Math.round((subtotal * percent) / 100 / 10) * 10));
 
 const P = {
-  fr: { lodging: (l: string, n: number) => `Hébergement ${l} (${n} nuit${n > 1 ? "s" : ""} d'hôtel) et services de base`, transport: "Transport aller-retour (estimation)", flight: "Vol aller-retour (estimation)", option: (l: string) => l },
-  en: { lodging: (l: string, n: number) => `${l} accommodation (${n} hotel night${n > 1 ? "s" : ""}) and core services`, transport: "Return transport (estimate)", flight: "Return flight (estimate)", option: (l: string) => l },
-  ar: { lodging: (l: string, n: number) => `الإقامة ${l} (${arNights(n)}) والخدمات الأساسية`, transport: "النقل ذهاباً وإياباً (تقدير)", flight: "الطيران ذهاباً وإياباً (تقدير)", option: (l: string) => l },
+  fr: { pack: (p: number) => `Réduction pack complet (-${p} %)`, lodging: (l: string, n: number) => `Hébergement ${l} (${n} nuit${n > 1 ? "s" : ""} d'hôtel) et services de base`, transport: "Transport aller-retour (estimation)", flight: "Vol aller-retour (estimation)", option: (l: string) => l },
+  en: { pack: (p: number) => `Full pack discount (-${p}%)`, lodging: (l: string, n: number) => `${l} accommodation (${n} hotel night${n > 1 ? "s" : ""}) and core services`, transport: "Return transport (estimate)", flight: "Return flight (estimate)", option: (l: string) => l },
+  ar: { pack: (p: number) => `تخفيض الباقة الكاملة (-${p}٪)`, lodging: (l: string, n: number) => `الإقامة ${l} (${arNights(n)}) والخدمات الأساسية`, transport: "النقل ذهاباً وإياباً (تقدير)", flight: "الطيران ذهاباً وإياباً (تقدير)", option: (l: string) => l },
 };
 /** « Confort — Campement confort » : gamme puis type d'hébergement */
 export const lodgingName = (cfg: CitiesConfig, l: { key: TierKey; label: Text }, lang: Lang) => `« ${cfg.tiers[l.key][lang]} — ${l.label[lang]} »`;
@@ -256,6 +270,12 @@ export function computePrice(cfg: CitiesConfig, dest: DestConfig, destPos: { lat
     if (!o) return null;
     lines.push({ key: `option:${o.code}`, label: p.option(o.label[lang]), amount: round50(o.priceMad) });
   }
+  // pack complet : recalculé ici, jamais repris du navigateur ; refusé s'il ne couvre pas toutes les activités
+  const subtotal = lines.filter((l) => l.key.startsWith("option:")).reduce((s, l) => s + l.amount, 0);
+  const full = !!c.pack && isFullPack(dest, c.options);
+  if (c.pack && !full) return null;
+  const discount = full ? packDiscount(subtotal, cfg.packDiscountPercent) : 0;
+  if (discount > 0) lines.push({ key: "pack", label: p.pack(cfg.packDiscountPercent), amount: -discount });
   const perPerson = lines.reduce((s, l) => s + l.amount, 0);
-  return { isDemo: true, perPerson, total: perPerson * c.travelers, lines };
+  return { isDemo: true, perPerson, total: perPerson * c.travelers, lines, activities: { subtotal, packDiscount: discount, packPercent: full ? cfg.packDiscountPercent : 0 } };
 }
