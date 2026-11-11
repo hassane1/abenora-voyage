@@ -613,5 +613,65 @@
       "en": "Berber tent camp at the foot of the dunes",
       "ar": "مخيم خيام أمازيغية عند الكثبان"
     }
+  },
+  {
+    "slot": "activity:khamlia-gnawa",
+    "title": "File:Khamlia Gnawa band members.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Khamlia_Gnawa_band_members.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Khamlia_Gnawa_band_members.jpg/1920px-Khamlia_Gnawa_band_members.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Withkarim",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Khamlia, Merzouga",
+    "alt": {
+      "fr": "Musiciens gnaoua de Khamlia en tenue blanche, vus de dos",
+      "en": "Gnawa musicians of Khamlia in white robes, seen from behind",
+      "ar": "موسيقيو كناوة في خملية بلباس أبيض من الخلف"
+    }
+  },
+  {
+    "slot": "activity:diner-etoiles",
+    "title": "File:Merzouga Desert.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Merzouga_Desert.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Merzouga_Desert.jpg/1920px-Merzouga_Desert.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Mohamed Rharnati",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Palmiers sous la lune dans le désert de Merzouga",
+      "en": "Palm trees under the moon in the Merzouga desert",
+      "ar": "نخيل تحت ضوء القمر في صحراء مرزوكة"
+    }
+  },
+  {
+    "slot": "activity:randonnee-guidee",
+    "title": "File:Where? follow me- (Unsplash).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Where%3F_follow_me-_(Unsplash).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Where%3F_follow_me-_%28Unsplash%29.jpg/1920px-Where%3F_follow_me-_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Rubén Bagüés rubavi78",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Marcheur seul dans les dunes de l'Erg Chebbi",
+      "en": "A lone walker in the Erg Chebbi dunes",
+      "ar": "متجول وحيد في كثبان عرق الشبي"
+    }
+  },
+  {
+    "slot": "activity:degustation",
+    "title": "File:Moroccan tagine.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Moroccan_tagine.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Moroccan_tagine.jpg/1920px-Moroccan_tagine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Khammal92",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Maroc",
+    "alt": {
+      "fr": "Couscous aux légumes servi dans un plat en terre",
+      "en": "Vegetable couscous served in an earthenware dish",
+      "ar": "كسكس بالخضر في طبق فخاري"
+    }
   }
 ]
