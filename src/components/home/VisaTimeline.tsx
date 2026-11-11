@@ -3,7 +3,7 @@ import type { Locale } from "@/i18n/config";
 import { getSignature } from "@/i18n/signature";
 import { Icon } from "../Icon";
 
-/** Bloc signature Visas USA / UK / Canada : frise des étapes du dossier */
+/** Bloc signature Visas (Schengen et autres destinations) : frise des étapes du dossier */
 export default function VisaTimeline({ locale }: { locale: Locale }) {
   const s = getSignature(locale).visa;
   return (

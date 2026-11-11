@@ -57,9 +57,9 @@ const fr = {
   },
   visa: {
     eyebrow: "Visas",
-    title: "Votre dossier visa USA, Royaume-Uni, Canada, de A à Z",
+    title: "Votre dossier visa de A à Z : Europe (Schengen) et autres destinations",
     text: "Nous préparons et suivons votre dossier à chaque étape. La décision finale appartient toujours au consulat.",
-    countries: ["États-Unis", "Royaume-Uni", "Canada"],
+    countries: ["Espace Schengen", "Autres destinations"],
     steps: [
       { title: "Premier échange", text: "Votre projet, vos dates, la liste des pièces à réunir." },
       { title: "Formulaires", text: "Remplissage des formulaires officiels et vérification." },
@@ -167,9 +167,9 @@ const en: Signature = {
   },
   visa: {
     eyebrow: "Visas",
-    title: "Your USA, UK and Canada visa file, from A to Z",
+    title: "Your visa file from A to Z: Europe (Schengen) and other destinations",
     text: "We prepare and follow your file at every step. The final decision always rests with the consulate.",
-    countries: ["United States", "United Kingdom", "Canada"],
+    countries: ["Schengen area", "Other destinations"],
     steps: [
       { title: "First chat", text: "Your plans, your dates, the list of documents to gather." },
       { title: "Forms", text: "Official forms filled in and checked." },
@@ -275,9 +275,9 @@ const ar: Signature = {
   },
   visa: {
     eyebrow: "التأشيرات",
-    title: "ملف تأشيرتكم إلى أمريكا وبريطانيا وكندا، من الألف إلى الياء",
+    title: "ملف تأشيرتكم من الألف إلى الياء: أوروبا (شنغن) ووجهات أخرى",
     text: "نُعدّ ملفكم ونتابعه في كل مرحلة. ويبقى القرار النهائي دائماً للقنصلية.",
-    countries: ["الولايات المتحدة", "المملكة المتحدة", "كندا"],
+    countries: ["فضاء شنغن", "وجهات أخرى"],
     steps: [
       { title: "أول لقاء", text: "مشروعكم وتواريخكم ولائحة الوثائق المطلوبة." },
       { title: "الاستمارات", text: "ملء الاستمارات الرسمية والتحقق منها." },
