@@ -87,7 +87,7 @@ const fr = {
     items: [
       { icon: "shield", title: "Rien à payer avant confirmation", text: "Vous ne réglez rien tant que votre voyage n'est pas confirmé par écrit." },
       { icon: "file", title: "Un programme écrit", text: "Étapes, hôtels, inclus et conditions d'annulation remis avant tout paiement." },
-      { icon: "euro", title: "Des prix honnêtes", text: "Un prix « dès » est un vrai prix ; sinon nous l'indiquons « sur demande »." },
+      { icon: "tag", title: "Des prix honnêtes", text: "Un prix « dès » est un vrai prix ; sinon nous l'indiquons « sur demande »." },
       { icon: "whatsapp", title: "Un conseiller joignable", text: "Par téléphone et WhatsApp, avant, pendant et après le voyage." },
       { icon: "lock", title: "Vos données protégées", text: "Utilisées uniquement pour votre voyage, jamais revendues." },
       { icon: "star", title: "Des avis vérifiés", text: "Seuls les voyageurs ayant réellement voyagé avec nous peuvent laisser un avis." },
@@ -197,7 +197,7 @@ const en: Signature = {
     items: [
       { icon: "shield", title: "Nothing to pay before confirmation", text: "You pay nothing until your trip is confirmed in writing." },
       { icon: "file", title: "A written programme", text: "Stages, hotels, inclusions and cancellation terms provided before any payment." },
-      { icon: "euro", title: "Honest prices", text: "A “from” price is a real price; otherwise we say “on request”." },
+      { icon: "tag", title: "Honest prices", text: "A “from” price is a real price; otherwise we say “on request”." },
       { icon: "whatsapp", title: "A reachable advisor", text: "By phone and WhatsApp, before, during and after your trip." },
       { icon: "lock", title: "Your data protected", text: "Used only for your trip, never sold." },
       { icon: "star", title: "Verified reviews", text: "Only travellers who actually travelled with us can leave a review." },
@@ -305,7 +305,7 @@ const ar: Signature = {
     items: [
       { icon: "shield", title: "لا دفع قبل التأكيد", text: "لا تدفعون شيئاً قبل تأكيد رحلتكم كتابياً." },
       { icon: "file", title: "برنامج مكتوب", text: "المراحل والفنادق وما يشمله السعر وشروط الإلغاء قبل أي دفع." },
-      { icon: "euro", title: "أسعار صادقة", text: "سعر «ابتداءً من» سعر حقيقي، وإلا نكتب «حسب الطلب»." },
+      { icon: "tag", title: "أسعار صادقة", text: "سعر «ابتداءً من» سعر حقيقي، وإلا نكتب «حسب الطلب»." },
       { icon: "whatsapp", title: "مستشار متاح", text: "بالهاتف وواتساب، قبل الرحلة وأثناءها وبعدها." },
       { icon: "lock", title: "معطياتكم محمية", text: "تُستعمل لرحلتكم فقط ولا تُباع أبداً." },
       { icon: "star", title: "آراء موثقة", text: "فقط من سافر معنا فعلاً يمكنه ترك رأيه." },

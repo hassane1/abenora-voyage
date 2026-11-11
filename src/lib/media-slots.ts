@@ -20,6 +20,7 @@ export const MEDIA_SLOTS = [
   { key: "palm", label: "Palmeraie (page Conseils)" },
   { key: "aitbenhaddou", label: "Aït-Ben-Haddou (page Voyages Maroc)" },
   { key: "about", label: "Page À propos : bannière" },
+  ...[1, 2, 3, 4, 5, 6].map((n) => ({ key: `engagement-${n}`, label: `Accueil : engagements, vignette ${n}` })),
   { key: "aitGuide", label: "Page À propos : bannière de secours (si « about » est vide)" },
   { key: "aitPalm", label: "Page Avis : bannière" },
 ] as const;

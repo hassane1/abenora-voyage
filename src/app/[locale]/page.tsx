@@ -232,7 +232,7 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
       {/* ───────── AVIS VÉRIFIÉS, sinon NOS ENGAGEMENTS ───────── */}
       {reviews.length === 0 ? (
         <div className="pt-section">
-          <Commitments locale={locale} />
+          <Commitments locale={locale} photos={[1, 2, 3, 4, 5, 6].map((n) => photo(`engagement-${n}`))} whatsapp={wa} contactLabel={t.nav.contact} />
         </div>
       ) : (
         <section className="mt-section bg-white py-section">
