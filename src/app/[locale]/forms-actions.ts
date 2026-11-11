@@ -9,6 +9,8 @@ import { getV2 } from "@/i18n/v2";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { clientIp, rateLimit } from "@/lib/security";
 import { site } from "@/lib/site";
+import { getComposerDestination } from "@/lib/composer-data";
+import { buildProgram, choiceSchema, computePrice, onSiteKey } from "@/lib/composer-engine";
 
 const optInt = (min: number, max: number) => z.coerce.number().int().min(min).max(max).optional().or(z.literal("").transform(() => undefined));
 const optStr = (max: number) => z.string().trim().max(max).optional().or(z.literal(""));
@@ -32,6 +34,7 @@ const schema = z.object({
   locale: z.string().max(5),
   consent: z.literal("on"),
   website: z.string().max(0).optional(), // champ piège anti-robot
+  composer: z.string().max(2000).optional(), // choix du configurateur (JSON), recalculé côté serveur
 });
 
 export type FormState = { ok: boolean; error?: string; reference?: string } | null;
@@ -51,13 +54,43 @@ export async function submitRequest(_prev: FormState, formData: FormData): Promi
   if (!parsed.success) return { ok: false, error: "INVALID" };
   const lim = await rateLimit(`request:${await clientIp()}`, 8, 3600);
   if (!lim.ok) return { ok: false, error: "RATE_LIMIT" };
-  const { website: _hp, consent: _c, needs, startDate, comfort, transport, ...data } = parsed.data;
+  const { website: _hp, consent: _c, needs, startDate, comfort, transport, composer, ...data } = parsed.data;
   void _hp;
   void _c;
   const locale: Locale = hasLocale(data.locale) ? data.locale : "fr";
+  let message = needs ? `${data.message}\n\n— ${getV2("fr").tailorForm.needs} : ${needs}` : data.message;
+  // configurateur : programme et estimation DÉMO recalculés ici, à partir des données en base
+  // (le récapitulatif envoyé par le navigateur ne fait pas foi)
+  if (composer) {
+    let raw: unknown = null;
+    try {
+      raw = JSON.parse(composer);
+    } catch {
+      raw = null;
+    }
+    const choice = choiceSchema.safeParse(raw);
+    const dest = choice.success ? await getComposerDestination(choice.data.destination, "fr") : null;
+    const price = choice.success && dest ? computePrice(dest.cities, dest.config, dest.pos, choice.data, "fr") : null;
+    if (!choice.success || !dest || !price) return { ok: false, error: "INVALID" };
+    const program = buildProgram(dest.cities, dest.config, dest.pos, choice.data, "fr");
+    const cityName = choice.data.city === onSiteKey ? "Sur place" : (dest.cities.cities.find((c) => c.key === choice.data.city)?.name.fr ?? choice.data.city);
+    data.destination = dest.name;
+    data.departureCity = cityName;
+    data.durationDays = choice.data.days;
+    data.travelers = choice.data.travelers;
+    const lodging = dest.config.lodging.find((l) => l.key === choice.data.lodging)?.label.fr ?? choice.data.lodging;
+    message += [
+      "",
+      "",
+      "— Programme composé en ligne (tarifs DÉMO) —",
+      `Hébergement : ${lodging}`,
+      ...program.map((p) => `J${p.day} · ${p.title} : ${p.items.map((i) => i.text).join(" ; ")}`),
+      ...price.lines.map((l) => `${l.label} : ${l.amount} MAD/pers.`),
+      `Estimation DÉMO : ${price.perPerson} MAD/pers. · ${price.total} MAD pour ${choice.data.travelers} pers.`,
+    ].join("\n");
+  }
   let reference = newReference();
   while (await db.quoteRequest.findUnique({ where: { reference } })) reference = newReference();
-  const message = needs ? `${data.message}\n\n— ${getV2("fr").tailorForm.needs} : ${needs}` : data.message;
   const req = await db.quoteRequest.create({
     data: {
       ...data,

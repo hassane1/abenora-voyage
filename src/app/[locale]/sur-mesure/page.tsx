@@ -59,9 +59,9 @@ export default async function TailorMadePage({ params, searchParams }: PageProps
           circuits={circuits.map((c) => ({ slug: c.slug, title: tr(c.title, locale), days: c.days, priceAdultMad: c.priceAdultMad, tags: TAGS[c.slug] ?? [] }))}
         />
       </section>
-      {composer.circuits.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pb-20 lg:px-8">
-          <h2 className="font-display mb-6 text-3xl font-semibold text-night">{t.tailor.title} — Merzouga</h2>
+      {composer.initial && (
+        <section id="composer" className="mx-auto max-w-7xl scroll-mt-28 px-4 pb-20 lg:px-8">
+          <h2 className="font-display mb-6 text-3xl font-semibold text-night">{t.tailor.title}</h2>
           <TripComposer locale={locale} {...composer} />
         </section>
       )}

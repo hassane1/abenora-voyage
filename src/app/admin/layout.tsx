@@ -33,6 +33,7 @@ const NAV: { title: string; items: Item[] }[] = [
       { href: "/admin/activites", label: "Activités", icon: "camel", perm: "catalog.write" },
       { href: "/admin/options", label: "Options & suppléments", icon: "plus", perm: "catalog.write" },
       { href: "/admin/destinations", label: "Destinations", icon: "pin", perm: "catalog.write" },
+      { href: "/admin/configurateur", label: "Configurateur sur mesure", icon: "sparkle", perm: "catalog.write" },
     ],
   },
   {

@@ -15,6 +15,7 @@
     "db:reset": "tsx prisma/seed.ts --reset",
     "db:upgrade": "tsx prisma/upgrade.ts",
     "db:programmes": "tsx prisma/load-programmes.ts",
+    "db:composer": "tsx prisma/load-composer.ts",
     "db:studio": "prisma studio",
     "test:booking": "node scripts/test-booking-flow.mjs",
     "test:agence": "node scripts/test-agence.mjs",

@@ -43,7 +43,9 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
   const reviews = await getPublishedReviews(d.id);
   const [photo, nextDeps, allDeps, brand] = await Promise.all([getPhotos(locale), getNextDepartures(), getUpcomingDepartures(60), getBrand()]);
   const calendar = allDeps.filter((x) => d.circuits.some((c) => c.id === x.circuitId)).slice(0, 12);
-  const composer = d.slug === "merzouga" ? await getComposerData(locale) : null;
+  // configurateur proposé sur chaque destination qui a un programme (préréglé sur cette destination)
+  const composerData = await getComposerData(locale, d.slug);
+  const composer = composerData.initial?.slug === d.slug ? composerData : null;
   const sections = (d.sections ?? {}) as Record<string, unknown>;
   const faq = (Array.isArray(d.faq) ? d.faq : []) as { q: unknown; a: unknown }[];
   const tips = trList(d.tips, locale);
@@ -69,7 +71,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
     ["faq", t.merzouga.faq],
     ["calendrier", calTitle],
     ["reserver", t.merzouga.book],
-  ] as [string, string][]).filter(([id]) => (id === "erg" ? has("erg") : id === "hebergements" ? has("accommodation") : id === "excursions" ? has("excursions") || excursionActs.length > 0 : id === "composer" ? !!composer?.circuits.length : id === "calendrier" ? calendar.length > 0 : true));
+  ] as [string, string][]).filter(([id]) => (id === "erg" ? has("erg") : id === "hebergements" ? has("accommodation") : id === "excursions" ? has("excursions") || excursionActs.length > 0 : id === "composer" ? !!composer : id === "calendrier" ? calendar.length > 0 : true));
 
   const jsonLd = [
     {
@@ -107,7 +109,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
             <a href="#circuits" className="btn btn-sand">
               {t.merzouga.circuits}
             </a>
-            <a href={composer && composer.circuits.length > 0 ? "#composer" : `/${locale}/reservation?destination=${d.slug}`} className="btn btn-ghost text-white">
+            <a href={composer ? "#composer" : `/${locale}/reservation?destination=${d.slug}`} className="btn btn-ghost text-white">
               {t.home.bookAdventure}
             </a>
           </div>
@@ -201,7 +203,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
       </section>
 
       {/* COMPOSER */}
-      {composer && composer.circuits.length > 0 && (
+      {composer && (
         <section id="composer" className="scroll-mt-32 bg-ivory py-24">
           <div className="mx-auto max-w-7xl px-4 lg:px-8">
             <SectionTitle eyebrow={t.nav.tailorMade} title={t.tailor.title} text={t.tailor.intro} />

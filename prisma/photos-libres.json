@@ -843,5 +843,1042 @@
     },
     "file": "faq.webp",
     "width": 1000
+  },
+  {
+    "slot": "composer:marrakech:1",
+    "file": "composer-marrakech-1.webp",
+    "width": 1280,
+    "title": "File:Jemaa el-Fnaa at night.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Jemaa_el-Fnaa_at_night.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Jemaa_el-Fnaa_at_night.jpg/1280px-Jemaa_el-Fnaa_at_night.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "procsilas",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Place Jemaa el-Fna à la tombée de la nuit, Marrakech",
+    "alt": {
+      "fr": "Place Jemaa el-Fna à la tombée de la nuit, Marrakech",
+      "en": "Jemaa el-Fna square at nightfall, Marrakesh",
+      "ar": "ساحة جامع الفنا عند الغروب، مراكش"
+    }
+  },
+  {
+    "slot": "composer:marrakech:2",
+    "file": "composer-marrakech-2.webp",
+    "width": 1280,
+    "title": "File:Le jardin des majorelle 16.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Le_jardin_des_majorelle_16.JPG",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Le_jardin_des_majorelle_16.JPG/1280px-Le_jardin_des_majorelle_16.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Viault",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Jardin Majorelle, Marrakech",
+    "alt": {
+      "fr": "Jardin Majorelle, Marrakech",
+      "en": "Majorelle Garden, Marrakesh",
+      "ar": "حديقة ماجوريل، مراكش"
+    }
+  },
+  {
+    "slot": "composer:marrakech:3",
+    "file": "composer-marrakech-3.webp",
+    "width": 1280,
+    "title": "File:Bahia palace celing 1205.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bahia_palace_celing_1205.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Bahia_palace_celing_1205.jpg/1280px-Bahia_palace_celing_1205.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "C messier",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Plafond décoré du palais de la Bahia, Marrakech",
+    "alt": {
+      "fr": "Plafond décoré du palais de la Bahia, Marrakech",
+      "en": "Decorated ceiling of Bahia Palace, Marrakesh",
+      "ar": "سقف مزخرف في قصر الباهية، مراكش"
+    }
+  },
+  {
+    "slot": "composer:fes:1",
+    "file": "composer-fes-1.webp",
+    "width": 1280,
+    "title": "File:Bab Bou Jeloud Frame Minaret Fes Nov25 A7CR 09127-8 HDR3.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bab_Bou_Jeloud_Frame_Minaret_Fes_Nov25_A7CR_09127-8_HDR3.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Bab_Bou_Jeloud_Frame_Minaret_Fes_Nov25_A7CR_09127-8_HDR3.jpg/1280px-Bab_Bou_Jeloud_Frame_Minaret_Fes_Nov25_A7CR_09127-8_HDR3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "This Photo was taken by Timothy A. Gonsalves. Feel free to use my photos, but please mention me as the author. I would much appreciate if you send me an email tagooty@yahoo.com or write on my talk page, for my information. Please contact me before commercial use. Please do not upload an edited image here without consulting me. I would like to make corrections only at my own source to ensure that the changes improve the image and are preserved.Otherwise you may upload an edited image with a new name. Please use one of the templates derivative or extract.",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Bab Bou Jeloud, la porte bleue de Fès",
+    "alt": {
+      "fr": "Bab Bou Jeloud, la porte bleue de Fès",
+      "en": "Bab Bou Jeloud, the blue gate of Fes",
+      "ar": "باب بوجلود، الباب الأزرق لفاس"
+    }
+  },
+  {
+    "slot": "composer:fes:2",
+    "file": "composer-fes-2.webp",
+    "width": 1280,
+    "title": "File:Leather tanning, Fes.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Leather_tanning,_Fes.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Leather_tanning%2C_Fes.jpg/1280px-Leather_tanning%2C_Fes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Bernard Gagnon",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "place": "Tannerie Chouara, Fès",
+    "alt": {
+      "fr": "Tannerie Chouara, Fès",
+      "en": "Chouara tannery, Fes",
+      "ar": "دباغة الشوارة، فاس"
+    }
+  },
+  {
+    "slot": "composer:chefchaouen:1",
+    "file": "composer-chefchaouen-1.webp",
+    "width": 1280,
+    "title": "File:Chefchaouen, Morocco (5409596611) (4).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chefchaouen,_Morocco_(5409596611)_(4).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Chefchaouen%2C_Morocco_%285409596611%29_%284%29.jpg/1280px-Chefchaouen%2C_Morocco_%285409596611%29_%284%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "YoTuT from United States",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Source de Ras El Maa, Chefchaouen",
+    "alt": {
+      "fr": "Source de Ras El Maa, Chefchaouen",
+      "en": "Ras El Maa spring, Chefchaouen",
+      "ar": "منبع رأس الماء، شفشاون"
+    }
+  },
+  {
+    "slot": "composer:chefchaouen:2",
+    "file": "composer-chefchaouen-2.webp",
+    "width": 1280,
+    "title": "File:Chefchaouen-blue-city-during-thesunset.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chefchaouen-blue-city-during-thesunset.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/Chefchaouen-blue-city-during-thesunset.jpg/1280px-Chefchaouen-blue-city-during-thesunset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Badr Rachadi",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Vue sur Chefchaouen et les montagnes du Rif",
+    "alt": {
+      "fr": "Vue sur Chefchaouen et les montagnes du Rif",
+      "en": "View over Chefchaouen and the Rif mountains",
+      "ar": "منظر على شفشاون وجبال الريف"
+    }
+  },
+  {
+    "slot": "composer:chefchaouen:3",
+    "file": "composer-chefchaouen-3.webp",
+    "width": 1280,
+    "title": "File:Exterior kasbah histórica de Chefchauen.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Exterior_kasbah_hist%C3%B3rica_de_Chefchauen.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Exterior_kasbah_hist%C3%B3rica_de_Chefchauen.jpg/1280px-Exterior_kasbah_hist%C3%B3rica_de_Chefchauen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Fraguando",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Tour de la kasbah de Chefchaouen",
+    "alt": {
+      "fr": "Tour de la kasbah de Chefchaouen",
+      "en": "Chefchaouen kasbah tower",
+      "ar": "برج قصبة شفشاون"
+    }
+  },
+  {
+    "slot": "composer:akchour:1",
+    "file": "composer-akchour-1.webp",
+    "width": 1280,
+    "title": "File:Akchour waterfall.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Akchour_waterfall.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Akchour_waterfall.jpg/1280px-Akchour_waterfall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Itachoo1",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Cascade et bassin d'Akchour",
+    "alt": {
+      "fr": "Cascade et bassin d'Akchour",
+      "en": "Akchour waterfall and pool",
+      "ar": "شلال وحوض أقشور"
+    }
+  },
+  {
+    "slot": "composer:akchour:3",
+    "file": "composer-akchour-3.webp",
+    "width": 1280,
+    "title": "File:Talassemtane National Park (5065124048).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Talassemtane_National_Park_(5065124048).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Talassemtane_National_Park_%285065124048%29.jpg/1280px-Talassemtane_National_Park_%285065124048%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Walter Rodriguez from Helsinki, Finland",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "place": "Oued et rochers du parc de Talassemtane",
+    "alt": {
+      "fr": "Oued et rochers du parc de Talassemtane",
+      "en": "River and rocks in Talassemtane park",
+      "ar": "وادٍ وصخور في منتزه تلاسمطان"
+    }
+  },
+  {
+    "slot": "composer:tanger-tetouan:1",
+    "file": "composer-tanger-tetouan-1.webp",
+    "width": 1280,
+    "title": "File:Faro del cabo Espartel, Marruecos, 2015-12-11, DD 02.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Faro_del_cabo_Espartel,_Marruecos,_2015-12-11,_DD_02.JPG",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/Faro_del_cabo_Espartel%2C_Marruecos%2C_2015-12-11%2C_DD_02.JPG/1280px-Faro_del_cabo_Espartel%2C_Marruecos%2C_2015-12-11%2C_DD_02.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Diego Delso",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Phare du cap Spartel, Tanger",
+    "alt": {
+      "fr": "Phare du cap Spartel, Tanger",
+      "en": "Cape Spartel lighthouse, Tangier",
+      "ar": "منارة رأس سبارطيل، طنجة"
+    }
+  },
+  {
+    "slot": "composer:tanger-tetouan:2",
+    "file": "composer-tanger-tetouan-2.webp",
+    "width": 1280,
+    "title": "File:Kasbah of Tangier (98812) enhanced.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Kasbah_of_Tangier_(98812)_enhanced.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Kasbah_of_Tangier_%2898812%29_enhanced.jpg/1280px-Kasbah_of_Tangier_%2898812%29_enhanced.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Ideophagous",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "place": "Kasbah de Tanger",
+    "alt": {
+      "fr": "Kasbah de Tanger",
+      "en": "Tangier kasbah",
+      "ar": "قصبة طنجة"
+    }
+  },
+  {
+    "slot": "composer:tanger-tetouan:3",
+    "file": "composer-tanger-tetouan-3.webp",
+    "width": 1280,
+    "title": "File:Tetouan, near the Medina and Qasba.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tetouan,_near_the_Medina_and_Qasba.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Tetouan%2C_near_the_Medina_and_Qasba.jpg/1280px-Tetouan%2C_near_the_Medina_and_Qasba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Ideophagous",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Tétouan et les montagnes",
+    "alt": {
+      "fr": "Tétouan et les montagnes",
+      "en": "Tetouan and the mountains",
+      "ar": "تطوان والجبال"
+    }
+  },
+  {
+    "slot": "composer:ifrane-azrou:1",
+    "file": "composer-ifrane-azrou-1.webp",
+    "width": 1280,
+    "title": "File:Ifrane, a prestigious town.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ifrane,_a_prestigious_town.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Ifrane%2C_a_prestigious_town.jpg/1280px-Ifrane%2C_a_prestigious_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Karima Lb",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Rue d'Ifrane aux toits pentus",
+    "alt": {
+      "fr": "Rue d'Ifrane aux toits pentus",
+      "en": "Ifrane street with pitched roofs",
+      "ar": "شارع في إفران بسقوف مائلة"
+    }
+  },
+  {
+    "slot": "composer:ifrane-azrou:3",
+    "file": "composer-ifrane-azrou-3.webp",
+    "width": 1280,
+    "title": "File:Lake Dayet Ifrah Dayet Aoua commune Ifrane province 05.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lake_Dayet_Ifrah_Dayet_Aoua_commune_Ifrane_province_05.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Lake_Dayet_Ifrah_Dayet_Aoua_commune_Ifrane_province_05.jpg/1280px-Lake_Dayet_Ifrah_Dayet_Aoua_commune_Ifrane_province_05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Mounir Neddi",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Lac et plateaux du Moyen Atlas",
+    "alt": {
+      "fr": "Lac et plateaux du Moyen Atlas",
+      "en": "Lake and plateaus of the Middle Atlas",
+      "ar": "بحيرة وهضاب الأطلس المتوسط"
+    }
+  },
+  {
+    "slot": "composer:nord-est-mediterranee:1",
+    "file": "composer-nord-est-mediterranee-1.webp",
+    "width": 1280,
+    "title": "File:Saidia MOROCCO BEACH.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Saidia_MOROCCO_BEACH.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Saidia_MOROCCO_BEACH.jpg/1280px-Saidia_MOROCCO_BEACH.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Assia ouajdi",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Coucher de soleil sur la côte de Saïdia",
+    "alt": {
+      "fr": "Coucher de soleil sur la côte de Saïdia",
+      "en": "Sunset on the Saïdia coast",
+      "ar": "غروب الشمس على ساحل السعيدية"
+    }
+  },
+  {
+    "slot": "composer:nord-est-mediterranee:2",
+    "file": "composer-nord-est-mediterranee-2.webp",
+    "width": 1280,
+    "title": "File:DSC03413 the main beach of al hoceima twon \"la playa\" qemado and the sea port.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:DSC03413_the_main_beach_of_al_hoceima_twon_%22la_playa%22_qemado_and_the_sea_port.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/DSC03413_the_main_beach_of_al_hoceima_twon_%22la_playa%22_qemado_and_the_sea_port.jpg/1280px-DSC03413_the_main_beach_of_al_hoceima_twon_%22la_playa%22_qemado_and_the_sea_port.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "SAMI AZAROUK",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Baie et plage d'Al Hoceïma",
+    "alt": {
+      "fr": "Baie et plage d'Al Hoceïma",
+      "en": "Al Hoceima bay and beach",
+      "ar": "خليج وشاطئ الحسيمة"
+    }
+  },
+  {
+    "slot": "composer:nord-est-mediterranee:3",
+    "file": "composer-nord-est-mediterranee-3.webp",
+    "width": 1280,
+    "title": "File:Lagune Marchica.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lagune_Marchica.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Lagune_Marchica.jpg/1280px-Lagune_Marchica.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Houssain tork",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Lagune de Marchica au coucher du soleil, Nador",
+    "alt": {
+      "fr": "Lagune de Marchica au coucher du soleil, Nador",
+      "en": "Marchica lagoon at sunset, Nador",
+      "ar": "بحيرة مارتشيكا عند الغروب، الناظور"
+    }
+  },
+  {
+    "slot": "composer:ouarzazate:1",
+    "file": "composer-ouarzazate-1.webp",
+    "width": 1280,
+    "title": "File:Ksar of Taourirt, Ouarzazate, Morocco (قصبة تاوريرت, ⵜⴰⵡⵔⵉⵔⵜ).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ksar_of_Taourirt,_Ouarzazate,_Morocco_(%D9%82%D8%B5%D8%A8%D8%A9_%D8%AA%D8%A7%D9%88%D8%B1%D9%8A%D8%B1%D8%AA,_%E2%B5%9C%E2%B4%B0%E2%B5%A1%E2%B5%94%E2%B5%89%E2%B5%94%E2%B5%9C).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Ksar_of_Taourirt%2C_Ouarzazate%2C_Morocco_%28%D9%82%D8%B5%D8%A8%D8%A9_%D8%AA%D8%A7%D9%88%D8%B1%D9%8A%D8%B1%D8%AA%2C_%E2%B5%9C%E2%B4%B0%E2%B5%A1%E2%B5%94%E2%B5%89%E2%B5%94%E2%B5%9C%29.jpg/1280px-Ksar_of_Taourirt%2C_Ouarzazate%2C_Morocco_%28%D9%82%D8%B5%D8%A8%D8%A9_%D8%AA%D8%A7%D9%88%D8%B1%D9%8A%D8%B1%D8%AA%2C_%E2%B5%9C%E2%B4%B0%E2%B5%A1%E2%B5%94%E2%B5%89%E2%B5%94%E2%B5%9C%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Petar Milošević",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Kasbah de Taourirt, Ouarzazate",
+    "alt": {
+      "fr": "Kasbah de Taourirt, Ouarzazate",
+      "en": "Taourirt kasbah, Ouarzazate",
+      "ar": "قصبة تاوريرت، ورزازات"
+    }
+  },
+  {
+    "slot": "composer:ouarzazate:3",
+    "file": "composer-ouarzazate-3.webp",
+    "width": 1280,
+    "title": "File:Oasis de Fint, Uarzazat 02.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Oasis_de_Fint,_Uarzazat_02.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Oasis_de_Fint%2C_Uarzazat_02.jpg/1280px-Oasis_de_Fint%2C_Uarzazat_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Fraguando",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Oasis au pied des montagnes près d'Ouarzazate",
+    "alt": {
+      "fr": "Oasis au pied des montagnes près d'Ouarzazate",
+      "en": "Oasis below the mountains near Ouarzazate",
+      "ar": "واحة عند سفح الجبال قرب ورزازات"
+    }
+  },
+  {
+    "slot": "composer:zagora:1",
+    "file": "composer-zagora-1.webp",
+    "width": 1280,
+    "title": "File:Moroccan military castle,Zagora.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Moroccan_military_castle,Zagora.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Moroccan_military_castle%2CZagora.jpg/1280px-Moroccan_military_castle%2CZagora.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "M.yaakoubi",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Ancienne forteresse en terre près de Zagora",
+    "alt": {
+      "fr": "Ancienne forteresse en terre près de Zagora",
+      "en": "Old earthen fortress near Zagora",
+      "ar": "حصن طيني قديم قرب زاكورة"
+    }
+  },
+  {
+    "slot": "composer:zagora:2",
+    "file": "composer-zagora-2.webp",
+    "width": 1280,
+    "title": "File:Zagora, Morocco (5422600323) (6).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Zagora,_Morocco_(5422600323)_(6).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Zagora%2C_Morocco_%285422600323%29_%286%29.jpg/1280px-Zagora%2C_Morocco_%285422600323%29_%286%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "YoTuT from United States",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Marcheurs dans le désert près de Zagora",
+    "alt": {
+      "fr": "Marcheurs dans le désert près de Zagora",
+      "en": "Walkers in the desert near Zagora",
+      "ar": "مشاة في الصحراء قرب زاكورة"
+    }
+  },
+  {
+    "slot": "composer:zagora:3",
+    "file": "composer-zagora-3.webp",
+    "width": 1280,
+    "title": "File:Tamegroute-hydroxy03 (pottery).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tamegroute-hydroxy03_(pottery).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Tamegroute-hydroxy03_%28pottery%29.jpg/1280px-Tamegroute-hydroxy03_%28pottery%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "hydro-xy from Zürich, Schweiz",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "place": "Poterie émaillée de Tamegroute",
+    "alt": {
+      "fr": "Poterie émaillée de Tamegroute",
+      "en": "Glazed pottery of Tamegroute",
+      "ar": "فخار تامكروت المزجج"
+    }
+  },
+  {
+    "slot": "composer:vallee-dades:1",
+    "file": "composer-vallee-dades-1.webp",
+    "width": 1280,
+    "title": "File:Big View on the Dades Gorge Road - panoramio.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Big_View_on_the_Dades_Gorge_Road_-_panoramio.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Big_View_on_the_Dades_Gorge_Road_-_panoramio.jpg/1280px-Big_View_on_the_Dades_Gorge_Road_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Adrian Farwell",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "place": "Route des gorges du Dadès",
+    "alt": {
+      "fr": "Route des gorges du Dadès",
+      "en": "Dades gorge road",
+      "ar": "طريق مضايق دادس"
+    }
+  },
+  {
+    "slot": "composer:vallee-dades:2",
+    "file": "composer-vallee-dades-2.webp",
+    "width": 1280,
+    "title": "File:Rose fields in Kelaa Mgouna.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Rose_fields_in_Kelaa_Mgouna.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/Rose_fields_in_Kelaa_Mgouna.jpg/1280px-Rose_fields_in_Kelaa_Mgouna.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "مصطفى ملو",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Roses de la vallée de Kelaat M'Gouna",
+    "alt": {
+      "fr": "Roses de la vallée de Kelaat M'Gouna",
+      "en": "Roses of the Kelaat M'Gouna valley",
+      "ar": "ورود وادي قلعة مكونة"
+    }
+  },
+  {
+    "slot": "composer:vallee-dades:3",
+    "file": "composer-vallee-dades-3.webp",
+    "width": 1280,
+    "title": "File:Dadestal Kasbah 2005.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dadestal_Kasbah_2005.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Dadestal_Kasbah_2005.jpg/1280px-Dadestal_Kasbah_2005.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Rosino",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "place": "Kasbah dans la vallée du Dadès",
+    "alt": {
+      "fr": "Kasbah dans la vallée du Dadès",
+      "en": "Kasbah in the Dades valley",
+      "ar": "قصبة في وادي دادس"
+    }
+  },
+  {
+    "slot": "composer:atlas:1",
+    "file": "composer-atlas-1.webp",
+    "width": 1280,
+    "title": "File:Spring blossom Toubkal National Park.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Spring_blossom_Toubkal_National_Park.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Spring_blossom_Toubkal_National_Park.jpg/1280px-Spring_blossom_Toubkal_National_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Toni Wöhrl",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Sommets enneigés du massif du Toubkal",
+    "alt": {
+      "fr": "Sommets enneigés du massif du Toubkal",
+      "en": "Snowy peaks of the Toubkal massif",
+      "ar": "قمم مثلجة في كتلة توبقال"
+    }
+  },
+  {
+    "slot": "composer:atlas:2",
+    "file": "composer-atlas-2.webp",
+    "width": 1280,
+    "title": "File:Agafay Desert, Morocco, 20250125 1802 7284.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Agafay_Desert,_Morocco,_20250125_1802_7284.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Agafay_Desert%2C_Morocco%2C_20250125_1802_7284.jpg/1280px-Agafay_Desert%2C_Morocco%2C_20250125_1802_7284.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Jakub Hałun",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "place": "Plateau désertique de l'Agafay",
+    "alt": {
+      "fr": "Plateau désertique de l'Agafay",
+      "en": "Agafay stony desert plateau",
+      "ar": "هضبة أكفاي الصحراوية"
+    }
+  },
+  {
+    "slot": "composer:ouzoud:1",
+    "file": "composer-ouzoud-1.webp",
+    "width": 1280,
+    "title": "File:Ouzoud Falls, Morocco, 20250126 1357 7470.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ouzoud_Falls,_Morocco,_20250126_1357_7470.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Ouzoud_Falls%2C_Morocco%2C_20250126_1357_7470.jpg/1280px-Ouzoud_Falls%2C_Morocco%2C_20250126_1357_7470.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Jakub Hałun",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "place": "Cascades d'Ouzoud",
+    "alt": {
+      "fr": "Cascades d'Ouzoud",
+      "en": "Ouzoud waterfalls",
+      "ar": "شلالات أوزود"
+    }
+  },
+  {
+    "slot": "composer:ouzoud:2",
+    "file": "composer-ouzoud-2.webp",
+    "width": 1280,
+    "title": "File:Tourist boats and Ouzoud waterfalls.jpeg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tourist_boats_and_Ouzoud_waterfalls.jpeg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Tourist_boats_and_Ouzoud_waterfalls.jpeg/1280px-Tourist_boats_and_Ouzoud_waterfalls.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Abderrahman Ait Ali",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "place": "Barques au pied des cascades d'Ouzoud",
+    "alt": {
+      "fr": "Barques au pied des cascades d'Ouzoud",
+      "en": "Boats at the foot of the Ouzoud falls",
+      "ar": "قوارب عند أسفل شلالات أوزود"
+    }
+  },
+  {
+    "slot": "composer:ouzoud:3",
+    "file": "composer-ouzoud-3.webp",
+    "width": 1280,
+    "title": "File:Bin el Ouidane lake From above-Morocco.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bin_el_Ouidane_lake_From_above-Morocco.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Bin_el_Ouidane_lake_From_above-Morocco.jpg/1280px-Bin_el_Ouidane_lake_From_above-Morocco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Kasmii",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Lac de Bin el-Ouidane",
+    "alt": {
+      "fr": "Lac de Bin el-Ouidane",
+      "en": "Bin el-Ouidane lake",
+      "ar": "بحيرة بين الويدان"
+    }
+  },
+  {
+    "slot": "composer:essaouira:1",
+    "file": "composer-essaouira-1.webp",
+    "width": 1280,
+    "title": "File:Ramparts of Essaouira.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Ramparts_of_Essaouira.JPG",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Ramparts_of_Essaouira.JPG/1280px-Ramparts_of_Essaouira.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Kayaky",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "place": "Côte rocheuse d'Essaouira",
+    "alt": {
+      "fr": "Côte rocheuse d'Essaouira",
+      "en": "Rocky coast of Essaouira",
+      "ar": "الساحل الصخري للصويرة"
+    }
+  },
+  {
+    "slot": "composer:essaouira:2",
+    "file": "composer-essaouira-2.webp",
+    "width": 1280,
+    "title": "File:Essaouira beach 03.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Essaouira_beach_03.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Essaouira_beach_03.jpg/1280px-Essaouira_beach_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Adam Harangozó",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Rochers et vagues, Essaouira",
+    "alt": {
+      "fr": "Rochers et vagues, Essaouira",
+      "en": "Rocks and waves, Essaouira",
+      "ar": "صخور وأمواج، الصويرة"
+    }
+  },
+  {
+    "slot": "composer:essaouira:3",
+    "file": "composer-essaouira-3.webp",
+    "width": 1280,
+    "title": "File:Ramparts of Essaouira.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Ramparts_of_Essaouira.JPG",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Ramparts_of_Essaouira.JPG/1280px-Ramparts_of_Essaouira.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Kayaky",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "place": "Médina d'Essaouira face à l'océan",
+    "alt": {
+      "fr": "Médina d'Essaouira face à l'océan",
+      "en": "Essaouira medina facing the ocean",
+      "ar": "مدينة الصويرة العتيقة مقابل المحيط"
+    }
+  },
+  {
+    "slot": "composer:agadir:1",
+    "file": "composer-agadir-1.webp",
+    "width": 1280,
+    "title": "File:Kasbah of Agadir Oufella.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Kasbah_of_Agadir_Oufella.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Kasbah_of_Agadir_Oufella.jpg/1280px-Kasbah_of_Agadir_Oufella.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Mwintirew",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Remparts de la kasbah d'Agadir Oufella",
+    "alt": {
+      "fr": "Remparts de la kasbah d'Agadir Oufella",
+      "en": "Agadir Oufella kasbah ramparts",
+      "ar": "أسوار قصبة أكادير أوفلا"
+    }
+  },
+  {
+    "slot": "composer:agadir:2",
+    "file": "composer-agadir-2.webp",
+    "width": 1280,
+    "title": "File:Paradise valley Souss Idaoutanane.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paradise_valley_Souss_Idaoutanane.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Paradise_valley_Souss_Idaoutanane.jpg/1280px-Paradise_valley_Souss_Idaoutanane.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Younes GOUSSYRA",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Palmiers et bassins de la vallée du Paradis",
+    "alt": {
+      "fr": "Palmiers et bassins de la vallée du Paradis",
+      "en": "Palms and pools in Paradise Valley",
+      "ar": "نخيل وأحواض وادي الجنة"
+    }
+  },
+  {
+    "slot": "composer:agadir:3",
+    "file": "composer-agadir-3.webp",
+    "width": 1280,
+    "title": "File:Taghazout village .jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Taghazout_village_.jpg",
+    "thumb1600": "https://upload.wikimedia.org/wikipedia/commons/4/48/Taghazout_village_.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "author": "Jimbobbailey312",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Maisons colorées de Taghazout",
+    "alt": {
+      "fr": "Maisons colorées de Taghazout",
+      "en": "Colourful houses of Taghazout",
+      "ar": "منازل ملونة في تغازوت"
+    }
+  },
+  {
+    "slot": "composer:dakhla:1",
+    "file": "composer-dakhla-1.webp",
+    "width": 1280,
+    "title": "File:FortecolorWestsaharaIII-48.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:FortecolorWestsaharaIII-48.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/FortecolorWestsaharaIII-48.jpg/1280px-FortecolorWestsaharaIII-48.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Trincerone",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Plage et lagune de Dakhla",
+    "alt": {
+      "fr": "Plage et lagune de Dakhla",
+      "en": "Dakhla beach and lagoon",
+      "ar": "شاطئ وبحيرة الداخلة"
+    }
+  },
+  {
+    "slot": "composer:dakhla:2",
+    "file": "composer-dakhla-2.webp",
+    "width": 1280,
+    "title": "File:Dakhla, Western Sahara (11).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dakhla,_Western_Sahara_(11).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Dakhla%2C_Western_Sahara_%2811%29.jpg/1280px-Dakhla%2C_Western_Sahara_%2811%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "YoTuT from United States",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Ville de Dakhla et l'océan",
+    "alt": {
+      "fr": "Ville de Dakhla et l'océan",
+      "en": "Dakhla town and the ocean",
+      "ar": "مدينة الداخلة والمحيط"
+    }
+  },
+  {
+    "slot": "composer:dakhla:3",
+    "file": "composer-dakhla-3.webp",
+    "width": 1280,
+    "title": "File:ISS059-E-119750 - View of Western Sahara.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:ISS059-E-119750_-_View_of_Western_Sahara.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/ISS059-E-119750_-_View_of_Western_Sahara.jpg/1280px-ISS059-E-119750_-_View_of_Western_Sahara.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Earth Science and Remote Sensing Unit, NASA Johnson Space Center",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "place": "Vue aérienne de la presqu'île de Dakhla",
+    "alt": {
+      "fr": "Vue aérienne de la presqu'île de Dakhla",
+      "en": "Aerial view of the Dakhla peninsula",
+      "ar": "منظر جوي لشبه جزيرة الداخلة"
+    }
+  },
+  {
+    "slot": "composer:omra-la-mecque-medine:1",
+    "file": "composer-omra-la-mecque-medine-1.webp",
+    "width": 1280,
+    "title": "File:Jabal al-Nour And cave Hira.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Jabal_al-Nour_And_cave_Hira.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Jabal_al-Nour_And_cave_Hira.jpg/1280px-Jabal_al-Nour_And_cave_Hira.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Sadath i",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Jabal al-Nour, La Mecque",
+    "alt": {
+      "fr": "Jabal al-Nour, La Mecque",
+      "en": "Jabal al-Nour, Mecca",
+      "ar": "جبل النور، مكة المكرمة"
+    }
+  },
+  {
+    "slot": "composer:omra-la-mecque-medine:2",
+    "file": "composer-omra-la-mecque-medine-2.webp",
+    "width": 1280,
+    "title": "File:Quba Mosque (2024).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Quba_Mosque_(2024).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Quba_Mosque_%282024%29.jpg/1280px-Quba_Mosque_%282024%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Kaliper1",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Mosquée de Quba, Médine",
+    "alt": {
+      "fr": "Mosquée de Quba, Médine",
+      "en": "Quba Mosque, Medina",
+      "ar": "مسجد قباء، المدينة المنورة"
+    }
+  },
+  {
+    "slot": "composer:turquie-istanbul:1",
+    "file": "composer-turquie-istanbul-1.webp",
+    "width": 1280,
+    "title": "File:Hagia Sophia Mars 2013.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Hagia_Sophia_Mars_2013.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Hagia_Sophia_Mars_2013.jpg/1280px-Hagia_Sophia_Mars_2013.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Arild Vågen",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "place": "Sainte-Sophie, Istanbul",
+    "alt": {
+      "fr": "Sainte-Sophie, Istanbul",
+      "en": "Hagia Sophia, Istanbul",
+      "ar": "آيا صوفيا، إسطنبول"
+    }
+  },
+  {
+    "slot": "composer:turquie-istanbul:2",
+    "file": "composer-turquie-istanbul-2.webp",
+    "width": 1280,
+    "title": "File:Sample of Tee - Grand Bazaar.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Sample_of_Tee_-_Grand_Bazaar.JPG",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Sample_of_Tee_-_Grand_Bazaar.JPG/1280px-Sample_of_Tee_-_Grand_Bazaar.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Martin Falbisoner",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Épices au Grand Bazar d'Istanbul",
+    "alt": {
+      "fr": "Épices au Grand Bazar d'Istanbul",
+      "en": "Spices at Istanbul's Grand Bazaar",
+      "ar": "توابل في البازار الكبير بإسطنبول"
+    }
+  },
+  {
+    "slot": "composer:turquie-istanbul:3",
+    "file": "composer-turquie-istanbul-3.webp",
+    "width": 1280,
+    "title": "File:Istanbul Galata Tower IMG 8211 1920.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Istanbul_Galata_Tower_IMG_8211_1920.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Istanbul_Galata_Tower_IMG_8211_1920.jpg/1280px-Istanbul_Galata_Tower_IMG_8211_1920.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Alexxx1979",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Tour de Galata, Istanbul",
+    "alt": {
+      "fr": "Tour de Galata, Istanbul",
+      "en": "Galata Tower, Istanbul",
+      "ar": "برج غلطة، إسطنبول"
+    }
+  },
+  {
+    "slot": "composer:emirats-dubai:1",
+    "file": "composer-emirats-dubai-1.webp",
+    "width": 1280,
+    "title": "File:Dubai Creek from an abra 5.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dubai_Creek_from_an_abra_5.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Dubai_Creek_from_an_abra_5.jpg/1280px-Dubai_Creek_from_an_abra_5.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "CT Cooper",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "place": "La Creek de Dubaï",
+    "alt": {
+      "fr": "La Creek de Dubaï",
+      "en": "Dubai Creek",
+      "ar": "خور دبي"
+    }
+  },
+  {
+    "slot": "composer:emirats-dubai:2",
+    "file": "composer-emirats-dubai-2.webp",
+    "width": 1280,
+    "title": "File:A car on Dubai Dune bashing.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:A_car_on_Dubai_Dune_bashing.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/A_car_on_Dubai_Dune_bashing.jpg/1280px-A_car_on_Dubai_Dune_bashing.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "iMahesh",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "4×4 dans les dunes au coucher du soleil, Dubaï",
+    "alt": {
+      "fr": "4×4 dans les dunes au coucher du soleil, Dubaï",
+      "en": "4×4 in the dunes at sunset, Dubai",
+      "ar": "سيارة رباعية في الكثبان عند الغروب، دبي"
+    }
+  },
+  {
+    "slot": "composer:emirats-dubai:3",
+    "file": "composer-emirats-dubai-3.webp",
+    "width": 1280,
+    "title": "File:Dubai Marina Skyline.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dubai_Marina_Skyline.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Dubai_Marina_Skyline.jpg/1280px-Dubai_Marina_Skyline.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Norlando Pobre",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Tours de Dubai Marina",
+    "alt": {
+      "fr": "Tours de Dubai Marina",
+      "en": "Dubai Marina towers",
+      "ar": "أبراج دبي مارينا"
+    }
+  },
+  {
+    "slot": "composer:egypte:1",
+    "file": "composer-egypte-1.webp",
+    "width": 1280,
+    "title": "File:Karnak temple complex 12.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Karnak_temple_complex_12.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/Karnak_temple_complex_12.jpg/1280px-Karnak_temple_complex_12.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Hamerani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Allée des sphinx du temple de Karnak",
+    "alt": {
+      "fr": "Allée des sphinx du temple de Karnak",
+      "en": "Avenue of sphinxes at Karnak Temple",
+      "ar": "ممر أبي الهول في معبد الكرنك"
+    }
+  },
+  {
+    "slot": "composer:egypte:2",
+    "file": "composer-egypte-2.webp",
+    "width": 1280,
+    "title": "File:Luxor, Egypt, Nile River.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Luxor,_Egypt,_Nile_River.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Luxor%2C_Egypt%2C_Nile_River.jpg/1280px-Luxor%2C_Egypt%2C_Nile_River.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Vyacheslav Argenberg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "place": "Le Nil à Louxor",
+    "alt": {
+      "fr": "Le Nil à Louxor",
+      "en": "The Nile at Luxor",
+      "ar": "النيل في الأقصر"
+    }
+  },
+  {
+    "slot": "composer:egypte:3",
+    "file": "composer-egypte-3.webp",
+    "width": 1280,
+    "title": "File:Mercado de Khan el-Khalili, El Cairo, Egipto4.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mercado_de_Khan_el-Khalili,_El_Cairo,_Egipto4.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Mercado_de_Khan_el-Khalili%2C_El_Cairo%2C_Egipto4.jpg/1280px-Mercado_de_Khan_el-Khalili%2C_El_Cairo%2C_Egipto4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Diego Delso",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "place": "Souk Khan el-Khalili le soir, Le Caire",
+    "alt": {
+      "fr": "Souk Khan el-Khalili le soir, Le Caire",
+      "en": "Khan el-Khalili souk in the evening, Cairo",
+      "ar": "سوق خان الخليلي مساءً، القاهرة"
+    }
+  },
+  {
+    "slot": "composer:malaisie:2",
+    "file": "composer-malaisie-2.webp",
+    "width": 1280,
+    "title": "File:Langkawi 003.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Langkawi_003.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Langkawi_003.jpg/1280px-Langkawi_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Emran Kassim",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Mer et îles de Langkawi",
+    "alt": {
+      "fr": "Mer et îles de Langkawi",
+      "en": "Sea and islands of Langkawi",
+      "ar": "بحر وجزر لنكاوي"
+    }
+  },
+  {
+    "slot": "composer:malaisie:3",
+    "file": "composer-malaisie-3.webp",
+    "width": 1280,
+    "title": "File:Cameron highlands tea 3.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Cameron_highlands_tea_3.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Cameron_highlands_tea_3.jpg/1280px-Cameron_highlands_tea_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "G.Mannaerts",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Plantation de thé des Cameron Highlands",
+    "alt": {
+      "fr": "Plantation de thé des Cameron Highlands",
+      "en": "Cameron Highlands tea plantation",
+      "ar": "مزرعة شاي في مرتفعات كاميرون"
+    }
+  },
+  {
+    "slot": "composer:espagne-andalousie:1",
+    "file": "composer-espagne-andalousie-1.webp",
+    "width": 1280,
+    "title": "File:Seville, Plaza de España (38625005691) (edited).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Seville,_Plaza_de_Espa%C3%B1a_(38625005691)_(edited).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Seville%2C_Plaza_de_Espa%C3%B1a_%2838625005691%29_%28edited%29.jpg/1280px-Seville%2C_Plaza_de_Espa%C3%B1a_%2838625005691%29_%28edited%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Dmitry Dzhus from London",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Plaza de España, Séville",
+    "alt": {
+      "fr": "Plaza de España, Séville",
+      "en": "Plaza de España, Seville",
+      "ar": "ساحة إسبانيا، إشبيلية"
+    }
+  },
+  {
+    "slot": "composer:espagne-andalousie:2",
+    "file": "composer-espagne-andalousie-2.webp",
+    "width": 1280,
+    "title": "File:Mezquita-Catedral de Córdoba - Blending of Christian and Moorish architecture.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mezquita-Catedral_de_C%C3%B3rdoba_-_Blending_of_Christian_and_Moorish_architecture.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Mezquita-Catedral_de_C%C3%B3rdoba_-_Blending_of_Christian_and_Moorish_architecture.jpg/1280px-Mezquita-Catedral_de_C%C3%B3rdoba_-_Blending_of_Christian_and_Moorish_architecture.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Martinvl",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Arcs de la mosquée-cathédrale de Cordoue",
+    "alt": {
+      "fr": "Arcs de la mosquée-cathédrale de Cordoue",
+      "en": "Arches of the Mosque-Cathedral of Córdoba",
+      "ar": "أقواس المسجد الكاتدرائية بقرطبة"
+    }
+  },
+  {
+    "slot": "composer:espagne-andalousie:3",
+    "file": "composer-espagne-andalousie-3.webp",
+    "width": 1280,
+    "title": "File:Generalife palace, detail, Granada, Spain.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Generalife_palace,_detail,_Granada,_Spain.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Generalife_palace%2C_detail%2C_Granada%2C_Spain.jpg/1280px-Generalife_palace%2C_detail%2C_Granada%2C_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Jebulon",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "place": "Palais du Generalife, Grenade",
+    "alt": {
+      "fr": "Palais du Generalife, Grenade",
+      "en": "Generalife palace, Granada",
+      "ar": "قصر جنة العريف، غرناطة"
+    }
+  },
+  {
+    "slot": "destination:akchour",
+    "file": "destination-akchour.webp",
+    "width": 1600,
+    "title": "File:Akchour waterfall.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Akchour_waterfall.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Akchour_waterfall.jpg/1280px-Akchour_waterfall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Itachoo1",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Cascade et bassin d'Akchour",
+    "alt": {
+      "fr": "Cascade et bassin d'Akchour",
+      "en": "Akchour waterfall and pool",
+      "ar": "شلال وحوض أقشور"
+    }
+  },
+  {
+    "slot": "destination:ouarzazate",
+    "file": "destination-ouarzazate.webp",
+    "width": 1600,
+    "title": "File:Ksar of Taourirt, Ouarzazate, Morocco (قصبة تاوريرت, ⵜⴰⵡⵔⵉⵔⵜ).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ksar_of_Taourirt,_Ouarzazate,_Morocco_(%D9%82%D8%B5%D8%A8%D8%A9_%D8%AA%D8%A7%D9%88%D8%B1%D9%8A%D8%B1%D8%AA,_%E2%B5%9C%E2%B4%B0%E2%B5%A1%E2%B5%94%E2%B5%89%E2%B5%94%E2%B5%9C).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Ksar_of_Taourirt%2C_Ouarzazate%2C_Morocco_%28%D9%82%D8%B5%D8%A8%D8%A9_%D8%AA%D8%A7%D9%88%D8%B1%D9%8A%D8%B1%D8%AA%2C_%E2%B5%9C%E2%B4%B0%E2%B5%A1%E2%B5%94%E2%B5%89%E2%B5%94%E2%B5%9C%29.jpg/1280px-Ksar_of_Taourirt%2C_Ouarzazate%2C_Morocco_%28%D9%82%D8%B5%D8%A8%D8%A9_%D8%AA%D8%A7%D9%88%D8%B1%D9%8A%D8%B1%D8%AA%2C_%E2%B5%9C%E2%B4%B0%E2%B5%A1%E2%B5%94%E2%B5%89%E2%B5%94%E2%B5%9C%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Petar Milošević",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Kasbah de Taourirt, Ouarzazate",
+    "alt": {
+      "fr": "Kasbah de Taourirt, Ouarzazate",
+      "en": "Taourirt kasbah, Ouarzazate",
+      "ar": "قصبة تاوريرت، ورزازات"
+    }
+  },
+  {
+    "slot": "destination:zagora",
+    "file": "destination-zagora.webp",
+    "width": 1600,
+    "title": "File:Moroccan military castle,Zagora.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Moroccan_military_castle,Zagora.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Moroccan_military_castle%2CZagora.jpg/1280px-Moroccan_military_castle%2CZagora.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "M.yaakoubi",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Ancienne forteresse en terre près de Zagora",
+    "alt": {
+      "fr": "Ancienne forteresse en terre près de Zagora",
+      "en": "Old earthen fortress near Zagora",
+      "ar": "حصن طيني قديم قرب زاكورة"
+    }
+  },
+  {
+    "slot": "destination:tanger-tetouan",
+    "file": "destination-tanger-tetouan.webp",
+    "width": 1600,
+    "title": "File:Faro del cabo Espartel, Marruecos, 2015-12-11, DD 02.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Faro_del_cabo_Espartel,_Marruecos,_2015-12-11,_DD_02.JPG",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/Faro_del_cabo_Espartel%2C_Marruecos%2C_2015-12-11%2C_DD_02.JPG/1280px-Faro_del_cabo_Espartel%2C_Marruecos%2C_2015-12-11%2C_DD_02.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Diego Delso",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Phare du cap Spartel, Tanger",
+    "alt": {
+      "fr": "Phare du cap Spartel, Tanger",
+      "en": "Cape Spartel lighthouse, Tangier",
+      "ar": "منارة رأس سبارطيل، طنجة"
+    }
+  },
+  {
+    "slot": "destination:vallee-dades",
+    "file": "destination-vallee-dades.webp",
+    "width": 1600,
+    "title": "File:Big View on the Dades Gorge Road - panoramio.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Big_View_on_the_Dades_Gorge_Road_-_panoramio.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Big_View_on_the_Dades_Gorge_Road_-_panoramio.jpg/1280px-Big_View_on_the_Dades_Gorge_Road_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Adrian Farwell",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "place": "Route des gorges du Dadès",
+    "alt": {
+      "fr": "Route des gorges du Dadès",
+      "en": "Dades gorge road",
+      "ar": "طريق مضايق دادس"
+    }
   }
 ]

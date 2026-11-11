@@ -12,6 +12,7 @@ import { activities, bookingOptions, circuits, futureDestinations, merzouga } fr
 import { merzougaFaq, merzougaSections, merzougaTips, posts } from "./seed-data/editorial";
 import { applyDefaults } from "./defaults";
 import { applyProgrammes } from "./programmes";
+import { applyComposer } from "./composer";
 
 const db = new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? "file:./dev.db" }) });
 const reset = process.argv.includes("--reset");
@@ -170,6 +171,7 @@ async function main() {
 
   await applyDefaults(db);
   await applyProgrammes(db);
+  await applyComposer(db);
   console.log("✔ Seed terminé.");
 }
 
