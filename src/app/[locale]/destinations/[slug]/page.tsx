@@ -186,7 +186,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
           <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {d.circuits.map((c, i) => (
               <Reveal key={c.id} delay={i * 120}>
-                <CircuitCard c={c} locale={locale} photo={photo(`circuit:${c.slug}`)} next={nextDeps.get(c.id)} />
+                <CircuitCard c={c} locale={locale} photo={photo(`circuit:${c.slug}`, `destination:${d.slug}`)} next={nextDeps.get(c.id)} />
               </Reveal>
             ))}
           </div>
@@ -358,7 +358,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
       {/* RÉSERVER */}
       <section id="reserver" className="scroll-mt-32 px-4 pb-24 lg:px-8">
         <div className="relative isolate mx-auto max-w-7xl overflow-hidden rounded-[2rem] px-8 py-20 text-center text-white">
-          <Visual photo={photo("heroAlt")} variant="sunset" seed={90} caravan className="absolute inset-0 -z-10 h-full w-full" />
+          <Visual photo={photo("heroAlt")} variant="sunset" seed={90} caravan className="absolute inset-0 -z-10 h-full w-full" sizes="100vw" />
           <div className="absolute inset-0 -z-10 bg-night/45" />
           <h2 className="font-display text-5xl font-semibold">{t.merzouga.book}</h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/85">{t.merzouga.bookText}</p>

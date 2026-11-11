@@ -39,7 +39,7 @@ export default async function ActivityPage({ params }: PageProps<"/[locale]/acti
   return (
     <>
       <section className="relative isolate overflow-hidden pt-32 pb-16 text-white">
-        <Visual photo={photo(`activity:${a.slug}`)} priority variant={categoryVariant[a.category as keyof typeof categoryVariant] ?? "sunset"} seed={hashSeed(a.slug)} caravan={a.icon === "camel"} className="absolute inset-0 -z-10 h-full w-full" title={tr(a.title, locale)} />
+        <Visual photo={photo(`activity:${a.slug}`)} priority variant={categoryVariant[a.category as keyof typeof categoryVariant] ?? "sunset"} seed={hashSeed(a.slug)} caravan={a.icon === "camel"} className="absolute inset-0 -z-10 h-full w-full" sizes="100vw" title={tr(a.title, locale)} />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/30 to-night/40" />
         <div className="mx-auto max-w-5xl px-4 lg:px-8">
           <Link href={`/${locale}/activites`} className="text-sm text-white/70 hover:text-sand">

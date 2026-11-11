@@ -72,7 +72,7 @@ export default async function TripsPage({ params, searchParams }: PageProps<"/[l
           ) : (
             <div className="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {circuits.map((c) => (
-                <CircuitCard key={c.id} c={c} locale={locale} photo={photo(`circuit:${c.slug}`)} next={nextDeps.get(c.id)} />
+                <CircuitCard key={c.id} c={c} locale={locale} photo={photo(`circuit:${c.slug}`, `destination:${c.destination.slug}`)} next={nextDeps.get(c.id)} />
               ))}
             </div>
           )}

@@ -1,0 +1,617 @@
+[
+  {
+    "slot": "hero",
+    "title": "File:Erg Chebbi in the evening light.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Erg_Chebbi_in_the_evening_light.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Erg_Chebbi_in_the_evening_light.jpg/1920px-Erg_Chebbi_in_the_evening_light.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Thomas Fuhrmann",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Crête de dune dorée dans l'Erg Chebbi, près de Merzouga",
+      "en": "Golden dune ridge in the Erg Chebbi near Merzouga",
+      "ar": "كثيب رملي ذهبي في عرق الشبي قرب مرزوكة"
+    }
+  },
+  {
+    "slot": "heroAlt",
+    "title": "File:Ksar Aït Benhaddou, Marocco (أيت بن حدو، المغرب, ⴰⵢⵜ ⵃⴰⴷⴷⵓ).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ksar_A%C3%AFt_Benhaddou,_Marocco_(%D8%A3%D9%8A%D8%AA_%D8%A8%D9%86_%D8%AD%D8%AF%D9%88%D8%8C_%D8%A7%D9%84%D9%85%D8%BA%D8%B1%D8%A8,_%E2%B4%B0%E2%B5%A2%E2%B5%9C_%E2%B5%83%E2%B4%B0%E2%B4%B7%E2%B4%B7%E2%B5%93).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Ksar_A%C3%AFt_Benhaddou%2C_Marocco_%28%D8%A3%D9%8A%D8%AA_%D8%A8%D9%86_%D8%AD%D8%AF%D9%88%D8%8C_%D8%A7%D9%84%D9%85%D8%BA%D8%B1%D8%A8%2C_%E2%B4%B0%E2%B5%A2%E2%B5%9C_%E2%B5%83%E2%B4%B0%E2%B4%B7%E2%B4%B7%E2%B5%93%29.jpg/1920px-Ksar_A%C3%AFt_Benhaddou%2C_Marocco_%28%D8%A3%D9%8A%D8%AA_%D8%A8%D9%86_%D8%AD%D8%AF%D9%88%D8%8C_%D8%A7%D9%84%D9%85%D8%BA%D8%B1%D8%A8%2C_%E2%B4%B0%E2%B5%A2%E2%B5%9C_%E2%B5%83%E2%B4%B0%E2%B4%B7%E2%B4%B7%E2%B5%93%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Petar Milošević",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Aït-Ben-Haddou, Ouarzazate",
+    "alt": {
+      "fr": "Le ksar d'Aït-Ben-Haddou et sa palmeraie",
+      "en": "The ksar of Aït Benhaddou and its palm grove",
+      "ar": "قصر آيت بن حدو وواحته"
+    }
+  },
+  {
+    "slot": "destination:merzouga",
+    "title": "File:Les dunes de Merzouga (Une caravane de chameaux ).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Les_dunes_de_Merzouga_(Une_caravane_de_chameaux_).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Les_dunes_de_Merzouga_%28Une_caravane_de_chameaux_%29.jpg/1920px-Les_dunes_de_Merzouga_%28Une_caravane_de_chameaux_%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Houssain tork",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Caravane de dromadaires dans les dunes de Merzouga",
+      "en": "Camel caravan in the Merzouga dunes",
+      "ar": "قافلة جمال في كثبان مرزوكة"
+    }
+  },
+  {
+    "slot": "dunes",
+    "title": "File:Erg Chebbi sunset.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Erg_Chebbi_sunset.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Erg_Chebbi_sunset.jpg/1920px-Erg_Chebbi_sunset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Thomas Fuhrmann",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Coucher de soleil sur les dunes de l'Erg Chebbi",
+      "en": "Sunset over the Erg Chebbi dunes",
+      "ar": "غروب الشمس على كثبان عرق الشبي"
+    }
+  },
+  {
+    "slot": "merzouga",
+    "title": "File:Erg Chebbi Sand Dunes (4804570352).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Erg_Chebbi_Sand_Dunes_(4804570352).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Erg_Chebbi_Sand_Dunes_%284804570352%29.jpg/1920px-Erg_Chebbi_Sand_Dunes_%284804570352%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Mike Prince from Bangalore, India",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Lumière du soir sur les dunes de l'Erg Chebbi",
+      "en": "Evening light over the Erg Chebbi dunes",
+      "ar": "ضوء المساء على كثبان عرق الشبي"
+    }
+  },
+  {
+    "slot": "camel",
+    "title": "File:Camel Tour on Erg Chebbi riding across the dunes.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Camel_Tour_on_Erg_Chebbi_riding_across_the_dunes.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Camel_Tour_on_Erg_Chebbi_riding_across_the_dunes.jpg/1920px-Camel_Tour_on_Erg_Chebbi_riding_across_the_dunes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Johannes K Becker",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Ombres d'une caravane de dromadaires sur une dune de l'Erg Chebbi",
+      "en": "Shadows of a camel caravan on an Erg Chebbi dune",
+      "ar": "ظلال قافلة جمال على كثيب في عرق الشبي"
+    }
+  },
+  {
+    "slot": "destination:marrakech",
+    "title": "File:A01 - Marrakech, Koutoubia.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:A01_-_Marrakech,_Koutoubia.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/A01_-_Marrakech%2C_Koutoubia.jpg/1920px-A01_-_Marrakech%2C_Koutoubia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Misa.stefanovic.07",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Marrakech",
+    "alt": {
+      "fr": "Le minaret de la Koutoubia à Marrakech au coucher du soleil",
+      "en": "The Koutoubia minaret in Marrakech at sunset",
+      "ar": "صومعة الكتبية في مراكش عند الغروب"
+    }
+  },
+  {
+    "slot": "destination:chefchaouen",
+    "title": "File:Chefchaouen Street B.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chefchaouen_Street_B.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Chefchaouen_Street_B.jpg/1920px-Chefchaouen_Street_B.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Mark Fischer",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "place": "Chefchaouen",
+    "alt": {
+      "fr": "Ruelle bleue de la médina de Chefchaouen",
+      "en": "Blue lane in the Chefchaouen medina",
+      "ar": "زقاق أزرق في مدينة شفشاون العتيقة"
+    }
+  },
+  {
+    "slot": "destination:ouzoud",
+    "title": "File:Ouzoud Falls, Morocco, 20250126 1357 7470.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ouzoud_Falls,_Morocco,_20250126_1357_7470.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Ouzoud_Falls%2C_Morocco%2C_20250126_1357_7470.jpg/1920px-Ouzoud_Falls%2C_Morocco%2C_20250126_1357_7470.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Jakub Hałun",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "place": "Ouzoud, Azilal",
+    "alt": {
+      "fr": "Les cascades d'Ouzoud",
+      "en": "The Ouzoud waterfalls",
+      "ar": "شلالات أوزود"
+    }
+  },
+  {
+    "slot": "destination:atlas",
+    "title": "File:Imlil and its valley and way to Jbel Toubkal 21.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Imlil_and_its_valley_and_way_to_Jbel_Toubkal_21.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Imlil_and_its_valley_and_way_to_Jbel_Toubkal_21.jpg/1920px-Imlil_and_its_valley_and_way_to_Jbel_Toubkal_21.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Erokhin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Imlil, Haut Atlas",
+    "alt": {
+      "fr": "La vallée d'Imlil sur la route du Toubkal",
+      "en": "The Imlil valley on the way to Toubkal",
+      "ar": "وادي إمليل في الطريق إلى توبقال"
+    }
+  },
+  {
+    "slot": "destination:essaouira",
+    "title": "File:Essaouira Citadel.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Essaouira_Citadel.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Essaouira_Citadel.jpg/1920px-Essaouira_Citadel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Ahmed.magdy",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Essaouira",
+    "alt": {
+      "fr": "La Skala du port d'Essaouira et ses barques bleues",
+      "en": "The Essaouira harbour Skala and its blue boats",
+      "ar": "سقالة ميناء الصويرة وقواربها الزرقاء"
+    }
+  },
+  {
+    "slot": "aitbenhaddou",
+    "title": "File:Ait Zineb - Ksar of Aït Benhaddou - 20190716180605.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ait_Zineb_-_Ksar_of_A%C3%AFt_Benhaddou_-_20190716180605.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Ait_Zineb_-_Ksar_of_A%C3%AFt_Benhaddou_-_20190716180605.jpg/1920px-Ait_Zineb_-_Ksar_of_A%C3%AFt_Benhaddou_-_20190716180605.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "C messier",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Aït-Ben-Haddou, Ouarzazate",
+    "alt": {
+      "fr": "Toits en pisé du ksar d'Aït-Ben-Haddou",
+      "en": "Earthen rooftops of the Aït Benhaddou ksar",
+      "ar": "أسطح طينية لقصر آيت بن حدو"
+    }
+  },
+  {
+    "slot": "aitPalm",
+    "title": "File:Aït Benhaddou view from above.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:A%C3%AFt_Benhaddou_view_from_above.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/A%C3%AFt_Benhaddou_view_from_above.jpg/1920px-A%C3%AFt_Benhaddou_view_from_above.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Elena Tatiana Chis",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Aït-Ben-Haddou, Ouarzazate",
+    "alt": {
+      "fr": "Le ksar d'Aït-Ben-Haddou encadré par une arche de pierre",
+      "en": "The Aït Benhaddou ksar framed by a stone arch",
+      "ar": "قصر آيت بن حدو من خلال قوس حجري"
+    }
+  },
+  {
+    "slot": "destination:omra-la-mecque-medine",
+    "title": "File:Masjid Al Haram. Mecca, Saudi Arabia.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Masjid_Al_Haram._Mecca,_Saudi_Arabia.jpg",
+    "thumb1600": "https://upload.wikimedia.org/wikipedia/commons/7/73/Masjid_Al_Haram._Mecca%2C_Saudi_Arabia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "author": "Ali Mansuri",
+    "license": "CC BY-SA 2.5",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+    "place": "La Mecque, Arabie saoudite",
+    "alt": {
+      "fr": "Vue générale de la Kaaba et de la mosquée al-Haram à La Mecque",
+      "en": "General view of the Kaaba and al-Haram Mosque in Mecca",
+      "ar": "منظر عام للكعبة والمسجد الحرام في مكة المكرمة"
+    }
+  },
+  {
+    "slot": "omra",
+    "title": "File:Al-Masjid An-Nabawi (Bird's Eye View).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Al-Masjid_An-Nabawi_(Bird%27s_Eye_View).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Al-Masjid_An-Nabawi_%28Bird%27s_Eye_View%29.jpg/1920px-Al-Masjid_An-Nabawi_%28Bird%27s_Eye_View%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Konevi",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "place": "Médine, Arabie saoudite",
+    "alt": {
+      "fr": "Vue générale de la mosquée du Prophète à Médine",
+      "en": "General view of the Prophet's Mosque in Medina",
+      "ar": "منظر عام للمسجد النبوي في المدينة المنورة"
+    }
+  },
+  {
+    "slot": "destination:turquie-istanbul",
+    "title": "File:Istanbul Ortaköy (54514468726).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Istanbul_Ortak%C3%B6y_(54514468726).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Istanbul_Ortak%C3%B6y_%2854514468726%29.jpg/1920px-Istanbul_Ortak%C3%B6y_%2854514468726%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Jorge Franganillo",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Istanbul, Turquie",
+    "alt": {
+      "fr": "La mosquée d'Ortaköy et le pont du Bosphore à Istanbul",
+      "en": "Ortaköy Mosque and the Bosphorus Bridge in Istanbul",
+      "ar": "مسجد أورتاكوي وجسر البوسفور في إسطنبول"
+    }
+  },
+  {
+    "slot": "destination:emirats-dubai",
+    "title": "File:Dubai Skyline mit Burj Khalifa (cropped).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dubai_Skyline_mit_Burj_Khalifa_(cropped).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Dubai_Skyline_mit_Burj_Khalifa_%28cropped%29.jpg/1920px-Dubai_Skyline_mit_Burj_Khalifa_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Tim Reckmann from Hamm, Deutschland",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "place": "Dubaï, Émirats arabes unis",
+    "alt": {
+      "fr": "Les gratte-ciel de Dubaï et la Burj Khalifa",
+      "en": "Dubai skyline and the Burj Khalifa",
+      "ar": "ناطحات سحاب دبي وبرج خليفة"
+    }
+  },
+  {
+    "slot": "destination:egypte",
+    "title": "File:All Gizah Pyramids.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:All_Gizah_Pyramids.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/All_Gizah_Pyramids.jpg/1920px-All_Gizah_Pyramids.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Ricardo Liberato",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "place": "Gizeh, Égypte",
+    "alt": {
+      "fr": "Les pyramides de Gizeh",
+      "en": "The pyramids of Giza",
+      "ar": "أهرامات الجيزة"
+    }
+  },
+  {
+    "slot": "destination:malaisie",
+    "title": "File:The Twins SE Asia 2019 (49171985716).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Twins_SE_Asia_2019_(49171985716).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/The_Twins_SE_Asia_2019_%2849171985716%29.jpg/1920px-The_Twins_SE_Asia_2019_%2849171985716%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "James Kerwin from Tbilisi",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Kuala Lumpur, Malaisie",
+    "alt": {
+      "fr": "Les tours Petronas à Kuala Lumpur au crépuscule",
+      "en": "The Petronas Towers in Kuala Lumpur at dusk",
+      "ar": "برجا بتروناس في كوالالمبور عند الغسق"
+    }
+  },
+  {
+    "slot": "destination:espagne-andalousie",
+    "title": "File:Dawn Charles V Palace Alhambra Granada Andalusia Spain.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg/1920px-Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Jebulon",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "place": "Grenade, Andalousie",
+    "alt": {
+      "fr": "L'Alhambra de Grenade à l'aube",
+      "en": "The Alhambra in Granada at dawn",
+      "ar": "قصر الحمراء في غرناطة عند الفجر"
+    }
+  },
+  {
+    "slot": "destination:nord-est-mediterranee",
+    "title": "File:Al Hoceima Morocco.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Al_Hoceima_Morocco.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Al_Hoceima_Morocco.jpg/1920px-Al_Hoceima_Morocco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Westonmr",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "place": "Al Hoceima",
+    "alt": {
+      "fr": "Al Hoceima et la côte méditerranéenne",
+      "en": "Al Hoceima and the Mediterranean coast",
+      "ar": "الحسيمة والساحل المتوسطي"
+    }
+  },
+  {
+    "slot": "circuit:grand-sud-marocain-4j",
+    "title": "File:Todgha Gorge walking through 03.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Todgha_Gorge_walking_through_03.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Todgha_Gorge_walking_through_03.jpg/1920px-Todgha_Gorge_walking_through_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Elena Tatiana Chis",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Gorges du Todgha, Tinghir",
+    "alt": {
+      "fr": "Les gorges du Todgha près de Tinghir",
+      "en": "The Todgha Gorge near Tinghir",
+      "ar": "مضايق تودغى قرب تنغير"
+    }
+  },
+  {
+    "slot": "tea",
+    "title": "File:Moroccan mint tea with sweets.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Moroccan_mint_tea_with_sweets.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Moroccan_mint_tea_with_sweets.jpg/1920px-Moroccan_mint_tea_with_sweets.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "مصطفى ملو",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Maroc",
+    "alt": {
+      "fr": "Thé à la menthe servi sur un plateau avec des pâtisseries marocaines",
+      "en": "Mint tea served on a tray with Moroccan pastries",
+      "ar": "شاي بالنعناع على صينية مع حلويات مغربية"
+    }
+  },
+  {
+    "slot": "activity:dromadaire-coucher-soleil",
+    "title": "File:Dunes de Merzouga 001.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dunes_de_Merzouga_001.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Dunes_de_Merzouga_001.jpg/1920px-Dunes_de_Merzouga_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Dieglop",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Balade à dos de dromadaire dans les dunes de Merzouga",
+      "en": "Camel ride in the Merzouga dunes",
+      "ar": "جولة على ظهر الجمل في كثبان مرزوكة"
+    }
+  },
+  {
+    "slot": "circuit:escapade-saharienne-2j",
+    "title": "File:Erg Chebbi Maroc.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Erg_Chebbi_Maroc.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Erg_Chebbi_Maroc.jpg/1920px-Erg_Chebbi_Maroc.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Rosino",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Dunes de l'Erg Chebbi et palmiers en contrebas",
+      "en": "Erg Chebbi dunes with palms below",
+      "ar": "كثبان عرق الشبي والنخيل أسفلها"
+    }
+  },
+  {
+    "slot": "circuit:immersion-desert-3j",
+    "title": "File:Dunes de Merzouga 006.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dunes_de_Merzouga_006.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Dunes_de_Merzouga_006.jpg/1920px-Dunes_de_Merzouga_006.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Dieglop",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Caravane au loin dans les grandes dunes de Merzouga",
+      "en": "A distant caravan in the great Merzouga dunes",
+      "ar": "قافلة بعيدة في كثبان مرزوكة الكبيرة"
+    }
+  },
+  {
+    "slot": "campLuxe",
+    "title": "File:Merzouga desert camp.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Merzouga_desert_camp.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Merzouga_desert_camp.jpg/1920px-Merzouga_desert_camp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Isabeldianamadrid",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Merzouga",
+    "alt": {
+      "fr": "Tentes blanches d'un campement dans les dunes de Merzouga",
+      "en": "White tents of a camp in the Merzouga dunes",
+      "ar": "خيام بيضاء لمخيم في كثبان مرزوكة"
+    }
+  },
+  {
+    "slot": "destination:agadir",
+    "title": "File:Agadir Areal view cropped.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Agadir_Areal_view_cropped.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Agadir_Areal_view_cropped.jpg/1920px-Agadir_Areal_view_cropped.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Marco Riss",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "place": "Agadir",
+    "alt": {
+      "fr": "Vue aérienne de la baie d'Agadir",
+      "en": "Aerial view of Agadir bay",
+      "ar": "منظر جوي لخليج أكادير"
+    }
+  },
+  {
+    "slot": "destination:fes",
+    "title": "File:Medina of Fes, Marocco.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Medina_of_Fes,_Marocco.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Medina_of_Fes%2C_Marocco.jpg/1920px-Medina_of_Fes%2C_Marocco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Petar Milošević",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Fès",
+    "alt": {
+      "fr": "Panorama sur la médina de Fès",
+      "en": "Panorama over the Fes medina",
+      "ar": "بانوراما على مدينة فاس العتيقة"
+    }
+  },
+  {
+    "slot": "valley",
+    "title": "File:Mountain In Zagora ,Morocco.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mountain_In_Zagora_,Morocco.jpg",
+    "thumb1600": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Mountain_In_Zagora_%2CMorocco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "author": "TASSINE Ilyas",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Zagora, vallée du Drâa",
+    "alt": {
+      "fr": "Palmeraie de la vallée du Drâa au pied du djebel Zagora",
+      "en": "Draa valley palm grove below Jebel Zagora",
+      "ar": "واحة نخيل وادي درعة عند جبل زاكورة"
+    }
+  },
+  {
+    "slot": "destination:dakhla",
+    "title": "File:Kitesurfing in Dakhla, Western Sahara.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Kitesurfing_in_Dakhla,_Western_Sahara.JPG",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Kitesurfing_in_Dakhla%2C_Western_Sahara.JPG/1920px-Kitesurfing_in_Dakhla%2C_Western_Sahara.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Lärchenholz",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Dakhla",
+    "alt": {
+      "fr": "Kitesurf sur la lagune de Dakhla",
+      "en": "Kitesurfing on the Dakhla lagoon",
+      "ar": "التزلج الشراعي في بحيرة الداخلة"
+    }
+  },
+  {
+    "slot": "destination:ifrane-azrou",
+    "title": "File:Atlas Cedar Forest Ifrane Morocco - panoramio.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Atlas_Cedar_Forest_Ifrane_Morocco_-_panoramio.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Atlas_Cedar_Forest_Ifrane_Morocco_-_panoramio.jpg/1920px-Atlas_Cedar_Forest_Ifrane_Morocco_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Hiroki Ogawa",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "place": "Ifrane",
+    "alt": {
+      "fr": "Forêt de cèdres de l'Atlas près d'Ifrane",
+      "en": "Atlas cedar forest near Ifrane",
+      "ar": "غابة أرز الأطلس قرب إفران"
+    }
+  },
+  {
+    "slot": "palm",
+    "title": "File:Amerhidil Qasbah 04 - amerune.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amerhidil_Qasbah_04_-_amerune.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Amerhidil_Qasbah_04_-_amerune.jpg/1920px-Amerhidil_Qasbah_04_-_amerune.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Maureen from Buffalo, USA",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Skoura, Ouarzazate",
+    "alt": {
+      "fr": "Palmeraie de Skoura et la kasbah Amridil",
+      "en": "The Skoura palm grove and Amridil kasbah",
+      "ar": "واحة سكورة وقصبة أمريديل"
+    }
+  },
+  {
+    "slot": "activity:oasis",
+    "title": "File:Profound sunset beyond palms.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Profound_sunset_beyond_palms.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Profound_sunset_beyond_palms.jpg/1920px-Profound_sunset_beyond_palms.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Hmidanix",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Sud marocain",
+    "alt": {
+      "fr": "Palmiers d'une oasis au coucher du soleil",
+      "en": "Oasis palms at sunset",
+      "ar": "نخيل واحة عند الغروب"
+    }
+  },
+  {
+    "slot": "activity:ciel-nocturne",
+    "title": "File:Bedouin Tent (4803944945).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bedouin_Tent_(4803944945).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Bedouin_Tent_%284803944945%29.jpg/1920px-Bedouin_Tent_%284803944945%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Mike Prince from Bangalore, India",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Tente berbère sous le ciel étoilé du désert",
+      "en": "Berber tent under the starry desert sky",
+      "ar": "خيمة أمازيغية تحت سماء الصحراء المرصعة بالنجوم"
+    }
+  },
+  {
+    "slot": "camp",
+    "title": "File:Berber camp at Merzouga - Flickr - gailhampshire (1).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berber_camp_at_Merzouga_-_Flickr_-_gailhampshire_(1).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Berber_camp_at_Merzouga_-_Flickr_-_gailhampshire_%281%29.jpg/1920px-Berber_camp_at_Merzouga_-_Flickr_-_gailhampshire_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "gailhampshire from Cradley, Malvern, U.K",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Merzouga",
+    "alt": {
+      "fr": "Bivouac de tentes berbères au pied des dunes de Merzouga",
+      "en": "Berber tent camp at the foot of the Merzouga dunes",
+      "ar": "مخيم خيام أمازيغية عند كثبان مرزوكة"
+    }
+  },
+  {
+    "slot": "aitGuide",
+    "title": "File:Ait Zineb - Ksar of Aït Benhaddou - 20190716175500.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ait_Zineb_-_Ksar_of_A%C3%AFt_Benhaddou_-_20190716175500.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Ait_Zineb_-_Ksar_of_A%C3%AFt_Benhaddou_-_20190716175500.jpg/1920px-Ait_Zineb_-_Ksar_of_A%C3%AFt_Benhaddou_-_20190716175500.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "C messier",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Aït-Ben-Haddou, Ouarzazate",
+    "alt": {
+      "fr": "Le ksar d'Aït-Ben-Haddou vu des hauteurs",
+      "en": "The Aït Benhaddou ksar seen from above",
+      "ar": "قصر آيت بن حدو من الأعلى"
+    }
+  },
+  {
+    "slot": "circuit:merzouga-tout-compris-week-end",
+    "title": "File:Erg chebbi sunrise.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Erg_chebbi_sunrise.jpg",
+    "thumb1600": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Erg_chebbi_sunrise.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "author": "JanSuchy",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Lever du soleil sur les dunes de l'Erg Chebbi",
+      "en": "Sunrise over the Erg Chebbi dunes",
+      "ar": "شروق الشمس على كثبان عرق الشبي"
+    }
+  },
+  {
+    "slot": "activity:lever-soleil",
+    "title": "File:Erg Chebbi Sand Dunes (4803941471).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Erg_Chebbi_Sand_Dunes_(4803941471).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Erg_Chebbi_Sand_Dunes_%284803941471%29.jpg/1920px-Erg_Chebbi_Sand_Dunes_%284803941471%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Mike Prince from Bangalore, India",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Soleil bas sur les dunes de l'Erg Chebbi",
+      "en": "Low sun over the Erg Chebbi dunes",
+      "ar": "شمس منخفضة فوق كثبان عرق الشبي"
+    }
+  },
+  {
+    "slot": "activity:campement-luxe",
+    "title": "File:Merzouga desert camp.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Merzouga_desert_camp.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Merzouga_desert_camp.jpg/1920px-Merzouga_desert_camp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Isabeldianamadrid",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Merzouga",
+    "alt": {
+      "fr": "Tentes blanches d'un campement dans les dunes de Merzouga",
+      "en": "White tents of a camp in the Merzouga dunes",
+      "ar": "خيام بيضاء لمخيم في كثبان مرزوكة"
+    }
+  },
+  {
+    "slot": "activity:bivouac-traditionnel",
+    "title": "File:Berber camp at Merzouga - Flickr - gailhampshire (1).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berber_camp_at_Merzouga_-_Flickr_-_gailhampshire_(1).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Berber_camp_at_Merzouga_-_Flickr_-_gailhampshire_%281%29.jpg/1920px-Berber_camp_at_Merzouga_-_Flickr_-_gailhampshire_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "gailhampshire from Cradley, Malvern, U.K",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "place": "Merzouga",
+    "alt": {
+      "fr": "Bivouac de tentes berbères au pied des dunes",
+      "en": "Berber tent camp at the foot of the dunes",
+      "ar": "مخيم خيام أمازيغية عند الكثبان"
+    }
+  }
+]

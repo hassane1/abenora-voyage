@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -18,7 +19,9 @@ export default async function GalleryPage({ params }: PageProps<"/[locale]/galer
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const t = getDictionary(locale);
-  const media = await getPublicMedia();
+  // une même photo peut servir à plusieurs emplacements (copie par emplacement) : affichée une seule fois
+  const seen = new Set<string>();
+  const media = (await getPublicMedia()).filter((m) => !m.sourceUrl || (!seen.has(m.sourceUrl) && !!seen.add(m.sourceUrl)));
   const heroPhoto = (await getPhotos(locale))("dunes");
   return (
     <>
@@ -31,11 +34,11 @@ export default async function GalleryPage({ params }: PageProps<"/[locale]/galer
                 {m.kind === "VIDEO" ? (
                   <video src={m.url} controls preload="metadata" className="w-full" />
                 ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={m.url} alt={tr(m.alt, locale)} loading="lazy" className="w-full" />
+                  <Image src={m.url} alt={tr(m.alt, locale)} width={800} height={533} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-auto w-full" />
                 )}
                 <figcaption className="p-3 text-xs text-muted">
-                  {tr(m.alt, locale)} {m.credit && <>· © {m.credit}</>} {m.license && <>· {m.license}</>}
+                  {tr(m.alt, locale)} {m.credit && <>· © {m.credit}</>}{" "}
+                  {m.license && (m.sourceUrl?.startsWith("https://") ? <>· <a href={m.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline decoration-dotted hover:text-gold-deep">{m.license}</a></> : <>· {m.license}</>)}
                 </figcaption>
               </figure>
             ))}

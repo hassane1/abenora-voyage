@@ -20,19 +20,25 @@ export const isAllowedMedia = (m: { credit: string | null; alt: unknown }) => !E
 const allowed = isAllowedMedia;
 
 export type Photo = { src: string; alt: string; credit: string | null };
-export type PhotoPicker = (key: string) => Photo | undefined;
+/** renvoie la photo du premier emplacement renseigné (ex. photo("circuit:x", "destination:merzouga")) */
+export type PhotoPicker = (...keys: string[]) => Photo | undefined;
 
 export async function getPhotos(locale: Locale): Promise<PhotoPicker> {
   await connection();
   const media = (await cached("media:images", 60, () => db.media.findMany({ where: { rightsConfirmed: true, kind: "IMAGE" }, include: { destination: { select: { slug: true } } }, orderBy: { createdAt: "asc" } }))).filter(allowed);
   const byDestination = new Map<string, (typeof media)[number]>();
   for (const m of media) if (m.destination && !byDestination.has(m.destination.slug)) byDestination.set(m.destination.slug, m);
-  // une photo étiquetée « slot:<clé> » dans Médias remplace l'attribution par défaut (ex. slot:destination:marrakech)
+  // une photo étiquetée « slot:<clé> » dans Médias remplace l'attribution par défaut (ex. slot:destination:marrakech) ;
+  // la plus récente l'emporte : une photo téléversée puis placée dans Médias remplace la précédente sans autre manipulation
   const bySlot = new Map<string, (typeof media)[number]>();
-  for (const m of media) for (const t of m.tags.split(",").map((x) => x.trim())) if (t.startsWith("slot:") && !bySlot.has(t.slice(5))) bySlot.set(t.slice(5), m);
-  return (key) => {
-    const m = bySlot.get(key) ?? (key.startsWith("destination:") ? byDestination.get(key.slice(12)) : undefined);
-    return m ? { src: m.url, alt: tr(m.alt, locale), credit: m.credit } : undefined;
+  for (const m of media) for (const t of m.tags.split(",").map((x) => x.trim())) if (t.startsWith("slot:")) bySlot.set(t.slice(5), m);
+  const one = (key: string) => bySlot.get(key) ?? (key.startsWith("destination:") ? byDestination.get(key.slice(12)) : undefined);
+  return (...keys) => {
+    for (const key of keys) {
+      const m = one(key);
+      if (m) return { src: m.url, alt: tr(m.alt, locale), credit: m.credit };
+    }
+    return undefined;
   };
 }
 

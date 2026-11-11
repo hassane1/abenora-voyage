@@ -158,13 +158,13 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
         </div>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((c) => (
-            <CircuitCard key={c.id} c={c} locale={locale} photo={photo(`circuit:${c.slug}`)} next={nextDeps.get(c.id)} />
+            <CircuitCard key={c.id} c={c} locale={locale} photo={photo(`circuit:${c.slug}`, `destination:${c.destination.slug}`)} next={nextDeps.get(c.id)} />
           ))}
         </div>
       </section>
 
       {/* ───────── SIGNATURE : OMRA & HAJJ ───────── */}
-      <OmraSignature locale={locale} departures={omraDeps} hotels={hotels} whatsapp={brand.whatsapp} />
+      <OmraSignature locale={locale} photo={photo("omra", "destination:omra-la-mecque-medine")} departures={omraDeps} hotels={hotels} whatsapp={brand.whatsapp} />
 
       {/* ───────── SIGNATURE : MAROC + MONDE ───────── */}
       <WorldDestinations locale={locale} destinations={world} />
@@ -278,7 +278,7 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {posts.slice(0, 3).map((p, i) => (
               <Link key={p.id} href={`/${locale}/blog/${p.slug}`} className="group overflow-hidden rounded-card bg-white shadow-card ring-1 ring-line transition hover:shadow-lift">
-                <Visual variant={(["dusk", "noon", "sunset"] as const)[i % 3]} seed={i + 11} className="aspect-[16/9] w-full" />
+                <Visual photo={[photo("tea"), photo("dunes"), photo("camp")][i % 3]} variant={(["dusk", "noon", "sunset"] as const)[i % 3]} seed={i + 11} className="aspect-[16/9] w-full" sizes="(max-width: 768px) 100vw, 33vw" />
                 <div className="p-6">
                   <p className="text-xs text-muted">{formatDate(p.publishedAt, locale)}</p>
                   <h3 className="font-display mt-1 text-xl leading-snug text-night group-hover:text-gold-deep">{tr(p.title, locale)}</h3>

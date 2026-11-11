@@ -29,7 +29,8 @@ export default function Visual({
 }) {
   if (!photo) return <BrandArt variant={variant} seed={seed} className={className} title={title} />;
   return (
-    <span className={`${/(absolute|fixed)/.test(className) ? "" : "relative"} block overflow-hidden ${className}`}>
+    // déjà positionné (fond plein cadre) : ne pas ajouter « relative », qui l'emporterait sur « absolute » et réduirait l'image à 0 px de haut
+    <span className={`${className.split(" ").some((c) => c === "absolute" || c === "fixed") ? "" : "relative "}block overflow-hidden ${className}`}>
       <Image src={photo.src} alt={photo.alt || title || ""} fill sizes={sizes} priority={priority} className={`object-cover ${imgClassName}`} />
       {showCredit && photo.credit && (
         <span className="absolute bottom-1.5 end-2 rounded bg-night/50 px-1.5 py-0.5 text-[10px] text-white/90">© {photo.credit}</span>

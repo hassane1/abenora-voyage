@@ -40,6 +40,7 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
   if (!c) notFound();
   const photo = await getPhotos(locale);
   const title = tr(c.title, locale);
+  const heroPhoto = photo(`circuit:${c.slug}`, `destination:${c.destination.slug}`);
   const warnings = trList(c.warnings, locale);
   const grid = resolveGrid(c.priceGrid, (v) => tr<string>(v, locale, ""));
   const brand = await getBrand();
@@ -71,12 +72,12 @@ export default async function CircuitPage({ params }: PageProps<"/[locale]/circu
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <section className="relative isolate overflow-hidden pt-32 pb-16 text-white">
-        {!photo(`circuit:${c.slug}`) && (c.programType !== "CIRCUIT" || c.destination.scope === "INTERNATIONAL") ? (
+        {!heroPhoto && (c.programType !== "CIRCUIT" || c.destination.scope === "INTERNATIONAL") ? (
           <ProgramArt type={c.programType} className="absolute inset-0 -z-10 h-full w-full" />
         ) : (
-          <Visual photo={photo(`circuit:${c.slug}`)} variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} caravan className="absolute inset-0 -z-10 h-full w-full" priority title={title} />
+          <Visual photo={heroPhoto} variant={circuitVariant(c.slug)} seed={hashSeed(c.slug)} caravan className="absolute inset-0 -z-10 h-full w-full" sizes="100vw" priority title={title} />
         )}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/30 to-night/40" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/55 to-night/50" />
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
           <nav className="no-print text-sm text-white/70" aria-label="Fil d'Ariane">
             <Link href={`/${locale}/destinations/${c.destination.slug}`} className="hover:text-sand">

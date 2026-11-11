@@ -5,17 +5,26 @@ import { tr } from "@/lib/i18n-content";
 import { formatDate, formatMad } from "@/lib/format";
 import { waLink } from "@/lib/site";
 import { Icon } from "../Icon";
+import Visual from "../Visual";
+import type { Photo } from "@/lib/photos";
 
 export type OmraDeparture = { id: string; date: Date; circuit: { slug: string; title: unknown; days: number; priceAdultMad: number | null; priceStatus: string } };
 export type OmraHotel = { label: string; detail: string };
 
 /** Bloc signature Omra & Hajj : prochains départs, hôtels proches du Haram, encadrement, WhatsApp dédié */
-export default function OmraSignature({ locale, departures, hotels, whatsapp }: { locale: Locale; departures: OmraDeparture[]; hotels: OmraHotel[]; whatsapp: string }) {
+export default function OmraSignature({ locale, photo, departures, hotels, whatsapp }: { locale: Locale; photo?: Photo; departures: OmraDeparture[]; hotels: OmraHotel[]; whatsapp: string }) {
   const s = getSignature(locale).omra;
   const card = getSignature(locale).card;
   const wa = waLink(whatsapp, s.whatsappMessage);
   return (
-    <section id="omra" className="scroll-mt-24 bg-emerald py-section text-white" aria-labelledby="omra-title">
+    <section id="omra" className="relative isolate scroll-mt-24 overflow-hidden bg-emerald py-section text-white" aria-labelledby="omra-title">
+      {/* photo d'ambiance (emplacement « omra » dans Médias), fondue dans le vert pour garder le texte lisible */}
+      {photo && (
+        <>
+          <Visual photo={photo} className="absolute inset-0 -z-20 h-full w-full" sizes="100vw" />
+          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-emerald via-emerald/90 to-emerald/60 rtl:bg-gradient-to-l" />
+        </>
+      )}
       <div className="relative mx-auto max-w-7xl overflow-hidden px-4 lg:px-8">
         <span aria-hidden className="pattern-arch pointer-events-none absolute -end-24 -top-24 h-96 w-96 opacity-20" />
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">

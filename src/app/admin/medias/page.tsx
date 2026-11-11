@@ -3,17 +3,20 @@ import { db } from "@/lib/db";
 import { tr } from "@/lib/i18n-content";
 import { updateMedia, uploadMedia } from "../actions";
 import { Badge, Card, Flash, Input, PageTitle } from "../ui";
+import { MEDIA_SLOTS } from "@/lib/media-slots";
 
 export default async function MediaAdmin({ searchParams }: PageProps<"/admin/medias">) {
   await requireAdmin();
   const sp = await searchParams;
   const [media, destinations] = await Promise.all([db.media.findMany({ orderBy: { createdAt: "desc" }, include: { destination: true } }), db.destination.findMany({ orderBy: { sortOrder: "asc" } })]);
-  // emplacements d'affichage : hero de l'accueil et photo principale de chaque destination
+  const [circuits, activities] = await Promise.all([db.circuit.findMany({ orderBy: [{ destination: { sortOrder: "asc" } }, { sortOrder: "asc" }], select: { slug: true, title: true } }), db.activity.findMany({ orderBy: { sortOrder: "asc" }, select: { slug: true, title: true } })]);
+  // emplacements d'affichage : un seul média par emplacement (le placer ici le retire des autres)
   const slots = [
     { v: "", label: "Aucun (galerie)" },
-    { v: "hero", label: "Accueil : hero (1re image)" },
-    { v: "heroAlt", label: "Accueil : hero (2e image)" },
-    ...destinations.map((d) => ({ v: `destination:${d.slug}`, label: `Destination : ${tr(d.name, "fr")}` })),
+    ...MEDIA_SLOTS.map((s) => ({ v: s.key, label: s.label })),
+    ...destinations.map((d) => ({ v: `destination:${d.slug}`, label: `Destination : ${tr(d.name, "fr")} (bannière et cartes de ses voyages)` })),
+    ...circuits.map((c) => ({ v: `circuit:${c.slug}`, label: `Voyage : ${tr(c.title, "fr")}` })),
+    ...activities.map((a) => ({ v: `activity:${a.slug}`, label: `Activité : ${tr(a.title, "fr")}` })),
   ];
   const slotOf = (tags: string) => tags.split(",").map((t) => t.trim()).find((t) => t.startsWith("slot:"))?.slice(5) ?? "";
   const SlotSelect = ({ value }: { value: string }) => (

@@ -1,0 +1,23 @@
+/**
+ * Emplacements génériques de photos (étiquette « slot:<clé> » posée dans Administration → Médias).
+ * S'y ajoutent destination:<slug>, circuit:<slug> et activity:<slug>.
+ * Une carte de circuit sans photo propre reprend celle de sa destination.
+ */
+export const MEDIA_SLOTS = [
+  { key: "hero", label: "Accueil : hero (1re image)" },
+  { key: "heroAlt", label: "Accueil : hero (2e image) et page Circuits" },
+  { key: "omra", label: "Accueil : fond du bloc Omra & Hajj" },
+  { key: "dunes", label: "Dunes (Merzouga, galerie, conseils)" },
+  { key: "merzouga", label: "Page Destinations : bannière" },
+  { key: "camel", label: "Page Activités : bannière" },
+  { key: "camp", label: "Bivouac (Merzouga, sur-mesure, conseils)" },
+  { key: "campLuxe", label: "Campement de luxe (Merzouga)" },
+  { key: "tea", label: "Thé / art de vivre (contact, conseils)" },
+  { key: "valley", label: "Vallée du Sud (services, comparateur)" },
+  { key: "palm", label: "Palmeraie (page Conseils)" },
+  { key: "aitbenhaddou", label: "Aït-Ben-Haddou (page Voyages Maroc)" },
+  { key: "aitGuide", label: "Page À propos : bannière" },
+  { key: "aitPalm", label: "Page Avis : bannière" },
+] as const;
+
+export const MEDIA_SLOT_KEYS = MEDIA_SLOTS.map((s) => s.key);

@@ -12,6 +12,7 @@ import { audit, clientIp, rateLimit, resetRateLimit } from "@/lib/security";
 import { sniffImage, sniffVideo, stripImageMetadata } from "@/lib/files";
 import { BookingError, changeBookingStatus } from "@/lib/bookings";
 import { addDays } from "@/lib/format";
+import { MEDIA_SLOT_KEYS } from "@/lib/media-slots";
 
 // ---------------------------------------------------------------------------
 // Authentification (limitation : 5 échecs / 15 min par compte, 20 / 15 min par IP)
@@ -407,9 +408,19 @@ export async function saveSettings(formData: FormData) {
 // ---------------------------------------------------------------------------
 // Médias (stockage local dans public/uploads ; à remplacer par Supabase Storage / S3 en production)
 // ---------------------------------------------------------------------------
-/** étiquette d'emplacement « slot:<clé> » : clés limitées à hero, heroAlt, destination:<slug>, circuit:<slug> */
+/** étiquette d'emplacement « slot:<clé> » : clés limitées aux emplacements connus du site (voir MEDIA_SLOT_KEYS) et à destination:, circuit:, activity:<slug> */
 function mediaSlotTag(slot: string) {
-  return /^(hero|heroAlt|(destination|circuit):[a-z0-9-]{1,80})$/.test(slot) ? `slot:${slot}` : "";
+  return (MEDIA_SLOT_KEYS as readonly string[]).includes(slot) || /^(destination|circuit|activity):[a-z0-9-]{1,80}$/.test(slot) ? `slot:${slot}` : "";
+}
+
+/** un emplacement n'affiche qu'une photo : la placer ailleurs retire l'étiquette des autres médias */
+async function freeMediaSlot(tag: string, exceptId?: string) {
+  if (!tag) return;
+  const others = await db.media.findMany({ where: { tags: { contains: tag }, ...(exceptId ? { NOT: { id: exceptId } } : {}) } });
+  for (const o of others) {
+    const rest = o.tags.split(",").map((t) => t.trim()).filter((t) => t && t !== tag);
+    if (rest.length !== o.tags.split(",").map((t) => t.trim()).filter(Boolean).length) await db.media.update({ where: { id: o.id }, data: { tags: rest.join(",") } });
+  }
 }
 
 export async function uploadMedia(formData: FormData) {
@@ -428,6 +439,8 @@ export async function uploadMedia(formData: FormData) {
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(dir, name), buf);
   await audit(admin.email, "MEDIA_UPLOAD", name);
+  const slotTag = mediaSlotTag(str(formData, "slot"));
+  await freeMediaSlot(slotTag);
   await db.media.create({
     data: {
       kind: file.type.startsWith("video") ? "VIDEO" : "IMAGE",
@@ -438,7 +451,7 @@ export async function uploadMedia(formData: FormData) {
       sourceUrl: str(formData, "sourceUrl") || null,
       rightsConfirmed: bool(formData, "rightsConfirmed"),
       destinationId: str(formData, "destinationId") || null,
-      tags: mediaSlotTag(str(formData, "slot")),
+      tags: slotTag,
     },
   });
   revalidatePath("/", "layout");
@@ -453,7 +466,9 @@ export async function updateMedia(formData: FormData) {
     if (m.url.startsWith("/uploads/")) await unlink(path.join(process.cwd(), "public", m.url)).catch(() => {});
   } else if (str(formData, "action") === "slot") {
     // emplacement d'affichage (photo principale d'une destination, hero…)
-    await db.media.update({ where: { id }, data: { tags: mediaSlotTag(str(formData, "slot")) } });
+    const tag = mediaSlotTag(str(formData, "slot"));
+    await freeMediaSlot(tag, id);
+    await db.media.update({ where: { id }, data: { tags: tag } });
   } else {
     await db.media.update({ where: { id }, data: { rightsConfirmed: bool(formData, "rightsConfirmed") } });
   }
