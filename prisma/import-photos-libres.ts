@@ -24,6 +24,7 @@ type Entry = {
   localFile?: string; // image déjà préparée et versionnée dans le dépôt (ex. montage), réencodée en WebP
   file?: string; // nom du fichier dans public/uploads/libres (par défaut : dérivé de l'emplacement)
   credit?: string; // crédit affiché (par défaut : « auteur / Wikimedia Commons »)
+  width?: number; // largeur maximale (par défaut 1600 px ; vignettes : 800 px)
   author: string;
   license: string;
   licenseUrl: string;
@@ -62,7 +63,7 @@ async function main() {
       const local = e.localSvg ?? e.localFile;
       const raw = local ? await readFile(path.join(process.cwd(), local)) : await download(e.thumb1600!);
       // largeur max 1600 px ; sharp ne recopie aucune métadonnée (EXIF, GPS, XMP) sans demande explicite
-      const out = await sharp(raw, e.localSvg ? { density: 72 } : {}).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 74, effort: 5 }).toBuffer();
+      const out = await sharp(raw, e.localSvg ? { density: 72 } : {}).rotate().resize({ width: e.width ?? 1600, withoutEnlargement: true }).webp({ quality: 74, effort: 5 }).toBuffer();
       await writeFile(target, out);
       if (!local) await sleep(800);
     }

@@ -21,7 +21,8 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
   const t = getDictionary(locale);
   const brand = await getBrand();
   const wa = waLink(brand.whatsapp, t.contact.intro);
-  const heroPhoto = (await getPhotos(locale))("tea");
+  // bannière : emplacement « contact » dans Médias, à défaut la photo « tea »
+  const heroPhoto = (await getPhotos(locale))("contact", "tea");
   return (
     <>
       <PageHero photo={heroPhoto} eyebrow={brand.name} title={t.contact.title} text={t.contact.intro} variant="night" seed={44} />

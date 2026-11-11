@@ -706,5 +706,125 @@
       "en": "Wooden desk with a computer showing the Benani Travel website, plants and shelves",
       "ar": "مكتب خشبي عليه حاسوب يعرض موقع بناني ترافل، مع نباتات ورفوف"
     }
+  },
+  {
+    "slot": "contact",
+    "file": "contact-photo.webp",
+    "title": "Montage : conseil client Benani Travel sur smartphone et ordinateur",
+    "page": "https://commons.wikimedia.org/wiki/File:Man_with_smartphone_and_laptop_%28Unsplash%29.jpg",
+    "localFile": "prisma/illustrations/contact-photo-montage.webp",
+    "author": "Alejandro Escamilla (photo d'origine, Unsplash)",
+    "credit": "Alejandro Escamilla / Unsplash (CC0), montage Benani Travel",
+    "license": "CC0 ; modifiée : conversation Benani Travel sur le téléphone et site Benani Travel sur l'ordinateur, image retournée",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "place": "Bureau (photo d'illustration)",
+    "alt": {
+      "fr": "Une personne échange avec Benani Travel sur son téléphone, devant un ordinateur portable affichant le site de l'agence",
+      "en": "A person chatting with Benani Travel on their phone, in front of a laptop showing the agency website",
+      "ar": "شخص يتواصل مع بناني ترافل عبر هاتفه أمام حاسوب محمول يعرض موقع الوكالة"
+    }
+  },
+  {
+    "slot": "engagement-1",
+    "file": "engagement-1.webp",
+    "width": 800,
+    "title": "File:Morocco exit 2019.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Morocco_exit_2019.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Morocco_exit_2019.jpg/1280px-Morocco_exit_2019.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Cpenyak787",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Aéroport de Marrakech-Ménara (tampon de passeport)",
+    "alt": {
+      "fr": "Tampon de sortie de l'aéroport de Marrakech-Ménara sur un passeport",
+      "en": "Exit stamp from Marrakech-Menara airport in a passport",
+      "ar": "ختم الخروج من مطار مراكش المنارة على جواز سفر"
+    }
+  },
+  {
+    "slot": "engagement-2",
+    "file": "engagement-2.webp",
+    "width": 800,
+    "title": "File:Maroc - Morocco - lelaroussepourto02laro 0148.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Maroc_-_Morocco_-_lelaroussepourto02laro_0148.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Maroc_-_Morocco_-_lelaroussepourto02laro_0148.jpg/1280px-Maroc_-_Morocco_-_lelaroussepourto02laro_0148.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Le Larousse pour tous : nouveau dictionnaire encyclopédique",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "place": "Carte ancienne du Maroc",
+    "alt": {
+      "fr": "Carte ancienne du Maroc",
+      "en": "Old map of Morocco",
+      "ar": "خريطة قديمة للمغرب"
+    }
+  },
+  {
+    "slot": "engagement-3",
+    "file": "engagement-3.webp",
+    "width": 800,
+    "title": "File:Dirhams marocains (MAD).jpeg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dirhams_marocains_(MAD).jpeg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Dirhams_marocains_%28MAD%29.jpeg/1280px-Dirhams_marocains_%28MAD%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Freepius",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "place": "Maroc (billets et pièces en dirhams)",
+    "alt": {
+      "fr": "Billets et pièces en dirhams marocains",
+      "en": "Moroccan dirham banknotes and coins",
+      "ar": "أوراق وقطع نقدية بالدرهم المغربي"
+    }
+  },
+  {
+    "slot": "engagement-4",
+    "file": "engagement-4.webp",
+    "width": 800,
+    "title": "Montage : conversation Benani Travel sur smartphone (recadrage de la bannière Contact)",
+    "page": "https://commons.wikimedia.org/wiki/File:Man_with_smartphone_and_laptop_%28Unsplash%29.jpg",
+    "localFile": "prisma/illustrations/engagement-4-telephone.webp",
+    "author": "Alejandro Escamilla (photo d'origine, Unsplash)",
+    "credit": "Alejandro Escamilla / Unsplash (CC0), montage Benani Travel",
+    "license": "CC0 ; modifiée : conversation et site Benani Travel ajoutés aux écrans",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "place": "Bureau (photo d'illustration)",
+    "alt": {
+      "fr": "Conversation avec Benani Travel sur un smartphone",
+      "en": "Chat with Benani Travel on a smartphone",
+      "ar": "محادثة مع بناني ترافل على هاتف ذكي"
+    }
+  },
+  {
+    "slot": "engagement-5",
+    "file": "engagement-5.webp",
+    "width": 800,
+    "title": "File:Cristina Gottardi 2017-01-19 (Unsplash).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Cristina_Gottardi_2017-01-19_(Unsplash).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Cristina_Gottardi_2017-01-19_%28Unsplash%29.jpg/1280px-Cristina_Gottardi_2017-01-19_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Cristina Gottardi cristina_gottardi",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "place": "Porte en bois fermée par un cadenas",
+    "alt": {
+      "fr": "Cadenas sur une porte en bois",
+      "en": "Padlock on a wooden door",
+      "ar": "قفل على باب خشبي"
+    }
+  },
+  {
+    "slot": "engagement-6",
+    "title": "File:Dunes de Merzouga 001.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dunes_de_Merzouga_001.jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Dunes_de_Merzouga_001.jpg/1920px-Dunes_de_Merzouga_001.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Dieglop",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Voyageurs à dos de dromadaire dans les dunes de Merzouga",
+      "en": "Travellers on camels in the Merzouga dunes",
+      "ar": "مسافرون على ظهور الجمال في كثبان مرزوكة"
+    },
+    "file": "engagement-6.webp",
+    "width": 800
   }
 ]
