@@ -72,16 +72,16 @@ export default async function Footer({ locale }: { locale: Locale }) {
   return (
     <footer className="bg-night text-white/80">
       <div aria-hidden className="band-star" />
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:grid-cols-2 lg:grid-cols-5 lg:px-8">
-        <div className="lg:col-span-2">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-7 px-4 py-10 lg:grid-cols-5 lg:gap-x-8 lg:px-8">
+        <div className="col-span-2">
           <div className="flex items-center gap-3 text-white">
-            <BrandMark logoUrl={brand.logoUrl} className="h-10 w-10 text-gold" />
-            <span className="font-display text-2xl">{brand.name}</span>
+            <BrandMark logoUrl={brand.logoUrl} className="h-8 w-8 text-gold" />
+            <span className="font-display text-xl">{brand.name}</span>
           </div>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/75">{tagline}</p>
-          <p className="mt-8 text-sm font-semibold tracking-wide text-gold-light uppercase">{v.footer.contact}</p>
+          <p className="mt-2 max-w-sm text-sm leading-snug text-white/75">{tagline}</p>
+          <p className="mt-5 text-[13px] font-semibold tracking-wide text-gold-light uppercase">{v.footer.contact}</p>
           {hasContact ? (
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-2 grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-2">
               {/* plusieurs numéros possibles, séparés par « / » */}
               {brand.phone
                 .split(/[/|,;]/)
@@ -120,10 +120,10 @@ export default async function Footer({ locale }: { locale: Locale }) {
               )}
             </ul>
           ) : (
-            <p className="mt-3 text-sm text-white/70">{v.footer.notConfigured}</p>
+            <p className="mt-2 text-sm text-white/70">{v.footer.notConfigured}</p>
           )}
           {socials.length > 0 && (
-            <div className="mt-6 flex gap-2" aria-label={v.footer.follow}>
+            <div className="mt-4 flex gap-2" aria-label={v.footer.follow}>
               {socials.map(([icon, url, label]) => (
                 <a key={icon} href={url} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-gold hover:text-night">
                   <Icon name={icon} className="h-5 w-5" />
@@ -132,13 +132,14 @@ export default async function Footer({ locale }: { locale: Locale }) {
             </div>
           )}
         </div>
-        {cols.map((c) => (
-          <div key={c.title}>
-            <p className="text-sm font-semibold tracking-wide text-gold-light uppercase">{c.title}</p>
-            <ul className="mt-4 space-y-2 text-sm">
+        {cols.map((c, i) => (
+          // la colonne « informations légales » occupe toute la largeur sur mobile, sur deux colonnes
+          <div key={c.title} className={i === 2 ? "col-span-2 lg:col-span-1" : undefined}>
+            <p className="text-[13px] font-semibold tracking-wide text-gold-light uppercase">{c.title}</p>
+            <ul className={`mt-2 text-sm ${i === 2 ? "grid grid-cols-2 gap-x-6 gap-y-1 lg:grid-cols-1" : "space-y-1"}`}>
               {c.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-gold-light">
+                  <Link href={l.href} className="inline-block py-1 hover:text-gold-light">
                     {l.label}
                   </Link>
                 </li>
@@ -148,10 +149,10 @@ export default async function Footer({ locale }: { locale: Locale }) {
         ))}
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
-          <p className="text-sm font-semibold tracking-wide text-gold-light uppercase">{lf.legalTitle}</p>
+        <div className="mx-auto max-w-7xl px-4 py-5 lg:px-8">
+          <p className="text-[13px] font-semibold tracking-wide text-gold-light uppercase">{lf.legalTitle}</p>
           {legalRows.length > 0 ? (
-            <dl className="mt-4 grid gap-x-8 gap-y-2 text-xs sm:grid-cols-2 lg:grid-cols-3">
+            <dl className="mt-2 grid gap-x-8 gap-y-1 text-[13px] sm:grid-cols-2 lg:grid-cols-3">
               {legalRows.map(([k, val]) => (
                 <div key={k} className="flex gap-2">
                   <dt className="shrink-0 text-white/70">{k} :</dt>
@@ -160,9 +161,9 @@ export default async function Footer({ locale }: { locale: Locale }) {
               ))}
             </dl>
           ) : (
-            <p className="mt-3 text-xs text-white/70">{lf.pending}</p>
+            <p className="mt-2 text-[13px] text-white/70">{lf.pending}</p>
           )}
-          <div className="mt-6 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/70 md:flex-row md:flex-wrap md:justify-between">
+          <div className="mt-4 flex flex-col gap-1 border-t border-white/10 pt-4 text-[13px] text-white/70 md:flex-row md:flex-wrap md:justify-between md:gap-x-6">
             <p>
               © {new Date().getFullYear()} {brand.name}. {t.footer.rights}
             </p>
