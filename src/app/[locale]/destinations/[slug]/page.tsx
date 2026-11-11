@@ -137,7 +137,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
           {isFallback(d.description, locale) && <p className="mt-2 text-xs text-muted">{t.common.translationPending}</p>}
         </Reveal>
         <Reveal delay={150} className="overflow-hidden rounded-[2rem]">
-          <Visual photo={photo("hero")} variant="dawn" seed={23} className="h-full min-h-80 w-full" showCredit />
+          <Visual photo={d.slug === "merzouga" ? photo("hero") : photo(`composer:${d.slug}:1`, `composer:${d.slug}:2`, `destination:${d.slug}`)} variant="dawn" seed={23} className="h-full min-h-80 w-full" sizes="(max-width: 1024px) 100vw, 45vw" showCredit />
         </Reveal>
       </section>
 
@@ -357,7 +357,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
       {/* RÉSERVER */}
       <section id="reserver" className="scroll-mt-32 px-4 pb-24 lg:px-8">
         <div className="relative isolate mx-auto max-w-7xl overflow-hidden rounded-[2rem] px-8 py-20 text-center text-white">
-          <Visual photo={photo("heroAlt")} variant="sunset" seed={90} caravan className="absolute inset-0 -z-10 h-full w-full" sizes="100vw" />
+          <Visual photo={d.slug === "merzouga" ? photo("heroAlt") : photo(`composer:${d.slug}:2`, `composer:${d.slug}:3`, `destination:${d.slug}`)} variant="sunset" seed={90} caravan className="absolute inset-0 -z-10 h-full w-full" sizes="100vw" />
           <div className="absolute inset-0 -z-10 bg-night/45" />
           <h2 className="font-display text-5xl font-semibold">{t.merzouga.book}</h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/85">{t.merzouga.bookText}</p>
