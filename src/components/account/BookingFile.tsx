@@ -197,7 +197,7 @@ export default async function BookingFile({ bookingId, locale, token, flags }: {
         </a>
       )}
 
-      <div className={card}>
+      <div id="avis" className={`${card} scroll-mt-28`}>
         <h2 className="font-display text-2xl font-semibold text-night">{t.account.leaveReview}</h2>
         {flags.review || booking.review ? (
           <p className="mt-3 text-emerald-800">{t.account.reviewSent}</p>

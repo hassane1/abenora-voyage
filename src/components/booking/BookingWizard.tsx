@@ -625,7 +625,7 @@ export function PriceTable({ price, locale, depositPercent }: { price: PriceResu
     <div>
       <table className="w-full text-sm">
         <tbody>
-          {[...price.lines, ...price.discounts].map((l) => (
+          {[...(price.lines ?? []), ...(price.discounts ?? [])].map((l) => (
             <tr key={l.key} className="border-b border-night/5">
               <td className="py-2 pe-2 text-night">{l.label}</td>
               <td className="py-2 text-xs text-muted" dir="ltr">

@@ -25,7 +25,9 @@
     "test:unit": "vitest run",
     "import:voyages": "tsx scripts/import-voyages.ts",
     "make:modele-voyages": "node scripts/make-modele-voyages.mjs",
-    "check:photos": "node scripts/check-destination-photos.mjs"
+    "check:photos": "node scripts/check-destination-photos.mjs",
+    "import:historique": "tsx scripts/import-historique.ts",
+    "make:historique": "node scripts/make-historique.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.7.0",
