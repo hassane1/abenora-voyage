@@ -6,7 +6,9 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { getDestination, getNextDepartures, getPublishedReviews, getUpcomingDepartures } from "@/lib/queries";
 import { formatDate } from "@/lib/format";
 import { isFallback, tr, trList } from "@/lib/i18n-content";
-import { site } from "@/lib/site";
+import { site, waLink } from "@/lib/site";
+import { getBrand } from "@/lib/brand";
+import FaqSection from "@/components/FaqSection";
 import BrandArt from "@/components/BrandArt";
 import Visual from "@/components/Visual";
 import { getPhotos } from "@/lib/photos";
@@ -39,7 +41,7 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
   const d = await getDestination(slug);
   if (!d) notFound();
   const reviews = await getPublishedReviews(d.id);
-  const [photo, nextDeps, allDeps] = await Promise.all([getPhotos(locale), getNextDepartures(), getUpcomingDepartures(60)]);
+  const [photo, nextDeps, allDeps, brand] = await Promise.all([getPhotos(locale), getNextDepartures(), getUpcomingDepartures(60), getBrand()]);
   const calendar = allDeps.filter((x) => d.circuits.some((c) => c.id === x.circuitId)).slice(0, 12);
   const composer = d.slug === "merzouga" ? await getComposerData(locale) : null;
   const sections = (d.sections ?? {}) as Record<string, unknown>;
@@ -322,21 +324,16 @@ export default async function DestinationPage({ params }: PageProps<"/[locale]/d
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="mx-auto max-w-4xl scroll-mt-32 px-4 py-24">
-        <SectionTitle eyebrow="FAQ" title={t.merzouga.faq} center />
-        <div className="mt-10 divide-y divide-night/10 rounded-3xl bg-white ring-1 ring-night/5">
-          {faq.map((f, i) => (
-            <details key={i} className="group p-6">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-night">
-                {tr(f.q, locale)}
-                <Icon name="plus" className="h-5 w-5 shrink-0 transition group-open:rotate-45" />
-              </summary>
-              <p className="mt-3 leading-relaxed text-muted">{tr(f.a, locale)}</p>
-            </details>
-          ))}
-        </div>
-      </section>
+      {/* FAQ (carnet de voyage) */}
+      <FaqSection
+        locale={locale}
+        items={faq.map((f) => ({ q: tr<string>(f.q, locale, ""), a: tr<string>(f.a, locale, "") }))}
+        title={t.merzouga.faq}
+        photo={photo("faq")}
+        brandName={brand.name}
+        whatsapp={waLink(brand.whatsapp, getExtra(locale).askUs)}
+        contactLabel={t.nav.contact}
+      />
 
       {/* CALENDRIER DES SÉJOURS (départs réellement ouverts, avec places restantes) */}
       {calendar.length > 0 && (

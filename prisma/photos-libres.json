@@ -826,5 +826,22 @@
     },
     "file": "engagement-6.webp",
     "width": 800
+  },
+  {
+    "slot": "faq",
+    "title": "File:Where? follow me- (Unsplash).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Where%3F_follow_me-_(Unsplash).jpg",
+    "thumb1600": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Where%3F_follow_me-_%28Unsplash%29.jpg/1920px-Where%3F_follow_me-_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Rubén Bagüés rubavi78",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "place": "Erg Chebbi, Merzouga",
+    "alt": {
+      "fr": "Voyageur de dos marchant seul dans les dunes de l'Erg Chebbi",
+      "en": "Traveller seen from behind walking alone in the Erg Chebbi dunes",
+      "ar": "مسافر من الخلف يمشي وحيداً في كثبان عرق الشبي"
+    },
+    "file": "faq.webp",
+    "width": 1000
   }
 ]

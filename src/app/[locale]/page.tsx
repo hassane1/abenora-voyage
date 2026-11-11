@@ -22,6 +22,7 @@ import OmraSignature, { type OmraHotel } from "@/components/home/OmraSignature";
 import VisaTimeline from "@/components/home/VisaTimeline";
 import WorldDestinations from "@/components/home/WorldDestinations";
 import Commitments from "@/components/home/Commitments";
+import FaqSection from "@/components/FaqSection";
 
 type Grid = { rows?: { label?: unknown; detail?: unknown }[] } | null;
 
@@ -291,23 +292,16 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[lo
         </section>
       )}
 
-      {/* ───────── QUESTIONS FRÉQUENTES ───────── */}
-      {faqItems.length > 0 && (
-        <section className="mx-auto max-w-4xl px-4 pb-section">
-          <SectionTitle eyebrow="FAQ" title={v.sections.faqTitle} center />
-          <div className="mt-10 divide-y divide-line rounded-card bg-white ring-1 ring-line">
-            {faqItems.map((f, i) => (
-              <details key={i} className="group p-6">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-night">
-                  {tr<string>(f.q, locale, "")}
-                  <Icon name="plus" className="h-5 w-5 shrink-0 text-gold-deep transition group-open:rotate-45" />
-                </summary>
-                <p className="mt-3 leading-relaxed text-muted">{tr<string>(f.a, locale, "")}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* ───────── QUESTIONS FRÉQUENTES (carnet de voyage) ───────── */}
+      <FaqSection
+        locale={locale}
+        items={faqItems.map((f) => ({ q: tr<string>(f.q, locale, ""), a: tr<string>(f.a, locale, "") }))}
+        title={v.sections.faqTitle}
+        photo={photo("faq")}
+        brandName={brand.name}
+        whatsapp={wa}
+        contactLabel={t.nav.contact}
+      />
 
       {/* ───────── NEWSLETTER ET CONTACT ───────── */}
       <section id="newsletter" className="scroll-mt-24 px-4 pb-section lg:px-8">
