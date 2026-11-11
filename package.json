@@ -1,11 +1,11 @@
 {
-  "name": "maroc-voyages",
+  "name": "abenora-voyage",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "start": "next start -p 3015 -H 127.0.0.1",
+    "start": "next start -p 3016 -H 127.0.0.1",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "postinstall": "prisma generate",
