@@ -16,7 +16,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 2, max: 8, default: 3 },
+      durations: { min: 1, max: 7, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.desert,
       days: [
         day(t("Les dunes de l'Erg Chebbi", "The Erg Chebbi dunes", "كثبان عرق الشبي"), tl(["Balade à dos de dromadaire jusqu'au campement", "Coucher de soleil sur les grandes dunes", "Dîner berbère et nuit sous les étoiles"], ["Camel ride to the camp", "Sunset over the high dunes", "Berber dinner and night under the stars"], ["جولة على الجمل إلى المخيم", "غروب الشمس فوق الكثبان العالية", "عشاء أمازيغي ومبيت تحت النجوم"]), "camel"),
@@ -46,7 +46,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 7, default: 3 },
+      durations: { min: 1, max: 6, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.city,
       days: [
         day(t("Médina et place Jemaa el-Fna", "Medina and Jemaa el-Fna", "المدينة العتيقة وساحة جامع الفنا"), tl(["Minaret de la Koutoubia", "Souks des artisans", "Ambiance de la place en soirée"], ["Koutoubia minaret", "Craftsmen's souks", "The square's evening atmosphere"], ["صومعة الكتبية", "أسواق الصناع التقليديين", "أجواء الساحة في المساء"]), "composer:marrakech:1"),
@@ -76,7 +76,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 6, default: 3 },
+      durations: { min: 1, max: 5, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.city,
       days: [
         day(t("Fès el-Bali, la médina millénaire", "Fes el-Bali, the ancient medina", "فاس البالي، المدينة الألفية"), tl(["Bab Bou Jeloud, la porte bleue", "Médersa Bou Inania", "Souks et fondouks"], ["Bab Bou Jeloud, the blue gate", "Bou Inania madrasa", "Souks and caravanserais"], ["باب بوجلود، الباب الأزرق", "المدرسة البوعنانية", "الأسواق والفنادق القديمة"]), "composer:fes:1"),
@@ -105,7 +105,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 5, default: 2 },
+      durations: { min: 1, max: 4, default: 1 } /* nuits d'hôtel */,
       lodging: lodging.city,
       days: [
         day(t("La perle bleue", "The blue pearl", "الجوهرة الزرقاء"), tl(["Place Outa el-Hammam et kasbah", "Ruelles bleues de la médina", "Thé sur une terrasse"], ["Outa el-Hammam square and kasbah", "Blue lanes of the medina", "Tea on a terrace"], ["ساحة وطاء الحمام والقصبة", "أزقة المدينة الزرقاء", "شاي على سطح"]), "composer:chefchaouen:3"),
@@ -133,7 +133,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 4, default: 2 },
+      durations: { min: 1, max: 3, default: 1 } /* nuits d'hôtel */,
       lodging: lodging.nature,
       days: [
         day(t("Les cascades d'Akchour", "The Akchour waterfalls", "شلالات أقشور"), tl(["Marche le long de l'oued (2 à 3 h aller-retour selon le rythme)", "Petite et grande cascade", "Baignade possible en été dans les bassins"], ["Walk along the river (2 to 3 h return depending on pace)", "Small and large waterfall", "Summer swimming in the pools"], ["المشي على طول الوادي (2 إلى 3 ساعات ذهاباً وإياباً حسب الوتيرة)", "الشلال الصغير والكبير", "إمكانية السباحة صيفاً في الأحواض"]), "composer:akchour:1"),
@@ -160,7 +160,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 6, default: 3 },
+      durations: { min: 1, max: 5, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.city,
       days: [
         day(t("Tanger, porte de l'Afrique", "Tangier, gateway to Africa", "طنجة، بوابة إفريقيا"), tl(["Kasbah et musée de la Kasbah", "Petit Socco et médina", "Café face au détroit"], ["Kasbah and Kasbah museum", "Petit Socco and medina", "Café overlooking the strait"], ["القصبة ومتحف القصبة", "السوق الداخل والمدينة العتيقة", "مقهى مطل على المضيق"]), "composer:tanger-tetouan:2"),
@@ -189,7 +189,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 4, default: 2 },
+      durations: { min: 1, max: 3, default: 1 } /* nuits d'hôtel */,
       lodging: lodging.nature,
       days: [
         day(t("Ifrane, la « petite Suisse »", "Ifrane, the “little Switzerland”", "إفران، «سويسرا الصغيرة»"), tl(["Balade dans la ville et le parc", "Statue du lion de pierre", "Pause gourmande"], ["Stroll through town and park", "Stone lion statue", "Snack break"], ["جولة في المدينة والمنتزه", "تمثال الأسد الحجري", "استراحة لتذوق الحلويات"]), "composer:ifrane-azrou:1"),
@@ -213,7 +213,7 @@ export const marocA = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 2, max: 7, default: 4 },
+      durations: { min: 1, max: 6, default: 3 } /* nuits d'hôtel */,
       lodging: lodging.beach,
       days: [
         day(t("Al Hoceïma et ses criques", "Al Hoceima and its coves", "الحسيمة وخلجانها"), tl(["Plage Quemado et front de mer", "Point de vue sur la baie", "Dîner de poisson au port"], ["Quemado beach and seafront", "Bay viewpoint", "Fish dinner at the harbour"], ["شاطئ كيمادو والكورنيش", "إطلالة على الخليج", "عشاء سمك في الميناء"]), "composer:nord-est-mediterranee:2"),

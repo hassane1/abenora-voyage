@@ -3,9 +3,8 @@
 import Image from "next/image";
 import { useActionState, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/get-dictionary";
 import { formatMad } from "@/lib/format";
-import { buildProgram, onSiteKey, startCities, travelFrom, type ComposerPrice, type ProgramDay } from "@/lib/composer-engine";
+import { arCount, buildProgram, lengthLabel, onSiteKey, startCities, travelFrom, tripLength, type ComposerPrice, type ProgramDay } from "@/lib/composer-engine";
 import type { ComposerDestination, ComposerDestinationData } from "@/lib/composer-data";
 import { submitRequest, type FormState } from "@/app/[locale]/forms-actions";
 import { useWhatsApp } from "./BrandProvider";
@@ -26,7 +25,8 @@ const T = {
     airportsGroup: "Aéroports",
     road: (h: string) => `environ ${h} h de route`,
     flight: (h: string) => `environ ${h} h de vol (selon compagnie et escale)`,
-    duration: "Durée du séjour",
+    duration: "Nuits d'hôtel",
+    nightsOpt: (n: number) => (n > 1 ? `${n} nuits` : "1 nuit"),
     travelers: "Voyageurs",
     persons: (n: number) => `${n} personne${n > 1 ? "s" : ""}`,
     lodging: "Hébergement",
@@ -71,7 +71,8 @@ const T = {
     airportsGroup: "Airports",
     road: (h: string) => `about ${h} h by road`,
     flight: (h: string) => `about ${h} h flight (depending on airline and stopover)`,
-    duration: "Length of stay",
+    duration: "Hotel nights",
+    nightsOpt: (n: number) => (n > 1 ? `${n} nights` : "1 night"),
     travelers: "Travellers",
     persons: (n: number) => `${n} traveller${n > 1 ? "s" : ""}`,
     lodging: "Accommodation",
@@ -116,7 +117,8 @@ const T = {
     airportsGroup: "المطارات",
     road: (h: string) => `حوالي ${h} ساعة بالطريق`,
     flight: (h: string) => `حوالي ${h} ساعة طيران (حسب الشركة والتوقف)`,
-    duration: "مدة الإقامة",
+    duration: "ليالي الفندق",
+    nightsOpt: (n: number) => arCount(n, "ليلة واحدة", "ليلتان", "ليالٍ", "ليلة"),
     travelers: "المسافرون",
     persons: (n: number) => `${n} ${n > 2 && n < 11 ? "أشخاص" : "شخص"}`,
     lodging: "الإقامة",
@@ -161,7 +163,6 @@ function StepNum({ n }: { n: number }) {
 
 export default function TripComposer({ locale, destinations, initial }: { locale: Locale; destinations: ComposerDestination[]; initial: ComposerDestinationData | null }) {
   const t = T[locale];
-  const d = getDictionary(locale);
   const whatsappLink = useWhatsApp();
   const resultRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
@@ -170,7 +171,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
   const [loadingDest, setLoadingDest] = useState(false);
   const cfg = data?.config;
   const [city, setCity] = useState<string>(initial?.config.onSite ? onSiteKey : "casablanca");
-  const [days, setDays] = useState(initial?.config.durations.default ?? 3);
+  const [nights, setNights] = useState(initial?.config.durations.default ?? 2);
   const [travelers, setTravelers] = useState(2);
   const [lodging, setLodging] = useState(initial?.config.lodging[1]?.key ?? initial?.config.lodging[0]?.key ?? "");
   const [options, setOptions] = useState<string[]>([]);
@@ -192,7 +193,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
         setData(j);
         setResult(null);
         setOptions([]);
-        setDays(j.config.durations.default);
+        setNights(j.config.durations.default);
         setLodging(j.config.lodging[1]?.key ?? j.config.lodging[0]?.key ?? "");
         const starts = startCities(j.cities, j.config);
         setCity((prev) => (j.config.onSite ? onSiteKey : starts.some((c) => c.key === prev) ? prev : (starts.find((c) => c.key === "casablanca") ?? starts[0])?.key ?? onSiteKey));
@@ -205,12 +206,13 @@ export default function TripComposer({ locale, destinations, initial }: { locale
   const travelHint = travel && travel.kind !== "NONE" ? (travel.kind === "FLIGHT" ? t.flight(fmtHours(travel.hours, locale)) : t.road(fmtHours(travel.hours, locale))) : null;
 
   if (!data || !cfg) return null;
+  const len = tripLength(data.cities, cfg, data.pos, city, nights);
   const durations = Array.from({ length: cfg.durations.max - cfg.durations.min + 1 }, (_, i) => cfg.durations.min + i);
   const lodgingObj = cfg.lodging.find((l) => l.key === lodging) ?? cfg.lodging[0];
 
   const create = async () => {
     setLoading(true);
-    const choice = { destination: data.slug, city, days, travelers, lodging: lodgingObj.key, options };
+    const choice = { destination: data.slug, city, nights, travelers, lodging: lodgingObj.key, options };
     const program = buildProgram(data.cities, cfg, data.pos, choice, locale);
     let price: ComposerPrice | null = null;
     try {
@@ -220,7 +222,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
       price = null;
     }
     const cityLabel = city === onSiteKey ? t.onSite(data.name) : (starts.find((c) => c.key === city)?.name[locale] ?? city);
-    const summary = `${data.name} · ${cityLabel} · ${d.common.daysNights(days, days - 1)} · ${t.persons(travelers)} · ${lodgingObj.label[locale]}${
+    const summary = `${data.name} · ${cityLabel} · ${lengthLabel(locale, len.days, len.nights, len.travelDay)} · ${t.persons(travelers)} · ${lodgingObj.label[locale]}${
       options.length ? ` · ${options.map((o) => cfg.options.find((x) => x.code === o)?.label[locale]).filter(Boolean).join(", ")}` : ""
     }`;
     setResult({ program, price, summary });
@@ -228,7 +230,7 @@ export default function TripComposer({ locale, destinations, initial }: { locale
     requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
-  const choiceJson = JSON.stringify({ destination: data.slug, city, days, travelers, lodging: lodgingObj.key, options });
+  const choiceJson = JSON.stringify({ destination: data.slug, city, nights, travelers, lodging: lodgingObj.key, options });
   const wa = result && whatsappLink(`${t.yourProgram} — ${result.summary}`);
   const national = destinations.filter((x) => x.scope === "NATIONAL");
   const international = destinations.filter((x) => x.scope === "INTERNATIONAL");
@@ -309,15 +311,19 @@ export default function TripComposer({ locale, destinations, initial }: { locale
                 </span>
                 <span className="relative mt-3 flex items-center">
                   <Icon name="calendar" className="pointer-events-none absolute start-4 h-4 w-4 text-gold-deep" />
-                  <select value={days} onChange={(e) => setDays(Number(e.target.value))} className={selectCls}>
+                  <select value={nights} onChange={(e) => setNights(Number(e.target.value))} className={selectCls}>
                     {durations.map((n) => (
                       <option key={n} value={n}>
-                        {d.common.daysNights(n, n - 1)}
+                        {t.nightsOpt(n)}
                       </option>
                     ))}
                   </select>
                   <Icon name="arrow" className="pointer-events-none absolute end-3.5 h-4 w-4 rotate-90 text-night/40" />
                 </span>
+                {/* durée calculée, jamais saisie */}
+                <output className="mt-1.5 block text-xs font-semibold text-gold-deep" aria-live="polite">
+                  {lengthLabel(locale, len.days, len.nights, len.travelDay)}
+                </output>
               </label>
               <div>
                 <span id="composer-travelers" className="text-sm font-bold text-night">

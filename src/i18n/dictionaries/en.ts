@@ -228,7 +228,7 @@ const en: Dictionary = {
   tailor: {
     title: "Create your tailor-made trip",
     intro: "Tell us what you'd like: we'll put together a personalised proposal, with no obligation.",
-    duration: "Desired length (days)",
+    duration: "Hotel nights",
     budget: "Budget per person (MAD)",
     interests: "Interests",
     interestList: ["Desert & camps", "Adventure & sport", "Culture & encounters", "Food", "Photography", "Relaxation & wellbeing"],

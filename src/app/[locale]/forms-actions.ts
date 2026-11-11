@@ -10,7 +10,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { clientIp, rateLimit } from "@/lib/security";
 import { site } from "@/lib/site";
 import { getComposerDestination } from "@/lib/composer-data";
-import { buildProgram, choiceSchema, computePrice, onSiteKey } from "@/lib/composer-engine";
+import { buildProgram, choiceSchema, computePrice, lengthLabel, onSiteKey, tripLength } from "@/lib/composer-engine";
 
 const optInt = (min: number, max: number) => z.coerce.number().int().min(min).max(max).optional().or(z.literal("").transform(() => undefined));
 const optStr = (max: number) => z.string().trim().max(max).optional().or(z.literal(""));
@@ -24,6 +24,7 @@ const schema = z.object({
   departureCity: optStr(80),
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().or(z.literal("")),
   durationDays: optInt(1, 60),
+  nights: optInt(1, 30), // nuits d'hôtel (unité de durée) : les jours sont calculés ici
   budgetMad: optInt(0, 1_000_000),
   travelers: optInt(1, 100),
   comfort: z.enum(["STANDARD", "CONFORT", "LUXE"]).optional().or(z.literal("")),
@@ -54,13 +55,24 @@ export async function submitRequest(_prev: FormState, formData: FormData): Promi
   if (!parsed.success) return { ok: false, error: "INVALID" };
   const lim = await rateLimit(`request:${await clientIp()}`, 8, 3600);
   if (!lim.ok) return { ok: false, error: "RATE_LIMIT" };
-  const { website: _hp, consent: _c, needs, startDate, comfort, transport, composer, ...data } = parsed.data;
+  const { website: _hp, consent: _c, needs, startDate, comfort, transport, composer, nights, ...data } = parsed.data;
   void _hp;
   void _c;
   const locale: Locale = hasLocale(data.locale) ? data.locale : "fr";
   let message = needs ? `${data.message}\n\n— ${getV2("fr").tailorForm.needs} : ${needs}` : data.message;
   // configurateur : programme et estimation DÉMO recalculés ici, à partir des données en base
   // (le récapitulatif envoyé par le navigateur ne fait pas foi)
+  // formulaire sur mesure : durée calculée à partir des nuits d'hôtel (+ journée de trajet si la ville de départ est loin)
+  if (!composer && nights) {
+    const dest = data.destination ? await getComposerDestination(data.destination, "fr").catch(() => null) : null;
+    const norm = (x: string) => x.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().trim();
+    const city = dest && data.departureCity ? dest.cities.cities.find((c) => [c.name.fr, c.name.en, c.name.ar, c.key].some((n) => norm(n) === norm(data.departureCity!))) : undefined;
+    const len = dest ? tripLength(dest.cities, dest.config, dest.pos, city?.key ?? onSiteKey, nights) : { days: nights + 1, nights, travelDay: false };
+    data.durationDays = len.days;
+    message += `
+
+— Durée : ${lengthLabel("fr", len.days, len.nights, len.travelDay)}${dest && data.departureCity && !city ? " (ville de départ non reconnue : journée de trajet à vérifier)" : ""}`;
+  }
   if (composer) {
     let raw: unknown = null;
     try {
@@ -76,13 +88,15 @@ export async function submitRequest(_prev: FormState, formData: FormData): Promi
     const cityName = choice.data.city === onSiteKey ? "Sur place" : (dest.cities.cities.find((c) => c.key === choice.data.city)?.name.fr ?? choice.data.city);
     data.destination = dest.name;
     data.departureCity = cityName;
-    data.durationDays = choice.data.days;
+    const len = tripLength(dest.cities, dest.config, dest.pos, choice.data.city, choice.data.nights);
+    data.durationDays = len.days;
     data.travelers = choice.data.travelers;
     const lodging = dest.config.lodging.find((l) => l.key === choice.data.lodging)?.label.fr ?? choice.data.lodging;
     message += [
       "",
       "",
       "— Programme composé en ligne (tarifs DÉMO) —",
+      `Durée : ${lengthLabel("fr", len.days, len.nights, len.travelDay)}`,
       `Hébergement : ${lodging}`,
       ...program.map((p) => `J${p.day} · ${p.title} : ${p.items.map((i) => i.text).join(" ; ")}`),
       ...price.lines.map((l) => `${l.label} : ${l.amount} MAD/pers.`),

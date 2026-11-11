@@ -231,7 +231,7 @@ const fr = {
   tailor: {
     title: "Créez votre voyage sur mesure",
     intro: "Indiquez vos envies : nous composons une proposition personnalisée, sans engagement.",
-    duration: "Durée souhaitée (jours)",
+    duration: "Nuits d'hôtel",
     budget: "Budget par personne (MAD)",
     interests: "Centres d'intérêt",
     interestList: ["Désert & bivouac", "Aventure & sports", "Culture & rencontres", "Gastronomie", "Photographie", "Détente & bien-être"],

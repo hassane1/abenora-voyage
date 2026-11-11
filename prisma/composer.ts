@@ -15,6 +15,8 @@ import { monde } from "./seed-data/composer/monde";
 type T3 = { fr: string; en: string; ar: string };
 const empty = (v: unknown) => !v || (typeof v === "object" && !Array.isArray(v) && Object.values(v as Record<string, unknown>).every((x) => !x || (Array.isArray(x) && x.length === 0))) || (Array.isArray(v) && v.length === 0);
 
+const generated = (faq: unknown) => Array.isArray(faq) && faq.length === 3 && /^Quelle est la meilleure période pour /.test(String((faq[0] as { q?: { fr?: string } })?.q?.fr ?? ""));
+
 export async function applyComposer(db: PrismaClient, { force = false } = {}) {
   const citiesCfg = citiesConfigSchema.parse(cities);
   const existingCities = await db.setting.findUnique({ where: { key: "composer:cities" } });
@@ -44,11 +46,11 @@ export async function applyComposer(db: PrismaClient, { force = false } = {}) {
     const faq = [
       { q: t(`Quelle est la meilleure période pour ${name.fr} ?`, `When is the best time to visit ${name.en}?`, `ما هي أفضل فترة لزيارة ${name.ar}؟`), a: cfg.seasons },
       {
-        q: t("Combien de jours prévoir ?", "How many days should I plan?", "كم يوماً يجب التخطيط له؟"),
+        q: t("Combien de nuits prévoir ?", "How many nights should I plan?", "كم ليلة يجب التخطيط لها؟"),
         a: t(
-          `Nos programmes vont de ${cfg.durations.min} à ${cfg.durations.max} jours ; ${cfg.durations.default} jours permettent de voir l'essentiel. Composez votre séjour dans le configurateur.`,
-          `Our programmes range from ${cfg.durations.min} to ${cfg.durations.max} days; ${cfg.durations.default} days cover the highlights. Build your stay in the trip builder.`,
-          `تتراوح برامجنا بين ${cfg.durations.min} و${cfg.durations.max} أيام؛ و${cfg.durations.default} أيام تكفي لرؤية الأهم. صمّموا إقامتكم في أداة التصميم.`,
+          `Comptez de ${cfg.durations.min} à ${cfg.durations.max} nuits d'hôtel ; ${cfg.durations.default} nuits permettent de voir l'essentiel. La durée en jours est calculée automatiquement (nuits + 1, plus une journée de trajet pour les longues distances) dans le configurateur.`,
+          `Allow ${cfg.durations.min} to ${cfg.durations.max} hotel nights; ${cfg.durations.default} nights cover the highlights. The number of days is calculated automatically (nights + 1, plus a travel day for long distances) in the trip builder.`,
+          `احتسبوا من ${cfg.durations.min} إلى ${cfg.durations.max} ليالٍ في الفندق؛ و${cfg.durations.default} ليالٍ تكفي لرؤية الأهم. يُحسب عدد الأيام تلقائياً (الليالي + 1، مع يوم سفر للمسافات الطويلة) في أداة التصميم.`,
         ),
       },
       {
@@ -65,7 +67,8 @@ export async function applyComposer(db: PrismaClient, { force = false } = {}) {
       data: {
         ...(entry.description && empty(dest.description) ? { description: entry.description } : {}),
         ...(empty(dest.tips) ? { tips: cfg.tips } : {}),
-        ...(empty(dest.faq) ? { faq } : {}),
+        // FAQ : créée si vide ; avec --force, seule une FAQ générée par ce script est régénérée (jamais une FAQ rédigée à la main)
+        ...(empty(dest.faq) || (force && generated(dest.faq)) ? { faq } : {}),
         published: true,
       },
     });

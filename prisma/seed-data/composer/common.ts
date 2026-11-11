@@ -41,7 +41,7 @@ export const cities = {
   ],
   roadKmh: 65,
   roadFactor: 1.3,
-  transferThresholdH: 5,
+  longTripH: 7, // au-delà de ~7 h de route : 1 journée de trajet en plus (sans nuit d'hôtel)
   transportBaseMad: 150,
   transportPerKmMad: 0.6,
 };

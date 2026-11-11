@@ -38,7 +38,7 @@ export default async function ComposerAdmin({ searchParams }: PageProps<"/admin/
           <summary className="cursor-pointer p-4 font-semibold">Villes de départ et transport ({cities.data.cities.length} villes)</summary>
           <div className="space-y-3 p-4 pt-0 text-sm">
             <p className="text-muted">
-              Temps de trajet estimé : distance à vol d&apos;oiseau × {cities.data.roadFactor} ÷ {cities.data.roadKmh} km/h ; journée de transfert au-delà de {cities.data.transferThresholdH} h. Transport DÉMO aller-retour par personne : {cities.data.transportBaseMad} MAD + {cities.data.transportPerKmMad} MAD/km.
+              Temps de trajet estimé : distance à vol d&apos;oiseau × {cities.data.roadFactor} ÷ {cities.data.roadKmh} km/h ; au-delà de {cities.data.longTripH} h de route, une journée de trajet (sans nuit d&apos;hôtel) s&apos;ajoute : jours = nuits d&apos;hôtel + 1 (+ 1). Transport DÉMO aller-retour par personne : {cities.data.transportBaseMad} MAD + {cities.data.transportPerKmMad} MAD/km.
             </p>
             <form action={saveComposerJson} className="space-y-2">
               <input type="hidden" name="slug" value="cities" />
@@ -90,7 +90,7 @@ export default async function ComposerAdmin({ searchParams }: PageProps<"/admin/
                         </>
                       )}
                       <label className="block">
-                        <span className="label text-xs">Durée min / max / par défaut (jours)</span>
+                        <span className="label text-xs">Nuits d&apos;hôtel min / max / par défaut</span>
                         <span className="flex gap-2">
                           <input name="dur:min" type="number" min={1} max={15} defaultValue={cfg.data.durations.min} className="field !py-1.5" />
                           <input name="dur:max" type="number" min={1} max={15} defaultValue={cfg.data.durations.max} className="field !py-1.5" />

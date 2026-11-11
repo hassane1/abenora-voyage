@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useMemo, useState } from "react";
+import { lengthLabel } from "@/lib/composer-engine";
 import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -30,7 +31,9 @@ export default function RequestForm({
   const v = getV2(locale);
   const today = new Date().toISOString().slice(0, 10);
   const [state, action, pending] = useActionState<FormState, FormData>(submitRequest, null);
-  const [days, setDays] = useState(3);
+  // l'unité est la nuit d'hôtel : les jours sont calculés (nuits + 1, + 1 journée de trajet si longue distance)
+  const [nights, setNights] = useState(2);
+  const days = nights + 1;
   const [budget, setBudget] = useState(3000);
   const [interests, setInterests] = useState<string[]>([]);
 
@@ -130,9 +133,18 @@ export default function RequestForm({
           <div className="grid gap-6 sm:grid-cols-2">
             <label>
               <span className="label">
-                {t.tailor.duration} : <strong>{days}</strong>
+                {t.tailor.duration}
               </span>
-              <input name="durationDays" type="range" min={1} max={15} value={days} onChange={(e) => setDays(Number(e.target.value))} className="w-full accent-terracotta" />
+              <select name="nights" value={nights} onChange={(e) => setNights(Number(e.target.value))} className="field">
+                {Array.from({ length: 14 }, (_, i) => i + 1).map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+              <output className="mt-1 block text-xs font-semibold text-gold-deep" aria-live="polite">
+                {locale === "ar" ? `${lengthLabel("ar", days, nights, false)} (+ يوم سفر للمسافات الطويلة، يُحسب حسب مدينة الانطلاق)` : locale === "en" ? `${days} days · ${nights} hotel night${nights > 1 ? "s" : ""} (+ 1 travel day for long distances, worked out from your departure city)` : `${days} jours · ${nights} nuit${nights > 1 ? "s" : ""} d'hôtel (+ 1 journée de trajet pour les longues distances, calculée selon votre ville de départ)`}
+              </output>
             </label>
             <label>
               <span className="label">

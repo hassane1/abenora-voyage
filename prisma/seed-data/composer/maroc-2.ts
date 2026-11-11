@@ -20,7 +20,7 @@ export const marocB = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 6, default: 3 },
+      durations: { min: 1, max: 5, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.city,
       days: [
         day(t("Aït-Ben-Haddou", "Aït Benhaddou", "آيت بن حدو"), tl(["Traversée de l'oued et montée au grenier du ksar", "Ruelles en pisé classées par l'UNESCO", "Vue sur la vallée de l'Ounila"], ["Cross the river and climb to the ksar granary", "UNESCO-listed earthen lanes", "View over the Ounila valley"], ["عبور الوادي والصعود إلى مخزن القصر", "أزقة طينية مصنفة لدى اليونسكو", "إطلالة على وادي أونيلة"]), "aitbenhaddou"),
@@ -49,7 +49,7 @@ export const marocB = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 2, max: 7, default: 3 },
+      durations: { min: 1, max: 6, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.desert,
       days: [
         day(t("La vallée du Drâa", "The Draa valley", "وادي درعة"), tl(["Route des palmeraies et des ksour", "Arrêt à Agdz", "Installation à Zagora"], ["Road of palm groves and ksour", "Stop in Agdz", "Check-in in Zagora"], ["طريق الواحات والقصور", "توقف في أكدز", "الاستقرار في زاكورة"]), "composer:zagora:1"),
@@ -77,7 +77,7 @@ export const marocB = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 5, default: 3 },
+      durations: { min: 1, max: 4, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.nature,
       days: [
         day(t("La vallée des roses", "The Valley of Roses", "وادي الورود"), tl(["Kelaat M'Gouna et ses coopératives d'eau de rose", "Balade dans les vergers", "Kasbahs en terre"], ["Kelaat M'Gouna and its rose-water cooperatives", "Walk through the orchards", "Earthen kasbahs"], ["قلعة مكونة وتعاونيات ماء الورد", "نزهة في البساتين", "قصبات طينية"]), "composer:vallee-dades:2"),
@@ -104,7 +104,7 @@ export const marocB = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 6, default: 3 },
+      durations: { min: 1, max: 5, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.nature,
       days: [
         day(t("Imlil et la vallée", "Imlil and the valley", "إمليل والوادي"), tl(["Arrivée à Imlil (environ 1 600 m)", "Balade vers les villages voisins", "Thé chez l'habitant"], ["Arrival in Imlil (about 1,600 m)", "Walk to neighbouring villages", "Tea with a local family"], ["الوصول إلى إمليل (حوالي 1600 م)", "نزهة نحو القرى المجاورة", "شاي عند السكان"]), "destination:atlas"),
@@ -133,7 +133,7 @@ export const marocB = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 3, default: 1 },
+      durations: { min: 1, max: 2, default: 1 } /* nuits d'hôtel */,
       lodging: lodging.nature,
       days: [
         day(t("Les cascades d'Ouzoud", "The Ouzoud waterfalls", "شلالات أوزود"), tl(["Descente par le sentier des oliviers", "Barque au pied des chutes", "Déjeuner face aux cascades"], ["Walk down the olive-tree path", "Boat at the foot of the falls", "Lunch facing the waterfalls"], ["النزول عبر مسلك الزيتون", "قارب عند أسفل الشلالات", "غداء قبالة الشلالات"]), "composer:ouzoud:1"),
@@ -160,7 +160,7 @@ export const marocB = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 1, max: 6, default: 3 },
+      durations: { min: 1, max: 5, default: 2 } /* nuits d'hôtel */,
       lodging: lodging.city,
       days: [
         day(t("Médina et remparts", "Medina and ramparts", "المدينة العتيقة والأسوار"), tl(["Skala de la ville et ses canons", "Ruelles blanches et galeries d'art", "Coucher de soleil sur les remparts"], ["The town's Skala and its cannons", "White lanes and art galleries", "Sunset on the ramparts"], ["سقالة المدينة ومدافعها", "أزقة بيضاء وأروقة فنية", "غروب الشمس على الأسوار"]), "composer:essaouira:1"),
@@ -189,7 +189,7 @@ export const marocB = [
     config: {
       mode: "ROAD",
       onSite: true,
-      durations: { min: 2, max: 8, default: 4 },
+      durations: { min: 1, max: 7, default: 3 } /* nuits d'hôtel */,
       lodging: lodging.beach,
       days: [
         day(t("La baie d'Agadir", "Agadir bay", "خليج أكادير"), tl(["Corniche et plage", "Marina", "Coucher de soleil depuis la kasbah d'Agadir Oufella"], ["Corniche and beach", "Marina", "Sunset from the Agadir Oufella kasbah"], ["الكورنيش والشاطئ", "المارينا", "غروب الشمس من قصبة أكادير أوفلا"]), "composer:agadir:1"),
@@ -218,7 +218,7 @@ export const marocB = [
     config: {
       mode: "FLIGHT",
       onSite: true,
-      durations: { min: 3, max: 8, default: 5 },
+      durations: { min: 2, max: 7, default: 4 } /* nuits d'hôtel */,
       flight: { hours: 2, baseMad: 1800, extraNonCasaMad: 400, airports: ["casablanca", "marrakech", "agadir", "rabat"], note: t("Vols intérieurs, directs ou avec escale selon la saison.", "Domestic flights, direct or with a stopover depending on season.", "رحلات داخلية مباشرة أو بتوقف حسب الموسم.") },
       lodging: lodging.beach,
       days: [

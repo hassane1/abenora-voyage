@@ -18,7 +18,7 @@ export const monde = [
     config: {
       mode: "FLIGHT",
       onSite: false,
-      durations: { min: 7, max: 15, default: 12 },
+      durations: { min: 6, max: 14, default: 11 } /* nuits d'hôtel */,
       flight: flight(6, 7000, t("Vols vers Djeddah ou Médine, directs ou avec escale selon le programme.", "Flights to Jeddah or Medina, direct or with a stopover depending on the programme.", "رحلات نحو جدة أو المدينة المنورة، مباشرة أو بتوقف حسب البرنامج.")),
       lodging: [
         { key: "essentiel", label: t("Hôtel avec navette", "Hotel with shuttle", "فندق مع حافلة نقل"), hint: t("Quelques minutes du Haram en navette", "A few minutes from the Haram by shuttle", "على بعد دقائق من الحرم بالحافلة"), nightMad: 900 },
@@ -48,7 +48,7 @@ export const monde = [
     config: {
       mode: "FLIGHT",
       onSite: false,
-      durations: { min: 3, max: 10, default: 6 },
+      durations: { min: 2, max: 9, default: 5 } /* nuits d'hôtel */,
       flight: flight(4.5, 3500),
       lodging: lodging.abroad,
       days: [
@@ -75,7 +75,7 @@ export const monde = [
     config: {
       mode: "FLIGHT",
       onSite: false,
-      durations: { min: 4, max: 10, default: 6 },
+      durations: { min: 3, max: 9, default: 5 } /* nuits d'hôtel */,
       flight: flight(7.5, 5000),
       lodging: lodging.abroad,
       days: [
@@ -102,7 +102,7 @@ export const monde = [
     config: {
       mode: "FLIGHT",
       onSite: false,
-      durations: { min: 4, max: 10, default: 8 },
+      durations: { min: 3, max: 9, default: 7 } /* nuits d'hôtel */,
       flight: flight(5, 4500),
       lodging: lodging.abroad,
       days: [
@@ -129,7 +129,7 @@ export const monde = [
     config: {
       mode: "FLIGHT",
       onSite: false,
-      durations: { min: 6, max: 12, default: 9 },
+      durations: { min: 5, max: 11, default: 8 } /* nuits d'hôtel */,
       flight: flight(16, 8500, t("Vols avec escale (pas de vol direct depuis le Maroc à ce jour).", "Flights with a stopover (no direct flight from Morocco at present).", "رحلات بتوقف (لا توجد رحلة مباشرة من المغرب حالياً).")),
       lodging: lodging.abroad,
       days: [
@@ -156,7 +156,7 @@ export const monde = [
     config: {
       mode: "FLIGHT",
       onSite: false,
-      durations: { min: 3, max: 10, default: 7 },
+      durations: { min: 2, max: 9, default: 6 } /* nuits d'hôtel */,
       flight: flight(1.5, 2200, t("Vols vers Malaga ou Séville selon l'aéroport de départ ; traversée en ferry possible depuis Tanger.", "Flights to Málaga or Seville depending on departure airport; ferry crossing possible from Tangier.", "رحلات نحو مالقة أو إشبيلية حسب مطار الانطلاق؛ يمكن العبور بالعبّارة من طنجة.")),
       lodging: lodging.abroad,
       days: [
